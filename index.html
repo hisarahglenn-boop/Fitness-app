@@ -574,6 +574,9 @@
         showAuthScreen(false);
         renderDashboard();
         updateProgress();
+        if(window.location.hash.includes('access_token')){
+          window.history.replaceState(null, '', window.location.pathname + window.location.search);
+        }
       } else {
         currentUser = null;
         doneCache = {};
