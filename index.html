@@ -1,0 +1,686 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Glute Build 5-Day Plan</title>
+  <style>
+    :root{
+      --bg:#EEECE7;
+      --surface:#FFFFFF;
+      --surface-2:#F3F1EC;
+      --surface-3:#E6E2DA;
+      --border:#DEDAD1;
+      --text:#141412;
+      --muted:#6E6B65;
+      --muted-2:#9C988F;
+      --accent:#131311;
+      --accent-dim:#000000;
+      --accent-ink:#FFFFFF;
+      --gold:#C9A227;
+      --shadow:0 1px 2px rgba(20,18,15,.05), 0 14px 30px rgba(20,18,15,.08);
+      --radius-xl:28px;
+      --radius-lg:22px;
+      --radius-md:16px;
+      --radius-sm:12px;
+      --ease:cubic-bezier(.16,1,.3,1);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",ui-sans-serif,system-ui,sans-serif;}
+    body{padding-bottom:calc(96px + env(safe-area-inset-bottom));min-height:100vh}
+    button{font:inherit;color:inherit}
+    .app{max-width:520px;margin:0 auto}
+
+    /* ---- top bar ---- */
+    header.topbar{
+      position:sticky;top:0;z-index:30;
+      background:rgba(238,236,231,.85);backdrop-filter:blur(20px) saturate(140%);
+      border-bottom:1px solid var(--border);
+      padding:calc(14px + env(safe-area-inset-top)) 18px 12px;
+    }
+    .topbar-inner{max-width:520px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .brand{display:flex;align-items:center;gap:7px;font-weight:900;font-size:16px;letter-spacing:-.01em;text-transform:uppercase}
+    .brand-mark{width:15px;height:15px;flex:none;fill:var(--text)}
+    .week-chip{background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-weight:800;font-size:12px;padding:8px 12px;border-radius:999px;white-space:nowrap}
+
+    /* ---- screens ---- */
+    .screen{padding:16px 16px 8px;max-width:520px;margin:0 auto}
+    .screen[hidden]{display:none}
+
+    /* ---- weekly hero / ring card ---- */
+    .hero{
+      background:var(--surface);
+      border:1px solid var(--border);border-radius:var(--radius-xl);
+      padding:16px 18px;display:flex;align-items:center;gap:16px;margin-bottom:18px;
+    }
+    .ring{flex:none}
+    .hero-info{flex:1;min-width:0}
+    .hero-info .label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 4px}
+    .hero-info .big{font-size:22px;font-weight:900;letter-spacing:-.04em;margin:0}
+    .hero-info .sub{font-size:12.5px;color:var(--muted);margin:3px 0 0}
+
+    /* ---- big "current day" card (inverted black card) ---- */
+    .day-hero{
+      position:relative;overflow:hidden;
+      background:var(--accent);
+      border-radius:var(--radius-xl);
+      padding:22px 20px;margin-bottom:22px;box-shadow:var(--shadow);
+    }
+    .day-hero .eyebrow{font-size:11px;font-weight:800;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.09em;margin:0 0 8px}
+    .day-hero h2{font-size:23px;font-weight:900;letter-spacing:-.035em;margin:0 0 4px;line-height:1.15;color:#fff}
+    .day-hero p.sub{margin:0 0 18px;color:rgba(255,255,255,.6);font-size:13px}
+    .day-hero .progress-line{display:flex;align-items:center;gap:10px;margin-bottom:18px}
+    .day-hero .bar{flex:1;height:8px;background:rgba(255,255,255,.16);border-radius:999px;overflow:hidden}
+    .day-hero .bar > div{height:100%;background:#fff;border-radius:999px;transition:width .4s var(--ease)}
+    .day-hero .frac{font-size:12.5px;font-weight:800;color:rgba(255,255,255,.65);white-space:nowrap}
+    .day-hero .cta{width:100%;background:#fff;color:var(--accent);font-weight:900;font-size:15px;padding:15px;border-radius:16px;transition:transform .12s var(--ease)}
+    .day-hero .cta:active{transform:scale(.97)}
+    .day-hero .cta.done{background:rgba(255,255,255,.14);color:#fff}
+    .day-hero .badge-done{position:absolute;top:20px;right:20px;background:#fff;color:var(--accent);font-size:11px;font-weight:900;padding:6px 10px;border-radius:999px}
+
+    /* ---- other-day small cards ---- */
+    .section-label{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:4px 4px 10px}
+    .day-card-small{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:13px 14px;margin-bottom:8px;transition:transform .12s var(--ease)}
+    .day-card-small:active{transform:scale(.97)}
+    .dcs-index{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1.5px solid var(--text);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:var(--text);flex:none}
+    .dcs-index.done{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+    .dcs-info{flex:1;min-width:0}
+    .dcs-info b{display:block;font-size:14px;font-weight:850}
+    .dcs-info span{font-size:12px;color:var(--muted)}
+    .dcs-status{font-size:12px;font-weight:800;color:var(--muted);flex:none}
+    .dcs-status.done{color:var(--text)}
+
+    /* ---- exercise card (reused by session view) ---- */
+    .exercise{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin:0 0 12px;overflow:hidden}
+    .ex-head{padding:15px 15px 8px;display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+    .ex-name{font-weight:850;font-size:15.5px;letter-spacing:-.02em}
+    .ex-dose{font-size:11.5px;color:var(--text);font-weight:850;background:transparent;border:1.5px solid var(--text);padding:5px 10px;border-radius:999px;white-space:nowrap;flex:none}
+    .fig-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);margin:2px 20px 14px;padding:6px;display:flex;align-items:center;justify-content:center}
+    .fig-box svg{width:100%;max-width:220px;height:108px;display:block}
+    .cue{color:var(--muted);font-size:13px;line-height:1.4;margin:0 15px 12px}
+    .weight-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 15px 14px}
+    .weight-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
+    .weight-box label{display:block;font-size:10px;color:var(--muted-2);font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
+    .suggest{font-size:14.5px;font-weight:800;color:var(--text)}
+    input[type="text"]{width:100%;border:0;background:transparent;padding:0;font-size:15px;font-weight:800;color:var(--text);outline:none}
+    input[type="text"]::placeholder{color:var(--muted-2);font-weight:600}
+    .sets{display:flex;gap:8px;flex-wrap:wrap;padding:2px 15px 16px}
+    .setdot{width:38px;height:38px;border-radius:50%;background:var(--surface);border:1.5px solid var(--text);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:var(--text);cursor:pointer;transition:transform .12s var(--ease),background .15s,border-color .15s,color .15s;user-select:none}
+    .setdot:active{transform:scale(.88)}
+    .setdot.done{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+
+    /* ---- session (single-exercise) screen ---- */
+    .session-header{display:flex;align-items:center;gap:12px;margin-bottom:2px}
+    .backbtn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;flex:none;transition:transform .12s var(--ease)}
+    .backbtn:active{transform:scale(.88)}
+    .backbtn svg{width:17px;height:17px;stroke:var(--text);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+    .session-title{flex:1;min-width:0}
+    .session-title b{display:block;font-size:15px;font-weight:900;letter-spacing:-.02em}
+    .session-title span{font-size:11.5px;color:var(--muted);font-weight:700}
+
+    .pips{display:flex;gap:6px;padding:16px 2px 20px}
+    .pip{flex:1;min-width:12px;height:5px;border-radius:999px;background:var(--surface-3);transition:background .2s}
+    .pip.done{background:var(--accent)}
+    .pip.active{background:var(--muted-2)}
+
+    .session-exercise{box-shadow:none}
+    .session-exercise .ex-head{padding:20px 20px 10px}
+    .session-exercise .ex-name{font-size:21px}
+    .session-exercise .ex-dose{font-size:12.5px;padding:6px 12px}
+    .session-exercise .cue{margin:0 20px 16px;font-size:14px}
+    .session-exercise .weight-row{padding:0 20px 18px}
+    .session-exercise .sets{padding:4px 20px 24px;justify-content:center}
+    .session-exercise .setdot{width:46px;height:46px;font-size:15px}
+
+    .session-nav{display:flex;gap:10px;margin-top:16px}
+    .session-nav button{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px;font-weight:850;color:var(--muted);transition:transform .12s var(--ease)}
+    .session-nav button:active{transform:scale(.96)}
+    .session-nav button:disabled{opacity:.35}
+    .session-nav button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+
+    .day-complete{display:flex;flex-direction:column;align-items:center;text-align:center;padding:70px 20px}
+    .day-complete .check{width:84px;height:84px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:22px}
+    .day-complete .check svg{width:40px;height:40px;fill:none;stroke:var(--accent-ink);stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+    .day-complete h2{font-size:24px;font-weight:900;margin:0 0 6px;letter-spacing:-.03em}
+    .day-complete p{color:var(--muted);font-size:14px;margin:0 0 28px}
+    .day-complete button{background:var(--accent);color:var(--accent-ink);font-weight:900;padding:14px 26px;border-radius:16px;font-size:15px}
+
+    /* ---- progress screen ---- */
+    .big-ring-wrap{display:flex;flex-direction:column;align-items:center;padding:20px 0 8px}
+    .big-ring-wrap .pct{font-size:38px;font-weight:900;letter-spacing:-.04em;margin-top:-96px}
+    .big-ring-wrap .pct-sub{font-size:13px;color:var(--muted);font-weight:700;margin-top:2px}
+    .section-title{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:22px 4px 10px}
+    .day-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:13px 14px;margin-bottom:8px;transition:transform .12s var(--ease)}
+    .day-row:active{transform:scale(.97)}
+    .day-row .dr-ring{flex:none}
+    .day-row .dr-info{flex:1;min-width:0}
+    .day-row .dr-info b{display:block;font-size:14px;font-weight:850}
+    .day-row .dr-info span{font-size:12px;color:var(--muted)}
+    .day-row .dr-frac{font-size:13px;font-weight:800;color:var(--text);flex:none}
+
+    /* ---- guide screen ---- */
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin:0 0 12px}
+    .panel h4{margin:0 0 8px;font-size:15px;font-weight:850}
+    .panel p,.panel li{color:var(--muted);font-size:13.5px;line-height:1.5}
+    .panel ul{padding-left:18px;margin:8px 0 0}
+    .swaps{display:grid;gap:10px}
+    .swap{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--border);padding-top:10px;font-size:13px}
+    .swap:first-child{border-top:0;padding-top:0}
+    .swap b{color:var(--text)}.swap span{color:var(--muted);text-align:right}
+
+    /* ---- bottom tab bar (floating pill) ---- */
+    .tabbar{
+      position:fixed;bottom:0;left:0;right:0;z-index:40;
+      display:flex;justify-content:center;
+      padding:0 16px calc(16px + env(safe-area-inset-bottom));
+      pointer-events:none;
+    }
+    .tabbar .inner{
+      pointer-events:auto;
+      max-width:420px;width:100%;display:flex;gap:2px;
+      background:var(--surface);border:1px solid var(--border);border-radius:999px;
+      box-shadow:var(--shadow);padding:6px;
+    }
+    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:999px;color:var(--muted-2);font-size:10.5px;font-weight:800;transition:color .15s,background .15s,transform .12s var(--ease)}
+    .tabbtn:active{transform:scale(.92)}
+    .tabbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .tabbtn.active{color:var(--text);background:var(--surface-2)}
+
+    @media (min-width:600px){
+      .app{max-width:560px}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="topbar-inner">
+        <div class="brand"><svg class="brand-mark" viewBox="0 0 24 24"><path d="M2 12c6 1 11-2 13-11 2 9-1 16-7 18-3 1-5 .3-6-7z"/></svg> Glute Build</div>
+        <div class="week-chip" id="weekChip">0% this week</div>
+      </div>
+    </header>
+
+    <!-- DASHBOARD -->
+    <main class="screen" id="screen-dashboard">
+      <div class="hero">
+        <div class="ring" id="heroRing"></div>
+        <div class="hero-info">
+          <p class="label">This week</p>
+          <p class="big" id="heroBig">0/0 sets</p>
+          <p class="sub" id="heroSub">Build butt, not thighs.</p>
+        </div>
+      </div>
+
+      <div class="day-hero" id="dayHero"></div>
+
+      <div class="section-label">Other days</div>
+      <div id="otherDays"></div>
+    </main>
+
+    <!-- SESSION (single day / single exercise flow) -->
+    <main class="screen" id="screen-session" hidden>
+      <div class="session-header">
+        <button class="backbtn" id="sessionBack" aria-label="Back to dashboard">
+          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
+        </button>
+        <div class="session-title">
+          <b id="sessionDayTitle"></b>
+          <span id="sessionDaySub"></span>
+        </div>
+      </div>
+      <div class="pips" id="pips"></div>
+      <div id="sessionBody"></div>
+    </main>
+
+    <!-- PROGRESS -->
+    <main class="screen" id="screen-progress" hidden>
+      <div class="big-ring-wrap">
+        <div id="bigRing"></div>
+        <div class="pct" id="bigPct">0%</div>
+        <div class="pct-sub" id="bigPctSub">0/0 sets complete</div>
+      </div>
+      <div class="section-title">By day</div>
+      <div id="dayList"></div>
+    </main>
+
+    <!-- GUIDE -->
+    <main class="screen" id="screen-guide" hidden>
+      <section class="panel">
+        <h4>Weight rule</h4>
+        <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If your knee pain goes above 3/10, lower the weight or use a swap.</p>
+      </section>
+      <section class="panel">
+        <h4>Knee-friendly swaps</h4>
+        <div class="swaps">
+          <div class="swap"><b>Squats</b><span>Hip thrusts, glute bridges, RDLs</span></div>
+          <div class="swap"><b>Lunges</b><span>Kickstand RDLs, B-stance hip thrusts</span></div>
+          <div class="swap"><b>Step-ups</b><span>Kettlebell swings or hamstring curls</span></div>
+          <div class="swap"><b>Bulgarian split squats</b><span>Single-leg glute bridge</span></div>
+        </div>
+      </section>
+      <section class="panel">
+        <h4>Progression</h4>
+        <ul>
+          <li>Hip thrust / glute bridge: add 10 lb when all sets feel good.</li>
+          <li>Deadlift / RDL: add 5–10 lb when form is clean.</li>
+          <li>Rows / bench: add 5 lb at a time.</li>
+          <li>Posture and triceps accessories: add reps first, then weight.</li>
+        </ul>
+      </section>
+    </main>
+  </div>
+
+  <nav class="tabbar" id="tabbar">
+    <div class="inner">
+      <button class="tabbtn active" data-screen="dashboard">
+        <svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
+        Dashboard
+      </button>
+      <button class="tabbtn" data-screen="progress">
+        <svg viewBox="0 0 24 24"><path d="M4 20V11M12 20V4M20 20v-7"/></svg>
+        Progress
+      </button>
+      <button class="tabbtn" data-screen="guide">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="8.5"/><line x1="12" y1="11" x2="12" y2="16"/></svg>
+        Guide
+      </button>
+    </div>
+  </nav>
+
+  <script>
+    const plan = [
+      {title:'Day 1', subtitle:'Heavy Glutes + Deadlift', exercises:[
+        ['Barbell hip thrust','5 x 5–8','95–135 lb','Pause 1 sec at top. Ribs down, chin tucked, shins vertical.','bridge'],
+        ['Barbell Romanian deadlift','4 x 6–8','65–95 lb','Hips back, soft knees, feel hamstrings and glutes.','hinge'],
+        ['Conventional or sumo deadlift','3 x 3–5','95–135 lb','Heavy clean reps. Sumo may feel better for glutes/knees.','hinge'],
+        ['Dumbbell frog pumps / glute bridge','3 x 15–25','25–50 lb DB','Burnout. Squeeze glutes, don’t arch low back.','bridge'],
+        ['Side-lying hip abduction','3 x 15–25/side','Bodyweight or 5–10 lb','Slow reps for side glute/hip stability.','legraise'],
+        ['Standing calf raise','3 x 10–15','25–50 lb total','Optional finisher.','calf']
+      ]},
+      {title:'Day 2', subtitle:'Back/Posture + Triceps', exercises:[
+        ['Chest-supported dumbbell row','4 x 8–10','20–35 lb DBs','Squeeze shoulder blades back and down.','row'],
+        ['Barbell bent-over row','4 x 6–8','45–75 lb','Heavy but controlled. No yanking.','row'],
+        ['Dumbbell rear delt fly','3 x 12–20','5–12 lb DBs','Light and strict.','armraise'],
+        ['Band face pulls / pull-aparts','3 x 15–25','Light-medium band','Elbows high, finish near temples.','row'],
+        ['Prone Y-raise','3 x 10–15','2.5–8 lb DBs','Lower traps. Tiny weights are enough.','armraise'],
+        ['Close-grip bench press','4 x 6–10','45–75 lb','Back of arms focus.','press'],
+        ['Overhead dumbbell triceps extension','3 x 10–15','15–30 lb DB','Long head of triceps.','curl']
+      ]},
+      {title:'Day 3', subtitle:'Glutes + Hamstrings, Knee-Friendly', exercises:[
+        ['Barbell glute bridge from floor','4 x 8–10','95–145 lb','Go heavy, but keep low back quiet.','bridge'],
+        ['Kickstand RDL','3 x 8–10/side','20–40 lb DBs','Stable single-leg-ish hinge.','hinge'],
+        ['Dumbbell hamstring curl','3 x 10–15','10–25 lb DB','Hold DB between feet or use sliders.','legcurl'],
+        ['Kettlebell swing','4 x 12–20','20–35 lb','Hip snap, not a squat.','hinge'],
+        ['B-stance hip thrust','3 x 10–12/side','65–115 lb','One glute works harder without knee stress.','bridge'],
+        ['Side plank / Copenhagen plank','2–3 x 20–40 sec','Bodyweight','Optional hip/core stability.','plank']
+      ]},
+      {title:'Day 4', subtitle:'Upper Back + Posture + Triceps', exercises:[
+        ['Single-arm dumbbell row','4 x 8–12/side','25–45 lb DB','Pull elbow toward hip.','row'],
+        ['Reverse fly','3 x 12–20','5–12 lb DBs','Rear delts and upper back.','armraise'],
+        ['Dumbbell pullover','3 x 10–12','20–35 lb DB','Lats + rib control.','press'],
+        ['Scapular push-up','3 x 10–15','Bodyweight','Serratus for shoulder position.','press'],
+        ['Wall slides / floor angels','3 x 8–12','Bodyweight','Slow and controlled.','armraise'],
+        ['Dumbbell skull crushers','3 x 8–12','8–15 lb DBs','Keep elbows steady.','curl'],
+        ['Triceps kickbacks','2–3 x 12–20','5–12 lb DBs','Light, strict, squeeze.','curl']
+      ]},
+      {title:'Day 5', subtitle:'Glute Pump + Back of Legs', exercises:[
+        ['Hip thrust, lighter than Day 1','4 x 10–12','75–115 lb','Smooth reps, full lockout.','bridge'],
+        ['Dumbbell or barbell RDL','3 x 10–12','50–85 lb barbell or 20–35 lb DBs','Moderate weight, big stretch.','hinge'],
+        ['Low step-up, glute-biased','2–3 x 8–10/side','Bodyweight to 15 lb DBs','Only if knee tolerates. Low box, forward lean.','squat'],
+        ['Kettlebell swing / pull-through swap','3 x 12–15','20–35 lb','Use instead of step-ups if knee hurts.','hinge'],
+        ['Hamstring curl variation','3 x 12–15','10–25 lb DB','Control the lowering.','legcurl'],
+        ['Band abductions','4 x 20–30','Light-medium band','Side-glute burnout.','legraise'],
+        ['Frog pumps','2 x 30','Bodyweight to 25 lb DB','Finisher.','bridge']
+      ]}
+    ];
+
+    const figures = {
+      bridge: `<svg viewBox="0 0 130 100"><line x1="8" y1="95" x2="122" y2="95" stroke="var(--border)" stroke-width="2"/>
+        <circle cx="20" cy="80" r="7" fill="var(--text)"/>
+        <line x1="30" y1="80" x2="16" y2="93" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <g>
+          <animateTransform attributeName="transform" type="rotate" values="0 30 80;-22 30 80;0 30 80" dur="1.5s" repeatCount="indefinite"/>
+          <line x1="30" y1="80" x2="70" y2="80" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="70" y1="80" x2="95" y2="60" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="95" y1="60" x2="95" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="88" y1="92" x2="102" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        </g></svg>`,
+      hinge: `<svg viewBox="0 0 130 110"><line x1="8" y1="98" x2="122" y2="98" stroke="var(--border)" stroke-width="2"/>
+        <line x1="65" y1="60" x2="58" y2="98" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="65" y1="60" x2="72" y2="98" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <g>
+          <animateTransform attributeName="transform" type="rotate" values="0 65 60;32 65 60;0 65 60" dur="1.6s" repeatCount="indefinite"/>
+          <line x1="65" y1="60" x2="65" y2="30" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="65" y1="36" x2="50" y2="56" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <circle cx="65" cy="22" r="7" fill="var(--text)"/>
+        </g></svg>`,
+      row: `<svg viewBox="0 0 130 100"><circle cx="60" cy="25" r="7" fill="var(--text)"/>
+        <line x1="60" y1="32" x2="66" y2="58" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="66" y1="58" x2="58" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="66" y1="58" x2="74" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="63" y1="40" x2="95" y2="46" stroke="var(--text)" stroke-width="5" stroke-linecap="round">
+          <animate attributeName="x2" values="95;55;95" dur="1.4s" repeatCount="indefinite"/>
+          <animate attributeName="y2" values="46;40;46" dur="1.4s" repeatCount="indefinite"/>
+        </line></svg>`,
+      press: `<svg viewBox="0 0 130 100"><line x1="8" y1="88" x2="122" y2="88" stroke="var(--border)" stroke-width="2"/>
+        <circle cx="20" cy="75" r="7" fill="var(--text)"/>
+        <line x1="27" y1="75" x2="80" y2="75" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="80" y1="75" x2="100" y2="60" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="100" y1="60" x2="100" y2="88" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="45" y1="75" x2="45" y2="55" stroke="var(--text)" stroke-width="5" stroke-linecap="round">
+          <animate attributeName="y2" values="55;25;55" dur="1.4s" repeatCount="indefinite"/>
+        </line></svg>`,
+      curl: `<svg viewBox="0 0 130 100"><circle cx="60" cy="22" r="7" fill="var(--text)"/>
+        <line x1="60" y1="29" x2="60" y2="60" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="60" y1="60" x2="53" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="60" y1="60" x2="67" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="60" y1="35" x2="85" y2="45" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="85" y1="45" x2="90" y2="70" stroke="var(--text)" stroke-width="5" stroke-linecap="round">
+          <animate attributeName="x2" values="90;78;90" dur="1.3s" repeatCount="indefinite"/>
+          <animate attributeName="y2" values="70;35;70" dur="1.3s" repeatCount="indefinite"/>
+        </line></svg>`,
+      armraise: `<svg viewBox="0 0 130 100"><circle cx="60" cy="25" r="7" fill="var(--text)"/>
+        <line x1="60" y1="32" x2="66" y2="58" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="66" y1="58" x2="58" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="66" y1="58" x2="74" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="63" y1="40" x2="70" y2="60" stroke="var(--text)" stroke-width="5" stroke-linecap="round">
+          <animate attributeName="x2" values="70;105;70" dur="1.5s" repeatCount="indefinite"/>
+          <animate attributeName="y2" values="60;38;60" dur="1.5s" repeatCount="indefinite"/>
+        </line></svg>`,
+      legraise: `<svg viewBox="0 0 130 100"><circle cx="60" cy="20" r="7" fill="var(--text)"/>
+        <line x1="60" y1="27" x2="60" y2="58" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="60" y1="40" x2="40" y2="55" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="60" y1="40" x2="80" y2="55" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="60" y1="58" x2="60" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="60" y1="58" x2="70" y2="90" stroke="var(--text)" stroke-width="5" stroke-linecap="round">
+          <animate attributeName="x2" values="70;95;70" dur="1.4s" repeatCount="indefinite"/>
+          <animate attributeName="y2" values="90;70;90" dur="1.4s" repeatCount="indefinite"/>
+        </line></svg>`,
+      legcurl: `<svg viewBox="0 0 130 100"><line x1="8" y1="88" x2="122" y2="88" stroke="var(--border)" stroke-width="2"/>
+        <circle cx="20" cy="80" r="7" fill="var(--text)"/>
+        <line x1="27" y1="80" x2="85" y2="80" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="30" y1="80" x2="18" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="85" y1="80" x2="100" y2="80" stroke="var(--text)" stroke-width="5" stroke-linecap="round">
+          <animate attributeName="x2" values="100;80;100" dur="1.3s" repeatCount="indefinite"/>
+          <animate attributeName="y2" values="80;50;80" dur="1.3s" repeatCount="indefinite"/>
+        </line></svg>`,
+      squat: `<svg viewBox="0 0 130 100"><line x1="8" y1="92" x2="122" y2="92" stroke="var(--border)" stroke-width="2"/>
+        <line x1="60" y1="55" x2="45" y2="75" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="45" y1="75" x2="50" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="60" y1="55" x2="75" y2="75" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <line x1="75" y1="75" x2="70" y2="92" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0 0;0 12;0 0" dur="1.4s" repeatCount="indefinite"/>
+          <circle cx="60" cy="20" r="7" fill="var(--text)"/>
+          <line x1="60" y1="27" x2="60" y2="55" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="55" y1="35" x2="40" y2="50" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="65" y1="35" x2="80" y2="50" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        </g></svg>`,
+      calf: `<svg viewBox="0 0 130 100"><line x1="8" y1="92" x2="122" y2="92" stroke="var(--border)" stroke-width="2"/>
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0 0;0 -10;0 0" dur="1.2s" repeatCount="indefinite"/>
+          <circle cx="60" cy="20" r="7" fill="var(--text)"/>
+          <line x1="60" y1="27" x2="60" y2="60" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="52" y1="38" x2="38" y2="55" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="68" y1="38" x2="82" y2="55" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="60" y1="60" x2="55" y2="90" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="60" y1="60" x2="65" y2="90" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        </g></svg>`,
+      plank: `<svg viewBox="0 0 130 100"><line x1="8" y1="90" x2="122" y2="90" stroke="var(--border)" stroke-width="2"/>
+        <g>
+          <animateTransform attributeName="transform" type="translate" values="0 0;0 -3;0 0" dur="1s" repeatCount="indefinite"/>
+          <circle cx="22" cy="55" r="7" fill="var(--text)"/>
+          <line x1="29" y1="57" x2="95" y2="62" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="95" y1="62" x2="112" y2="88" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+          <line x1="35" y1="60" x2="35" y2="82" stroke="var(--text)" stroke-width="5" stroke-linecap="round"/>
+        </g></svg>`
+    };
+    function figureSvg(type){ return figures[type] || ''; }
+
+    let sessionDay = null;
+    let sessionExercise = 0;
+
+    function setCount(dose){
+      const m = dose.match(/^(\d+)/);
+      return m ? Number(m[1]) : 3;
+    }
+    function key(day, ex, set){return `gbp-d${day}-e${ex}-s${set}`}
+    function weightKey(day, ex){return `gbp-d${day}-e${ex}-weight`}
+
+    function ringSvg(pct, size, stroke){
+      const r = (size - stroke) / 2;
+      const c = 2 * Math.PI * r;
+      const offset = c - (Math.min(100,Math.max(0,pct)) / 100) * c;
+      const mid = size / 2;
+      return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
+        <circle cx="${mid}" cy="${mid}" r="${r}" stroke="var(--surface-3)" stroke-width="${stroke}" fill="none"/>
+        <circle cx="${mid}" cy="${mid}" r="${r}" stroke="var(--accent)" stroke-width="${stroke}" fill="none"
+          stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${offset}"
+          transform="rotate(-90 ${mid} ${mid})" style="transition:stroke-dashoffset .5s var(--ease)"/>
+      </svg>`;
+    }
+
+    function dayStats(i){
+      const d = plan[i];
+      let total=0, done=0;
+      d.exercises.forEach((ex,exi)=>{
+        const count=setCount(ex[1]); total+=count;
+        for(let si=0;si<count;si++) if(localStorage.getItem(key(i,exi,si))==='1') done++;
+      });
+      return {done, total, pct: total ? Math.round(done/total*100) : 0};
+    }
+
+    function exerciseDone(day, exi){
+      const count = setCount(plan[day].exercises[exi][1]);
+      for(let si=0; si<count; si++){
+        if(localStorage.getItem(key(day,exi,si)) !== '1') return false;
+      }
+      return true;
+    }
+
+    function firstIncompleteExercise(day){
+      const exs = plan[day].exercises;
+      for(let e=0; e<exs.length; e++){
+        if(!exerciseDone(day, e)) return e;
+      }
+      return -1;
+    }
+
+    function dashboardCurrentDay(){
+      for(let i=0;i<plan.length;i++){
+        if(dayStats(i).pct < 100) return i;
+      }
+      return plan.length - 1;
+    }
+
+    function overallStats(){
+      let total=0, done=0;
+      plan.forEach((d,i)=>d.exercises.forEach((ex,exi)=>{
+        const count=setCount(ex[1]); total+=count;
+        for(let si=0;si<count;si++) if(localStorage.getItem(key(i,exi,si))==='1') done++;
+      }));
+      return {done, total, pct: total ? Math.round(done/total*100) : 0};
+    }
+
+    // ---------- DASHBOARD ----------
+    function renderDashboard(){
+      const bigIndex = dashboardCurrentDay();
+      const bigStats = dayStats(bigIndex);
+      const bigDay = plan[bigIndex];
+      const allDone = plan.every((_,i)=>dayStats(i).pct===100);
+
+      const heroEl = document.getElementById('dayHero');
+      heroEl.innerHTML = `
+        ${bigStats.pct===100 ? '<div class="badge-done">✓ Done</div>' : ''}
+        <p class="eyebrow">${allDone ? 'Plan complete' : 'Up next'}</p>
+        <h2>${bigDay.title}: ${bigDay.subtitle}</h2>
+        <p class="sub">${bigDay.exercises.length} exercises · ${bigStats.total} sets</p>
+        <div class="progress-line">
+          <div class="bar"><div style="width:${bigStats.pct}%"></div></div>
+          <div class="frac">${bigStats.done}/${bigStats.total}</div>
+        </div>
+        <button class="cta${bigStats.pct===100?' done':''}">${bigStats.pct===100 ? 'Review day' : (bigStats.done>0 ? 'Continue workout' : 'Start workout')}</button>
+      `;
+      heroEl.onclick = ()=>openSession(bigIndex);
+
+      const list = document.getElementById('otherDays');
+      list.innerHTML = '';
+      plan.forEach((d,i)=>{
+        if(i===bigIndex) return;
+        const s = dayStats(i);
+        const row = document.createElement('div');
+        row.className = 'day-card-small';
+        row.innerHTML = `
+          <div class="dcs-index${s.pct===100?' done':''}">${s.pct===100?'✓':i+1}</div>
+          <div class="dcs-info"><b>${d.title}</b><span>${d.subtitle}</span></div>
+          <div class="dcs-status${s.pct===100?' done':''}">${s.pct===100?'Completed':`${s.done}/${s.total}`}</div>`;
+        row.onclick = ()=>openSession(i);
+        list.appendChild(row);
+      });
+    }
+
+    // ---------- SESSION ----------
+    function openSession(dayIndex){
+      sessionDay = dayIndex;
+      sessionExercise = firstIncompleteExercise(dayIndex);
+      document.getElementById('tabbar').style.display = 'none';
+      document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-session');
+      window.scrollTo({top:0, behavior:'smooth'});
+      renderSession();
+    }
+
+    function closeSession(){
+      sessionDay = null;
+      document.getElementById('tabbar').style.display = 'flex';
+      switchScreen('dashboard');
+    }
+
+    function pipsHtml(day, activeIndex){
+      return plan[day].exercises.map((ex,i)=>{
+        const done = exerciseDone(day, i);
+        let cls = 'pip';
+        if(done) cls += ' done';
+        else if(i===activeIndex) cls += ' active';
+        return `<div class="${cls}"></div>`;
+      }).join('');
+    }
+
+    function advanceExercise(){
+      const exs = plan[sessionDay].exercises;
+      if(sessionExercise < exs.length - 1){
+        sessionExercise += 1;
+      } else {
+        sessionExercise = -1;
+      }
+      renderSession();
+    }
+
+    function renderSession(){
+      const day = plan[sessionDay];
+      document.getElementById('sessionDayTitle').textContent = day.title;
+      document.getElementById('sessionDaySub').textContent = day.subtitle;
+      document.getElementById('pips').innerHTML = pipsHtml(sessionDay, sessionExercise);
+
+      const body = document.getElementById('sessionBody');
+
+      if(sessionExercise === -1){
+        body.innerHTML = `
+          <div class="day-complete">
+            <div class="check"><svg viewBox="0 0 24 24"><path d="M5 13l4 4L19 7"/></svg></div>
+            <h2>Day complete</h2>
+            <p>All sets logged for ${day.title}: ${day.subtitle}.</p>
+            <button id="backToDashBtn">Back to dashboard</button>
+          </div>`;
+        document.getElementById('backToDashBtn').onclick = closeSession;
+        return;
+      }
+
+      const exi = sessionExercise;
+      const ex = day.exercises[exi];
+      const count = setCount(ex[1]);
+      const dots = Array.from({length:count}, (_,si)=>{
+        const id = key(sessionDay, exi, si);
+        const isDone = localStorage.getItem(id)==='1';
+        return `<div class="setdot${isDone?' done':''}" data-k="${id}" data-n="${si+1}">${isDone?'✓':si+1}</div>`;
+      }).join('');
+      const savedWeight = localStorage.getItem(weightKey(sessionDay, exi)) || '';
+
+      body.innerHTML = `
+        <article class="exercise session-exercise">
+          <div class="ex-head"><div class="ex-name">${ex[0]}</div><div class="ex-dose">${ex[1]}</div></div>
+          <div class="fig-box">${figureSvg(ex[4])}</div>
+          <p class="cue">${ex[3]}</p>
+          <div class="weight-row">
+            <div class="weight-box"><label>Start with</label><div class="suggest">${ex[2]}</div></div>
+            <div class="weight-box"><label>Your weight</label><input type="text" inputmode="decimal" placeholder="ex: 115 lb" value="${savedWeight}" data-weight="${weightKey(sessionDay, exi)}"></div>
+          </div>
+          <div class="sets">${dots}</div>
+        </article>
+        <div class="session-nav">
+          <button id="sessPrev" ${exi===0?'disabled':''}>Back</button>
+          <button id="sessNext" class="primary">${exi===day.exercises.length-1 ? 'Finish day' : 'Skip exercise'}</button>
+        </div>`;
+
+      document.getElementById('sessPrev').onclick = ()=>{ sessionExercise = Math.max(0, sessionExercise-1); renderSession(); };
+      document.getElementById('sessNext').onclick = ()=>advanceExercise();
+
+      body.querySelectorAll('.setdot').forEach(dot=>{
+        dot.onclick = ()=>{
+          const k = dot.dataset.k;
+          const nowDone = !(localStorage.getItem(k)==='1');
+          localStorage.setItem(k, nowDone?'1':'0');
+          dot.classList.toggle('done', nowDone);
+          dot.textContent = nowDone ? '✓' : dot.dataset.n;
+          updateProgress();
+          if(exerciseDone(sessionDay, exi)){
+            setTimeout(()=>{ if(sessionDay!==null && sessionExercise===exi) advanceExercise(); }, 450);
+          }
+        };
+      });
+      body.querySelector('input[data-weight]').oninput = e=>localStorage.setItem(e.target.dataset.weight, e.target.value);
+    }
+
+    document.getElementById('sessionBack').onclick = closeSession;
+
+    // ---------- PROGRESS / GUIDE / TAB SWITCHING ----------
+    function updateProgress(){
+      const {done, total, pct} = overallStats();
+      document.getElementById('weekChip').textContent = `${pct}% this week`;
+      document.getElementById('heroRing').innerHTML = ringSvg(pct, 60, 7);
+      document.getElementById('heroBig').textContent = `${done}/${total} sets`;
+
+      document.getElementById('bigRing').innerHTML = ringSvg(pct, 176, 16);
+      document.getElementById('bigPct').textContent = `${pct}%`;
+      document.getElementById('bigPctSub').textContent = `${done}/${total} sets complete`;
+
+      const dayList = document.getElementById('dayList');
+      dayList.innerHTML = '';
+      plan.forEach((d,i)=>{
+        const s = dayStats(i);
+        const row = document.createElement('div');
+        row.className = 'day-row';
+        row.innerHTML = `
+          <div class="dr-ring">${ringSvg(s.pct, 40, 5)}</div>
+          <div class="dr-info"><b>${d.title}</b><span>${d.subtitle}</span></div>
+          <div class="dr-frac">${s.done}/${s.total}</div>`;
+        row.onclick = ()=>openSession(i);
+        dayList.appendChild(row);
+      });
+    }
+
+    function switchScreen(name){
+      document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== `screen-${name}`);
+      document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.screen===name));
+      window.scrollTo({top:0, behavior:'smooth'});
+      if(name==='progress' || name==='dashboard') updateProgress();
+      if(name==='dashboard') renderDashboard();
+    }
+    document.querySelectorAll('.tabbtn').forEach(b=>{
+      b.onclick = ()=>switchScreen(b.dataset.screen);
+    });
+
+    renderDashboard();
+    updateProgress();
+  </script>
+</body>
+</html>
