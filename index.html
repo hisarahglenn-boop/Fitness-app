@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Glute Build 5-Day Plan</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
   <style>
     :root{
       --bg:#EEECE7;
@@ -186,13 +187,40 @@
     .tabbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     .tabbtn.active{color:var(--text);background:var(--surface-2)}
 
+    /* ---- auth screen ---- */
+    .authscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+    .authscreen[hidden]{display:none}
+    .authcard{max-width:360px;width:100%;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-xl);padding:28px 24px;box-shadow:var(--shadow);text-align:center}
+    .authcard .brand-mark{width:22px;height:22px;fill:var(--text);margin-bottom:14px}
+    .authcard h2{font-size:20px;font-weight:900;letter-spacing:-.03em;margin:0 0 6px}
+    .authcard p{color:var(--muted);font-size:13.5px;margin:0 0 20px;line-height:1.4}
+    .authcard input[type="email"]{width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:14px;padding:13px 14px;font-size:15px;font-weight:700;color:var(--text);outline:none;margin-bottom:12px}
+    .authcard input[type="email"]::placeholder{color:var(--muted-2);font-weight:600}
+    .authcard button{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:15px;padding:14px;border-radius:14px;transition:transform .12s var(--ease)}
+    .authcard button:active{transform:scale(.97)}
+    .authcard button:disabled{opacity:.5}
+    .authcard .status{margin-top:14px;font-size:13px;color:var(--muted);min-height:16px}
+    .account-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .account-row button{background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:999px;white-space:nowrap}
+
     @media (min-width:600px){
       .app{max-width:560px}
     }
   </style>
 </head>
 <body>
-  <div class="app">
+  <div class="authscreen" id="authScreen">
+    <div class="authcard">
+      <svg class="brand-mark" viewBox="0 0 24 24"><path d="M2 12c6 1 11-2 13-11 2 9-1 16-7 18-3 1-5 .3-6-7z"/></svg>
+      <h2>Glute Build</h2>
+      <p>Sign in to sync your progress and workout history across devices.</p>
+      <input type="email" id="authEmail" placeholder="you@email.com" inputmode="email" autocomplete="email">
+      <button id="authSendBtn">Send magic link</button>
+      <div class="status" id="authStatus"></div>
+    </div>
+  </div>
+
+  <div class="app" id="app" hidden>
     <header class="topbar">
       <div class="topbar-inner">
         <div class="brand"><svg class="brand-mark" viewBox="0 0 24 24"><path d="M2 12c6 1 11-2 13-11 2 9-1 16-7 18-3 1-5 .3-6-7z"/></svg> Glute Build</div>
@@ -266,6 +294,13 @@
           <li>Rows / bench: add 5 lb at a time.</li>
           <li>Posture and triceps accessories: add reps first, then weight.</li>
         </ul>
+      </section>
+      <section class="panel">
+        <h4>Account</h4>
+        <div class="account-row">
+          <span id="accountEmail" style="font-size:13.5px;color:var(--muted)"></span>
+          <button id="logoutBtn">Log out</button>
+        </div>
       </section>
     </main>
   </div>
@@ -447,6 +482,90 @@
     function key(day, ex, set){return `gbp-d${day}-e${ex}-s${set}`}
     function weightKey(day, ex){return `gbp-d${day}-e${ex}-weight`}
 
+    // ---------- SUPABASE SYNC ----------
+    const SUPABASE_URL = 'https://sqplklzjpougwdlinrhz.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_PVZYXtvvLl0wkORvTMx5CA_WhzaYAJf';
+    const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    let currentUser = null;
+    let doneCache = {};
+    let weightCache = {};
+
+    function isDone(day, ex, set){ return doneCache[key(day, ex, set)] === true; }
+    function getWeight(day, ex){ return weightCache[weightKey(day, ex)] || ''; }
+
+    async function loadUserData(){
+      const [{data: progressRows}, {data: weightRows}] = await Promise.all([
+        sb.from('progress').select('day_idx,exercise_idx,set_idx,done').eq('user_id', currentUser.id),
+        sb.from('exercise_weights').select('day_idx,exercise_idx,weight').eq('user_id', currentUser.id)
+      ]);
+      doneCache = {};
+      weightCache = {};
+      (progressRows || []).forEach(r=>{ if(r.done) doneCache[key(r.day_idx, r.exercise_idx, r.set_idx)] = true; });
+      (weightRows || []).forEach(r=>{ weightCache[weightKey(r.day_idx, r.exercise_idx)] = r.weight; });
+    }
+
+    async function persistSetDone(day, ex, set, done){
+      await sb.from('progress').upsert({
+        user_id: currentUser.id, day_idx: day, exercise_idx: ex, set_idx: set,
+        done, updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,day_idx,exercise_idx,set_idx' });
+      if(done){
+        await sb.from('workout_history').insert({
+          user_id: currentUser.id, day_idx: day, exercise_idx: ex, set_idx: set,
+          weight: getWeight(day, ex)
+        });
+      }
+    }
+
+    async function persistWeight(day, ex, weight){
+      await sb.from('exercise_weights').upsert({
+        user_id: currentUser.id, day_idx: day, exercise_idx: ex,
+        weight, updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,day_idx,exercise_idx' });
+    }
+
+    function showAuthScreen(show){
+      document.getElementById('authScreen').hidden = !show;
+      document.getElementById('app').hidden = show;
+      document.getElementById('tabbar').style.display = show ? 'none' : 'flex';
+    }
+
+    document.getElementById('authSendBtn').onclick = async ()=>{
+      const email = document.getElementById('authEmail').value.trim();
+      const statusEl = document.getElementById('authStatus');
+      if(!email){ statusEl.textContent = 'Enter your email first.'; return; }
+      const btn = document.getElementById('authSendBtn');
+      btn.disabled = true;
+      statusEl.textContent = 'Sending...';
+      const { error } = await sb.auth.signInWithOtp({
+        email,
+        options: { emailRedirectTo: window.location.origin + window.location.pathname }
+      });
+      btn.disabled = false;
+      statusEl.textContent = error ? error.message : 'Check your email for a login link.';
+    };
+
+    document.getElementById('logoutBtn').onclick = async ()=>{
+      await sb.auth.signOut();
+    };
+
+    sb.auth.onAuthStateChange(async (event, session)=>{
+      if(session && session.user){
+        currentUser = session.user;
+        document.getElementById('accountEmail').textContent = currentUser.email;
+        await loadUserData();
+        showAuthScreen(false);
+        renderDashboard();
+        updateProgress();
+      } else {
+        currentUser = null;
+        doneCache = {};
+        weightCache = {};
+        showAuthScreen(true);
+      }
+    });
+
     function ringSvg(pct, size, stroke){
       const r = (size - stroke) / 2;
       const c = 2 * Math.PI * r;
@@ -465,7 +584,7 @@
       let total=0, done=0;
       d.exercises.forEach((ex,exi)=>{
         const count=setCount(ex[1]); total+=count;
-        for(let si=0;si<count;si++) if(localStorage.getItem(key(i,exi,si))==='1') done++;
+        for(let si=0;si<count;si++) if(isDone(i,exi,si)) done++;
       });
       return {done, total, pct: total ? Math.round(done/total*100) : 0};
     }
@@ -473,7 +592,7 @@
     function exerciseDone(day, exi){
       const count = setCount(plan[day].exercises[exi][1]);
       for(let si=0; si<count; si++){
-        if(localStorage.getItem(key(day,exi,si)) !== '1') return false;
+        if(!isDone(day,exi,si)) return false;
       }
       return true;
     }
@@ -497,7 +616,7 @@
       let total=0, done=0;
       plan.forEach((d,i)=>d.exercises.forEach((ex,exi)=>{
         const count=setCount(ex[1]); total+=count;
-        for(let si=0;si<count;si++) if(localStorage.getItem(key(i,exi,si))==='1') done++;
+        for(let si=0;si<count;si++) if(isDone(i,exi,si)) done++;
       }));
       return {done, total, pct: total ? Math.round(done/total*100) : 0};
     }
@@ -599,11 +718,10 @@
       const ex = day.exercises[exi];
       const count = setCount(ex[1]);
       const dots = Array.from({length:count}, (_,si)=>{
-        const id = key(sessionDay, exi, si);
-        const isDone = localStorage.getItem(id)==='1';
-        return `<div class="setdot${isDone?' done':''}" data-k="${id}" data-n="${si+1}">${isDone?'✓':si+1}</div>`;
+        const done = isDone(sessionDay, exi, si);
+        return `<div class="setdot${done?' done':''}" data-si="${si}" data-n="${si+1}">${done?'✓':si+1}</div>`;
       }).join('');
-      const savedWeight = localStorage.getItem(weightKey(sessionDay, exi)) || '';
+      const savedWeight = getWeight(sessionDay, exi);
 
       body.innerHTML = `
         <article class="exercise session-exercise">
@@ -626,18 +744,22 @@
 
       body.querySelectorAll('.setdot').forEach(dot=>{
         dot.onclick = ()=>{
-          const k = dot.dataset.k;
-          const nowDone = !(localStorage.getItem(k)==='1');
-          localStorage.setItem(k, nowDone?'1':'0');
+          const si = Number(dot.dataset.si);
+          const nowDone = !isDone(sessionDay, exi, si);
+          doneCache[key(sessionDay, exi, si)] = nowDone;
           dot.classList.toggle('done', nowDone);
           dot.textContent = nowDone ? '✓' : dot.dataset.n;
           updateProgress();
+          persistSetDone(sessionDay, exi, si, nowDone);
           if(exerciseDone(sessionDay, exi)){
             setTimeout(()=>{ if(sessionDay!==null && sessionExercise===exi) advanceExercise(); }, 450);
           }
         };
       });
-      body.querySelector('input[data-weight]').oninput = e=>localStorage.setItem(e.target.dataset.weight, e.target.value);
+      body.querySelector('input[data-weight]').oninput = e=>{
+        weightCache[weightKey(sessionDay, exi)] = e.target.value;
+        persistWeight(sessionDay, exi, e.target.value);
+      };
     }
 
     document.getElementById('sessionBack').onclick = closeSession;
@@ -678,9 +800,6 @@
     document.querySelectorAll('.tabbtn').forEach(b=>{
       b.onclick = ()=>switchScreen(b.dataset.screen);
     });
-
-    renderDashboard();
-    updateProgress();
   </script>
 </body>
 </html>
