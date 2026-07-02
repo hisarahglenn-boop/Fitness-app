@@ -331,32 +331,13 @@
       </div>
       <div class="section-title">By day</div>
       <div id="dayList"></div>
+      <div class="section-title" id="partnerSectionTitle" hidden>Partner</div>
+      <div id="partnerCard"></div>
     </main>
 
     <!-- GUIDE -->
     <main class="screen" id="screen-guide" hidden>
-      <section class="panel">
-        <h4>Weight rule</h4>
-        <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If your knee pain goes above 3/10, lower the weight or use a swap.</p>
-      </section>
-      <section class="panel">
-        <h4>Knee-friendly swaps</h4>
-        <div class="swaps">
-          <div class="swap"><b>Squats</b><span>Hip thrusts, glute bridges, RDLs</span></div>
-          <div class="swap"><b>Lunges</b><span>Kickstand RDLs, B-stance hip thrusts</span></div>
-          <div class="swap"><b>Step-ups</b><span>Kettlebell swings or hamstring curls</span></div>
-          <div class="swap"><b>Bulgarian split squats</b><span>Single-leg glute bridge</span></div>
-        </div>
-      </section>
-      <section class="panel">
-        <h4>Progression</h4>
-        <ul>
-          <li>Hip thrust / glute bridge: add 10 lb when all sets feel good.</li>
-          <li>Deadlift / RDL: add 5–10 lb when form is clean.</li>
-          <li>Rows / bench: add 5 lb at a time.</li>
-          <li>Posture and triceps accessories: add reps first, then weight.</li>
-        </ul>
-      </section>
+      <div id="guideTips"></div>
       <section class="panel">
         <h4>Account</h4>
         <div class="account-row">
@@ -366,6 +347,21 @@
         <div class="account-row" style="margin-top:10px">
           <span style="font-size:13.5px;color:var(--muted)">Profile</span>
           <button id="changeProfileBtn">Change</button>
+        </div>
+      </section>
+      <section class="panel" id="partnerPanel">
+        <h4>Partner</h4>
+        <p style="margin:0 0 12px">Link accounts to see each other's progress. They'll be able to see yours too.</p>
+        <div id="partnerLinked" hidden>
+          <div class="account-row">
+            <span id="partnerEmail" style="font-size:13.5px;color:var(--muted)"></span>
+            <span style="font-size:12px;font-weight:800;color:var(--text)">Connected</span>
+          </div>
+        </div>
+        <div id="partnerConnectForm">
+          <input type="email" id="partnerEmailInput" placeholder="their@email.com" inputmode="email" autocomplete="email" style="width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:11px 12px;font-size:14px;font-weight:700;color:var(--text);outline:none;margin-bottom:10px">
+          <button id="connectPartnerBtn" style="width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;padding:12px;border-radius:12px">Connect</button>
+          <div id="partnerStatus" style="margin-top:10px;font-size:12.5px;color:var(--muted);min-height:16px"></div>
         </div>
       </section>
     </main>
@@ -389,7 +385,7 @@
   </nav>
 
   <script>
-    const plan = [
+    const SARAH_PLAN = [
       {title:'Day 1', subtitle:'Heavy Glutes + Deadlift', exercises:[
         ['Barbell hip thrust','5 x 5–8','95–135 lb','Pause 1 sec at top. Ribs down, chin tucked, shins vertical.','bridge'],
         ['Barbell Romanian deadlift','4 x 6–8','65–95 lb','Hips back, soft knees, feel hamstrings and glutes.','hinge'],
@@ -434,6 +430,52 @@
         ['Frog pumps','2 x 30','Bodyweight to 25 lb DB','Finisher.','bridge']
       ]}
     ];
+
+    const CHRISTOPHER_PLAN = [
+      {title:'Day 1', subtitle:'Chest + Triceps', exercises:[
+        ['Barbell bench press','4 x 6–8','95–135 lb','Elbows at 45°, drive feet into the floor, touch chest lightly.','press'],
+        ['Incline dumbbell press','3 x 8–10','30–50 lb DBs','30–45° incline, control the descent.','press'],
+        ['Weighted dips','3 x 8–12','Bodyweight to +25 lb','Lean forward slightly to bias chest, full lockout.','press'],
+        ['Dumbbell chest fly','3 x 10–15','15–25 lb DBs','Slight elbow bend, squeeze at the top.','armraise'],
+        ['Overhead triceps extension','3 x 10–15','20–35 lb DB','Elbows tucked in, full stretch at bottom.','curl'],
+        ['Triceps pushdown','3 x 12–15','Light-medium band or cable','Keep elbows pinned to your sides.','curl']
+      ]},
+      {title:'Day 2', subtitle:'Back + Biceps', exercises:[
+        ['Barbell deadlift','4 x 5–6','135–185 lb','Neutral spine, push the floor away, bar stays close.','hinge'],
+        ['Pull-ups or lat pulldown','4 x 6–10','Bodyweight or moderate stack','Lead with the elbows, squeeze the lats at the bottom.','row'],
+        ['Barbell bent-over row','4 x 8–10','65–95 lb','Flat back, pull to the belly button.','row'],
+        ['Single-arm dumbbell row','3 x 10–12/side','30–45 lb DB','Full stretch at the bottom, no torso twist.','row'],
+        ['Barbell bicep curl','3 x 8–12','30–50 lb','Elbows locked at your sides, no swinging.','curl'],
+        ['Hammer curl','3 x 10–15','20–30 lb DBs','Neutral grip, controlled tempo.','curl']
+      ]},
+      {title:'Day 3', subtitle:'Thighs, Quad Focus', exercises:[
+        ['Barbell back squat','5 x 5–8','135–185 lb','Chest up, knees track over toes, hit depth.','squat'],
+        ['Leg press','4 x 10–12','Moderate-heavy stack','Feet mid-platform, don’t lock knees out hard.','squat'],
+        ['Walking lunges','3 x 10–12/side','20–35 lb DBs','Long stride, back knee kisses the floor.','squat'],
+        ['Bulgarian split squat','3 x 8–10/side','20–30 lb DBs','Front shin vertical, most weight on front leg.','squat'],
+        ['Romanian deadlift','3 x 8–10','95–135 lb','Hips back, soft knees, feel the hamstring stretch.','hinge'],
+        ['Standing calf raise','4 x 12–15','Bodyweight to 25 lb DBs','Full stretch at bottom, pause at the top.','calf']
+      ]},
+      {title:'Day 4', subtitle:'Shoulders + Arms', exercises:[
+        ['Standing overhead barbell press','4 x 6–8','65–95 lb','Brace core, press straight up, avoid leaning back.','armraise'],
+        ['Seated dumbbell shoulder press','3 x 8–10','25–40 lb DBs','Controlled descent to ear level.','armraise'],
+        ['Lateral raise','4 x 12–15','10–20 lb DBs','Lead with elbows, stop at shoulder height.','armraise'],
+        ['Rear delt fly','3 x 12–15','10–15 lb DBs','Slight bend in elbows, squeeze shoulder blades.','armraise'],
+        ['EZ-bar curl','3 x 8–12','40–60 lb','Full range, no momentum.','curl'],
+        ['Skull crushers','3 x 8–12','30–45 lb','Elbows stay fixed, lower to forehead.','curl']
+      ]},
+      {title:'Day 5', subtitle:'Upper Pump + Thighs', exercises:[
+        ['Front squat or goblet squat','4 x 8–10','65–95 lb barbell or 40–60 lb DB','Upright torso, elbows high.','squat'],
+        ['Leg press, higher rep','3 x 15–20','Moderate stack','Slow and controlled, chase the burn.','squat'],
+        ['Incline machine or DB press','3 x 10–12','30–45 lb DBs','Squeeze upper chest at the top.','press'],
+        ['Chest-supported row','3 x 10–12','30–45 lb DBs','Squeeze shoulder blades together and down.','row'],
+        ['Cable lateral raise','3 x 15–20','Light-medium cable','Constant tension, don’t rest at the bottom.','armraise'],
+        ['Standing calf raise','3 x 15–20','Bodyweight to 25 lb DBs','Fast, full-range pump reps.','calf']
+      ]}
+    ];
+
+    let plan = SARAH_PLAN;
+    function planFor(mascot){ return mascot === 'christopher' ? CHRISTOPHER_PLAN : SARAH_PLAN; }
 
     const figures = {
       bridge: `<svg viewBox="0 0 130 100"><line x1="8" y1="95" x2="122" y2="95" stroke="var(--border)" stroke-width="2"/>
@@ -603,13 +645,61 @@
       document.documentElement.style.setProperty('--spark-color', mascot === 'christopher' ? '#3fa9e8' : '#ff2fa0');
     }
 
+    function renderGuideTips(){
+      const el = document.getElementById('guideTips');
+      if(currentMascot === 'christopher'){
+        el.innerHTML = `
+          <section class="panel">
+            <h4>Weight rule</h4>
+            <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If form breaks down, lower the weight.</p>
+          </section>
+          <section class="panel">
+            <h4>Progression</h4>
+            <ul>
+              <li>Squats / deadlifts: add 5–10 lb when form is clean.</li>
+              <li>Bench / overhead press: add 5 lb at a time.</li>
+              <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
+              <li>Shoulders and arms accessories: add reps first, then weight.</li>
+            </ul>
+          </section>`;
+      } else {
+        el.innerHTML = `
+          <section class="panel">
+            <h4>Weight rule</h4>
+            <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If your knee pain goes above 3/10, lower the weight or use a swap.</p>
+          </section>
+          <section class="panel">
+            <h4>Knee-friendly swaps</h4>
+            <div class="swaps">
+              <div class="swap"><b>Squats</b><span>Hip thrusts, glute bridges, RDLs</span></div>
+              <div class="swap"><b>Lunges</b><span>Kickstand RDLs, B-stance hip thrusts</span></div>
+              <div class="swap"><b>Step-ups</b><span>Kettlebell swings or hamstring curls</span></div>
+              <div class="swap"><b>Bulgarian split squats</b><span>Single-leg glute bridge</span></div>
+            </div>
+          </section>
+          <section class="panel">
+            <h4>Progression</h4>
+            <ul>
+              <li>Hip thrust / glute bridge: add 10 lb when all sets feel good.</li>
+              <li>Deadlift / RDL: add 5–10 lb when form is clean.</li>
+              <li>Rows / bench: add 5 lb at a time.</li>
+              <li>Posture and triceps accessories: add reps first, then weight.</li>
+            </ul>
+          </section>`;
+      }
+    }
+
     async function chooseMascot(mascot){
       currentMascot = mascot;
+      plan = planFor(mascot);
       applyMascotTheme(mascot);
       await sb.auth.updateUser({ data: { mascot } });
+      await sb.from('profiles').upsert({ user_id: currentUser.id, mascot, updated_at: new Date().toISOString() });
+      await loadPartner();
       setScreenState('app');
       renderDashboard();
       updateProgress();
+      renderGuideTips();
     }
 
     document.querySelectorAll('.mascot-opt').forEach(btn=>{
@@ -657,10 +747,13 @@
         const mascot = currentUser.user_metadata && currentUser.user_metadata.mascot;
         if(mascot){
           currentMascot = mascot;
+          plan = planFor(mascot);
           applyMascotTheme(mascot);
+          await loadPartner();
           setScreenState('app');
           renderDashboard();
           updateProgress();
+          renderGuideTips();
         } else {
           setScreenState('mascot');
         }
@@ -895,6 +988,69 @@
         row.onclick = ()=>openSession(i);
         dayList.appendChild(row);
       });
+
+      renderPartnerCard();
+    }
+
+    let partnerId = null;
+    let partnerMascot = null;
+
+    function mascotName(mascot){
+      return mascot === 'christopher' ? 'Christopher' : mascot === 'sarah' ? 'Sarah' : 'Partner';
+    }
+
+    async function loadPartner(){
+      const { data } = await sb.from('partners').select('partner_id').eq('user_id', currentUser.id).limit(1).maybeSingle();
+      if(data && data.partner_id){
+        partnerId = data.partner_id;
+        const { data: prof } = await sb.from('profiles').select('mascot').eq('user_id', partnerId).maybeSingle();
+        partnerMascot = prof && prof.mascot;
+      } else {
+        partnerId = null;
+        partnerMascot = null;
+      }
+      updatePartnerAccountUI();
+    }
+
+    function updatePartnerAccountUI(){
+      document.getElementById('partnerLinked').hidden = !partnerId;
+      document.getElementById('partnerConnectForm').hidden = !!partnerId;
+      if(partnerId) document.getElementById('partnerEmail').textContent = mascotName(partnerMascot);
+    }
+
+    document.getElementById('connectPartnerBtn').onclick = async ()=>{
+      const email = document.getElementById('partnerEmailInput').value.trim();
+      const statusEl = document.getElementById('partnerStatus');
+      if(!email){ statusEl.textContent = 'Enter their email first.'; return; }
+      statusEl.textContent = 'Connecting...';
+      const { error } = await sb.rpc('link_partner_by_email', { partner_email: email });
+      if(error){ statusEl.textContent = error.message; return; }
+      statusEl.textContent = '';
+      await loadPartner();
+    };
+
+    async function renderPartnerCard(){
+      const titleEl = document.getElementById('partnerSectionTitle');
+      const cardEl = document.getElementById('partnerCard');
+      if(!partnerId || !partnerMascot){
+        titleEl.hidden = true;
+        cardEl.innerHTML = '';
+        return;
+      }
+      const { data: rows } = await sb.from('progress').select('day_idx,exercise_idx,set_idx,done').eq('user_id', partnerId);
+      const partnerPlan = planFor(partnerMascot);
+      let total = 0;
+      partnerPlan.forEach(d=>d.exercises.forEach(ex=>{ total += setCount(ex[1]); }));
+      const done = (rows || []).filter(r=>r.done).length;
+      const pct = total ? Math.round(done/total*100) : 0;
+
+      titleEl.hidden = false;
+      cardEl.innerHTML = `
+        <div class="day-row">
+          <div class="dr-ring">${ringSvg(pct, 40, 5)}</div>
+          <div class="dr-info"><b>${mascotName(partnerMascot)}</b><span>${pct}% this week</span></div>
+          <div class="dr-frac">${done}/${total}</div>
+        </div>`;
     }
 
     function switchScreen(name){
@@ -903,6 +1059,7 @@
       window.scrollTo({top:0, behavior:'smooth'});
       if(name==='progress' || name==='dashboard') updateProgress();
       if(name==='dashboard') renderDashboard();
+      if(name==='guide') renderGuideTips();
     }
     document.querySelectorAll('.tabbtn').forEach(b=>{
       b.onclick = ()=>switchScreen(b.dataset.screen);
