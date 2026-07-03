@@ -24,7 +24,18 @@
       --radius-lg:22px;
       --radius-md:16px;
       --radius-sm:12px;
+      --radius-pill:999px;
       --ease:cubic-bezier(.16,1,.3,1);
+      /* spacing scale — added when the Figma design system formalized these; not yet used everywhere in this file */
+      --space-4:4px;
+      --space-8:8px;
+      --space-12:12px;
+      --space-16:16px;
+      --space-18:18px;
+      --space-20:20px;
+      --space-22:22px;
+      --space-24:24px;
+      --space-28:28px;
     }
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
     html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",ui-sans-serif,system-ui,sans-serif;}
@@ -40,7 +51,7 @@
       padding:calc(14px + env(safe-area-inset-top)) 18px 12px;
     }
     .topbar-inner{max-width:520px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .week-chip{background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-weight:800;font-size:12px;padding:8px 12px;border-radius:999px;white-space:nowrap}
+    .week-chip{background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-weight:800;font-size:12px;padding:8px 12px;border-radius:var(--radius-pill);white-space:nowrap}
 
     /* ---- wordmark (logo) ---- */
     .wordmark{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;color:var(--text);position:relative;display:inline-block;line-height:1}
@@ -79,13 +90,13 @@
     .day-hero h2{font-size:23px;font-weight:900;letter-spacing:-.035em;margin:0 0 4px;line-height:1.15;color:#fff}
     .day-hero p.sub{margin:0 0 18px;color:rgba(255,255,255,.6);font-size:13px}
     .day-hero .progress-line{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-    .day-hero .bar{flex:1;height:8px;background:rgba(255,255,255,.16);border-radius:999px;overflow:hidden}
-    .day-hero .bar > div{height:100%;background:#fff;border-radius:999px;transition:width .4s var(--ease)}
+    .day-hero .bar{flex:1;height:8px;background:rgba(255,255,255,.16);border-radius:var(--radius-pill);overflow:hidden}
+    .day-hero .bar > div{height:100%;background:#fff;border-radius:var(--radius-pill);transition:width .4s var(--ease)}
     .day-hero .frac{font-size:12.5px;font-weight:800;color:rgba(255,255,255,.65);white-space:nowrap}
     .day-hero .cta{width:100%;background:#fff;color:var(--accent);font-weight:900;font-size:15px;padding:15px;border-radius:16px;transition:transform .12s var(--ease)}
     .day-hero .cta:active{transform:scale(.97)}
     .day-hero .cta.done{background:rgba(255,255,255,.14);color:#fff}
-    .day-hero .badge-done{position:absolute;top:20px;right:20px;background:#fff;color:var(--accent);font-size:11px;font-weight:900;padding:6px 10px;border-radius:999px}
+    .day-hero .badge-done{position:absolute;top:20px;right:20px;background:#fff;color:var(--accent);font-size:11px;font-weight:900;padding:6px 10px;border-radius:var(--radius-pill)}
 
     /* ---- other-day small cards ---- */
     .section-label{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:4px 4px 10px}
@@ -103,7 +114,7 @@
     .exercise{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin:0 0 12px;overflow:hidden}
     .ex-head{padding:15px 15px 8px;display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
     .ex-name{font-weight:850;font-size:15.5px;letter-spacing:-.02em}
-    .ex-dose{font-size:11.5px;color:var(--text);font-weight:850;background:transparent;border:1.5px solid var(--text);padding:5px 10px;border-radius:999px;white-space:nowrap;flex:none}
+    .ex-dose{font-size:11.5px;color:var(--text);font-weight:850;background:transparent;border:1.5px solid var(--text);padding:5px 10px;border-radius:var(--radius-pill);white-space:nowrap;flex:none}
     .fig-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);margin:2px 20px 14px;padding:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:140px}
     .fig-box img{width:100%;max-width:280px;height:140px;object-fit:contain;display:block;border-radius:calc(var(--radius-sm) - 4px)}
     .fig-missing{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);padding:20px 0}
@@ -131,7 +142,7 @@
     .session-title span{font-size:11.5px;color:var(--muted);font-weight:700}
 
     .pips{display:flex;gap:6px;padding:16px 2px 20px}
-    .pip{flex:1;min-width:12px;height:5px;border-radius:999px;background:var(--surface-3);transition:background .2s}
+    .pip{flex:1;min-width:12px;height:5px;border-radius:var(--radius-pill);background:var(--surface-3);transition:background .2s}
     .pip.done{background:var(--accent)}
     .pip.active{background:var(--muted-2)}
 
@@ -192,10 +203,10 @@
     .tabbar .inner{
       pointer-events:auto;
       max-width:420px;width:100%;display:flex;gap:2px;
-      background:var(--surface);border:1px solid var(--border);border-radius:999px;
+      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-pill);
       box-shadow:var(--shadow);padding:6px;
     }
-    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:999px;color:var(--muted-2);font-size:10.5px;font-weight:800;transition:color .15s,background .15s,transform .12s var(--ease)}
+    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:var(--radius-pill);color:var(--muted-2);font-size:10.5px;font-weight:800;transition:color .15s,background .15s,transform .12s var(--ease)}
     .tabbtn:active{transform:scale(.92)}
     .tabbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     .tabbtn.active{color:var(--text);background:var(--surface-2)}
@@ -218,7 +229,7 @@
     .authcard .authdivider::before,.authcard .authdivider::after{content:'';flex:1;height:1px;background:var(--border)}
     .authcard .status{margin-top:14px;font-size:13px;color:var(--muted);min-height:16px}
     .account-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .account-row button{background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:999px;white-space:nowrap}
+    .account-row button{background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:var(--radius-pill);white-space:nowrap}
 
     /* ---- setup / no-plan overlay screens ---- */
     .overlayscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
