@@ -392,7 +392,7 @@
         ['Chest-supported dumbbell row','4 x 8–10','20–35 lb DBs','Squeeze shoulder blades back and down.','row',null],
         ['Barbell bent-over row','4 x 6–8','45–75 lb','Heavy but controlled. No yanking.','row','/api/gif/0027'],
         ['Dumbbell rear delt fly','3 x 12–20','5–12 lb DBs','Light and strict.','armraise','/api/gif/0383'],
-        ['Band face pulls / pull-aparts','3 x 15–25','Light-medium band','Elbows high, finish near temples.','row','/api/gif/5203'],
+        ['Dumbbell rear delt row','3 x 15–25','5–15 lb DBs','Wide grip, pull to chest height, squeeze shoulder blades.','row','/api/gif/0377'],
         ['Prone Y-raise','3 x 10–15','2.5–8 lb DBs','Lower traps. Tiny weights are enough.','armraise',null],
         ['Close-grip bench press','4 x 6–10','45–75 lb','Back of arms focus.','press','/api/gif/0030'],
         ['Overhead dumbbell triceps extension','3 x 10–15','15–30 lb DB','Long head of triceps.','curl','/api/gif/0109']
@@ -401,7 +401,7 @@
         ['Barbell glute bridge from floor','4 x 8–10','95–145 lb','Go heavy, but keep low back quiet.','bridge','/api/gif/1409'],
         ['Kickstand RDL','3 x 8–10/side','20–40 lb DBs','Stable single-leg-ish hinge.','hinge','/api/gif/1459'],
         ['Dumbbell hamstring curl','3 x 10–15','10–25 lb DB','Hold DB between feet or use sliders.','legcurl',null],
-        ['Kettlebell swing','4 x 12–20','20–35 lb','Hip snap, not a squat.','hinge','/api/gif/0549'],
+        ['Dumbbell sumo pull-through','4 x 12–20','25–40 lb DB','Hip snap, not a squat — swing the DB back through your legs.','hinge','/api/gif/2808'],
         ['B-stance hip thrust','3 x 10–12/side','65–115 lb','One glute works harder without knee stress.','bridge',null],
         ['Side plank / Copenhagen plank','2–3 x 20–40 sec','Bodyweight','Optional hip/core stability.','plank','/api/gif/3544']
       ]},
@@ -418,9 +418,9 @@
         ['Hip thrust, lighter than Day 1','4 x 10–12','75–115 lb','Smooth reps, full lockout.','bridge',null],
         ['Dumbbell or barbell RDL','3 x 10–12','50–85 lb barbell or 20–35 lb DBs','Moderate weight, big stretch.','hinge','/api/gif/0085'],
         ['Low step-up, glute-biased','2–3 x 8–10/side','Bodyweight to 15 lb DBs','Only if knee tolerates. Low box, forward lean.','squat',null],
-        ['Kettlebell swing / pull-through swap','3 x 12–15','20–35 lb','Use instead of step-ups if knee hurts.','hinge','/api/gif/0549'],
+        ['Dumbbell sumo pull-through swap','3 x 12–15','25–40 lb DB','Use instead of step-ups if knee hurts.','hinge','/api/gif/2808'],
         ['Hamstring curl variation','3 x 12–15','10–25 lb DB','Control the lowering.','legcurl','/api/gif/0586'],
-        ['Band abductions','4 x 20–30','Light-medium band','Side-glute burnout.','legraise','/api/gif/3006'],
+        ['Side bridge hip abduction','4 x 20–30/side','Bodyweight','Side-glute burnout, top leg lifts and lowers.','legraise','/api/gif/1774'],
         ['Frog pumps','2 x 30','Bodyweight to 25 lb DB','Finisher.','bridge',null]
       ]}
     ];
@@ -429,14 +429,14 @@
       {title:'Day 1', subtitle:'Chest + Triceps', exercises:[
         ['Barbell bench press','4 x 6–8','95–135 lb','Elbows at 45°, drive feet into the floor, touch chest lightly.','press','/api/gif/0025'],
         ['Incline dumbbell press','3 x 8–10','30–50 lb DBs','30–45° incline, control the descent.','press','/api/gif/0314'],
-        ['Weighted dips','3 x 8–12','Bodyweight to +25 lb','Lean forward slightly to bias chest, full lockout.','press','/api/gif/0251'],
+        ['Bench dips','3 x 10–15','Bodyweight, feet elevated to add difficulty','Hands on bench edge, lower until elbows hit ~90°.','press','/api/gif/0129'],
         ['Dumbbell chest fly','3 x 10–15','15–25 lb DBs','Slight elbow bend, squeeze at the top.','armraise','/api/gif/0308'],
         ['Overhead triceps extension','3 x 10–15','20–35 lb DB','Elbows tucked in, full stretch at bottom.','curl','/api/gif/0109'],
-        ['Triceps pushdown','3 x 12–15','Light-medium band or cable','Keep elbows pinned to your sides.','curl','/api/gif/0241']
+        ['Dumbbell triceps kickback','3 x 12–15','10–20 lb DBs','Keep elbows pinned to your sides, squeeze at full extension.','curl','/api/gif/0333']
       ]},
       {title:'Day 2', subtitle:'Back + Biceps', exercises:[
         ['Barbell deadlift','4 x 5–6','135–185 lb','Neutral spine, push the floor away, bar stays close.','hinge','/api/gif/0032'],
-        ['Pull-ups or lat pulldown','4 x 6–10','Bodyweight or moderate stack','Lead with the elbows, squeeze the lats at the bottom.','row','/api/gif/0651'],
+        ['Dumbbell pullover','4 x 8–12','35–55 lb DB','Lie on the bench, arc the DB back behind your head, pull over with the lats.','row','/api/gif/0375'],
         ['Barbell bent-over row','4 x 8–10','65–95 lb','Flat back, pull to the belly button.','row','/api/gif/0027'],
         ['Single-arm dumbbell row','3 x 10–12/side','30–45 lb DB','Full stretch at the bottom, no torso twist.','row','/api/gif/0064'],
         ['Barbell bicep curl','3 x 8–12','30–50 lb','Elbows locked at your sides, no swinging.','curl','/api/gif/0031'],
@@ -455,7 +455,7 @@
         ['Seated dumbbell shoulder press','3 x 8–10','25–40 lb DBs','Controlled descent to ear level.','armraise','/api/gif/0405'],
         ['Lateral raise','4 x 12–15','10–20 lb DBs','Lead with elbows, stop at shoulder height.','armraise','/api/gif/0334'],
         ['Rear delt fly','3 x 12–15','10–15 lb DBs','Slight bend in elbows, squeeze shoulder blades.','armraise','/api/gif/0383'],
-        ['EZ-bar curl','3 x 8–12','40–60 lb','Full range, no momentum.','curl','/api/gif/0447'],
+        ['Barbell curl','3 x 8–12','40–60 lb','Full range, no momentum, elbows locked at your sides.','curl','/api/gif/0031'],
         ['Skull crushers','3 x 8–12','30–45 lb','Elbows stay fixed, lower to forehead.','curl','/api/gif/0060']
       ]},
       {title:'Day 5', subtitle:'Upper Pump + Thighs', exercises:[
@@ -463,7 +463,7 @@
         ['Barbell split squat','3 x 12–15/side','45–65 lb','Front foot planted, back knee taps down, drive through the front heel.','squat','/api/gif/2810'],
         ['Incline machine or DB press','3 x 10–12','30–45 lb DBs','Squeeze upper chest at the top.','press','/api/gif/0314'],
         ['Chest-supported row','3 x 10–12','30–45 lb DBs','Squeeze shoulder blades together and down.','row',null],
-        ['Cable lateral raise','3 x 15–20','Light-medium cable','Constant tension, don’t rest at the bottom.','armraise','/api/gif/0178'],
+        ['Dumbbell lateral raise, drop set','3 x 15–20','10–20 lb DBs, drop weight on the last set','Lead with elbows, stop at shoulder height, chase the burn.','armraise','/api/gif/0334'],
         ['Standing calf raise','3 x 15–20','Bodyweight to 25 lb DBs','Fast, full-range pump reps.','calf','/api/gif/0417']
       ]}
     ];
