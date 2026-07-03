@@ -658,7 +658,41 @@
       ]}
     ];
 
-    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN, test: TEST_PLAN, emily: EMILY_PLAN };
+    const GLEAMOTEST_PLAN = [
+      {title:'Day 1', subtitle:'Chest + Abs Fundamentals', exercises:[
+        ['Barbell bench press','3 x 8–10','Light-moderate barbell','Elbows at 45°, drive your feet into the floor, lower the bar with control.','press','/api/gif/0025'],
+        ['Incline dumbbell press','3 x 10–12','10–20 lb DBs','30–45° incline, press up and slightly in, control the way down.','press','/api/gif/0314'],
+        ['Dumbbell chest fly','3 x 12–15','8–15 lb DBs','Slight bend in your elbows, lower slow, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Cable kneeling crunch','3 x 15–20','Light-moderate cable','Round through your spine, exhale as you crunch down.','legraise','/api/gif/0175'],
+        ['Weighted front plank','3 x 20–30 sec','Bodyweight, add a light plate later','Keep your hips level, brace like someone’s about to poke your stomach.','plank','/api/gif/2135']
+      ]},
+      {title:'Day 2', subtitle:'Chest + Abs, Cable & Core', exercises:[
+        ['Bench dips','3 x 8–10','Bodyweight','Hands on the bench edge, lower until your elbows hit about 90°, push back up.','press','/api/gif/0129'],
+        ['Dumbbell chest fly','3 x 12–15','8–15 lb DBs','Slight bend in your elbows, lower slow, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Russian twist','3 x 15–20','Bodyweight or light plate','Rotate from your core, not your arms.','plank','/api/gif/0687'],
+        ['Cable standing crunch','3 x 15–20','Light-moderate cable','Crunch down and in, exhale fully at the bottom.','legraise','/api/gif/0226']
+      ]},
+      {title:'Day 3', subtitle:'Chest + Abs Pump', exercises:[
+        ['Barbell bench press, lighter than Day 1','3 x 10–12','Lighter than Day 1','Smooth reps, full lockout, chase the pump.','press','/api/gif/0025'],
+        ['Incline dumbbell press','3 x 10–12','10–20 lb DBs','30–45° incline, press up and slightly in, control the way down.','press','/api/gif/0314'],
+        ['Cable reverse crunch','3 x 15–20','Light-moderate cable','Curl your hips up and in, not just your legs.','legraise','/api/gif/0873'],
+        ['Side plank','2–3 x 15–20 sec/side','Bodyweight','Stack your hips, hold a straight line from shoulder to ankle.','plank','/api/gif/3544']
+      ]},
+      {title:'Day 4', subtitle:'Chest + Abs Core Focus', exercises:[
+        ['Dumbbell chest fly','3 x 12–15','8–15 lb DBs','Slight bend in your elbows, lower slow, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Bench dips','3 x 8–10','Bodyweight','Hands on the bench edge, lower until your elbows hit about 90°, push back up.','press','/api/gif/0129'],
+        ['Hanging leg raise','3 x 8–10','Bodyweight','Control the lift and the lowering, don’t swing.','legraise','/api/gif/0472'],
+        ['Cable kneeling crunch','3 x 15–20','Light-moderate cable','Round through your spine, exhale as you crunch down.','legraise','/api/gif/0175']
+      ]},
+      {title:'Day 5', subtitle:'Chest + Abs Finisher', exercises:[
+        ['Barbell bench press','3 x 10–12','Light-moderate barbell','Elbows at 45°, drive your feet into the floor, lower the bar with control.','press','/api/gif/0025'],
+        ['Incline dumbbell press','3 x 10–12','10–20 lb DBs','30–45° incline, press up and slightly in, control the way down.','press','/api/gif/0314'],
+        ['Russian twist','3 x 15–20','Bodyweight or light plate','Rotate from your core, not your arms.','plank','/api/gif/0687'],
+        ['Weighted front plank','3 x 20–30 sec','Bodyweight, add a light plate later','Keep your hips level, brace like someone’s about to poke your stomach.','plank','/api/gif/2135']
+      ]}
+    ];
+
+    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN, test: TEST_PLAN, emily: EMILY_PLAN, gleamotest: GLEAMOTEST_PLAN };
     let plan = null;
     function planFor(planKey){ return PLANS[planKey] || null; }
 
@@ -776,6 +810,21 @@
               <li>Bench / overhead press: add 5 lb at a time.</li>
               <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
               <li>Shoulders and arms accessories: add reps first, then weight.</li>
+            </ul>
+          </section>`;
+      } else if(planKey === 'gleamotest'){
+        el.innerHTML = `
+          <section class="panel">
+            <h4>Weight rule</h4>
+            <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
+          </section>
+          <section class="panel">
+            <h4>Progression</h4>
+            <ul>
+              <li>Bench press / incline press: once all sets feel easy with good form, add 5 lb.</li>
+              <li>Chest fly / bench dips: master the bodyweight or light-DB version before adding more weight.</li>
+              <li>Abs and core: add reps or hold time first, then start adding load.</li>
+              <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
             </ul>
           </section>`;
       } else if(planKey === 'emily'){
