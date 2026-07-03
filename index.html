@@ -5,8 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>gleamo</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap">
   <style>
     :root{
       --bg:#EEECE7;
@@ -220,19 +218,16 @@
     .account-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
     .account-row button{background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:999px;white-space:nowrap}
 
-    /* ---- mascot / profile picker screen ---- */
-    .mascotscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
-    .mascotscreen[hidden]{display:none}
-    .mascotcard{max-width:380px;width:100%;text-align:center}
-    .mascotcard .eyebrow{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:8px}
-    .mascotcard h2{font-size:22px;font-weight:900;letter-spacing:-.03em;margin:0 0 22px}
-    .mascot-options{display:grid;grid-template-columns:1fr 1fr;gap:14px}
-    .mascot-opt{background:var(--surface);border:1.5px solid var(--border);border-radius:var(--radius-lg);padding:28px 12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;min-height:170px;transition:transform .12s var(--ease),border-color .15s}
-    .mascot-opt:active{transform:scale(.96)}
-    .mascot-opt .deco-icon{width:34px;height:auto}
-    .mascot-opt .graffiti-name{font-family:'Luckiest Guy',cursive;font-size:26px;letter-spacing:.02em;line-height:1;-webkit-text-stroke:1.5px #1a1a1a;text-shadow:2px 2px 0 rgba(0,0,0,.12)}
-    .mascot-opt.pink:hover,.mascot-opt.pink:active{border-color:#ff9fc8}
-    .mascot-opt.blue:hover,.mascot-opt.blue:active{border-color:#7fcdf0}
+    /* ---- setup / no-plan overlay screens ---- */
+    .overlayscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
+    .overlayscreen[hidden]{display:none}
+    .overlaycard{max-width:380px;width:100%;text-align:center}
+    .overlaycard .eyebrow{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:8px}
+    .overlaycard h2{font-size:22px;font-weight:900;letter-spacing:-.03em;margin:0 0 22px}
+    .overlaycard input[type=text]{width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:13px 14px;font-size:16px;font-weight:700;color:var(--text);outline:none;margin-bottom:14px;text-align:center}
+    .overlaycard .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:15px;padding:14px;border-radius:14px}
+    .overlaycard .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:14px;padding:12px;border-radius:14px;margin-top:10px}
+    .overlaycard .code-display{font-size:32px;font-weight:900;letter-spacing:.12em;margin-bottom:18px}
 
     @media (min-width:600px){
       .app{max-width:560px}
@@ -255,26 +250,24 @@
     </div>
   </div>
 
-  <div class="mascotscreen" id="mascotScreen" hidden>
-    <div class="mascotcard">
+  <div class="overlayscreen" id="setupScreen" hidden>
+    <div class="overlaycard">
       <div class="eyebrow">quick thing</div>
-      <h2>who's this?</h2>
-      <div class="mascot-options">
-        <button class="mascot-opt pink" data-mascot="sarah">
-          <svg class="deco-icon" viewBox="0 0 40 24">
-            <path d="M20 12 C20 12 14 3 5 5.5 C-1 7.2 -1 16.8 5 18.5 C14 21 20 12 20 12 Z" fill="#ff5fa8"/>
-            <path d="M20 12 C20 12 26 3 35 5.5 C41 7.2 41 16.8 35 18.5 C26 21 20 12 20 12 Z" fill="#ff5fa8"/>
-            <circle cx="20" cy="12" r="4.5" fill="#e0407f"/>
-          </svg>
-          <span class="graffiti-name" style="color:#ff5fa8;transform:rotate(-4deg)">SARAH</span>
-        </button>
-        <button class="mascot-opt blue" data-mascot="christopher">
-          <svg class="deco-icon" viewBox="0 0 24 32">
-            <path d="M14 0 L2 18 L11 18 L8 32 L22 12 L13 12 Z" fill="#3fa9e8"/>
-          </svg>
-          <span class="graffiti-name" style="color:#3fa9e8;transform:rotate(4deg)">CHRIS</span>
-        </button>
-      </div>
+      <h2>What should we call you?</h2>
+      <input type="text" id="setupNameInput" placeholder="Your name">
+      <button id="setupSaveBtn" class="primary-btn">Continue</button>
+      <div class="status" id="setupStatus"></div>
+    </div>
+  </div>
+
+  <div class="overlayscreen" id="noPlanScreen" hidden>
+    <div class="overlaycard">
+      <div class="eyebrow">almost there</div>
+      <h2>Your plan isn't set up yet</h2>
+      <p style="color:var(--muted);font-size:14px;margin:0 0 18px">Send this code to whoever's setting up GLEAMO for you and they'll get your workout plan ready.</p>
+      <div class="code-display" id="noPlanCode"></div>
+      <button id="noPlanRefreshBtn" class="primary-btn">I'm all set — refresh</button>
+      <button id="noPlanLogoutBtn" class="secondary-btn">Log out</button>
     </div>
   </div>
 
@@ -363,15 +356,19 @@
       </section>
       <section class="panel" id="partnerPanel">
         <h4>Partner</h4>
-        <p style="margin:0 0 12px">Link accounts to see each other's progress. They'll be able to see yours too.</p>
+        <p style="margin:0 0 12px">Share your code so a friend can connect with you, or enter theirs below.</p>
+        <div class="account-row" style="margin-bottom:12px">
+          <span style="font-size:13.5px;color:var(--muted)">Your code</span>
+          <span id="yourConnectCode" style="font-weight:900;font-size:15px;letter-spacing:.08em"></span>
+        </div>
         <div id="partnerLinked" hidden>
           <div class="account-row">
-            <span id="partnerEmail" style="font-size:13.5px;color:var(--muted)"></span>
+            <span id="partnerDisplayName" style="font-size:13.5px;color:var(--muted)"></span>
             <span style="font-size:12px;font-weight:800;color:var(--text)">Connected</span>
           </div>
         </div>
         <div id="partnerConnectForm">
-          <input type="email" id="partnerEmailInput" placeholder="their@email.com" inputmode="email" autocomplete="email" style="width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:11px 12px;font-size:14px;font-weight:700;color:var(--text);outline:none;margin-bottom:10px">
+          <input type="text" id="partnerCodeInput" placeholder="Their code" maxlength="6" style="width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:11px 12px;font-size:14px;font-weight:700;color:var(--text);outline:none;margin-bottom:10px;text-transform:uppercase">
           <button id="connectPartnerBtn" style="width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;padding:12px;border-radius:12px">Connect</button>
           <div id="partnerStatus" style="margin-top:10px;font-size:12.5px;color:var(--muted);min-height:16px"></div>
         </div>
@@ -486,8 +483,9 @@
       ]}
     ];
 
-    let plan = SARAH_PLAN;
-    function planFor(mascot){ return mascot === 'christopher' ? CHRISTOPHER_PLAN : SARAH_PLAN; }
+    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN };
+    let plan = null;
+    function planFor(planKey){ return PLANS[planKey] || null; }
 
     const figures = {
       bridge: `<svg viewBox="0 0 130 100"><line x1="8" y1="95" x2="122" y2="95" stroke="var(--border)" stroke-width="2"/>
@@ -608,9 +606,17 @@
     const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let currentUser = null;
-    let currentMascot = null;
+    let myProfile = null;
     let doneCache = {};
     let weightCache = {};
+
+    const COLOR_PALETTE = ['#ff2fa0','#3fa9e8','#8b5cf6','#10b981','#f59e0b','#ef4444','#06b6d4','#f472b6'];
+    function colorForId(id){
+      if(!id) return 'var(--accent)';
+      let hash = 0;
+      for(let i=0;i<id.length;i++){ hash = (hash * 31 + id.charCodeAt(i)) >>> 0; }
+      return COLOR_PALETTE[hash % COLOR_PALETTE.length];
+    }
 
     function isDone(day, ex, set){ return doneCache[key(day, ex, set)] === true; }
     function getWeight(day, ex){ return weightCache[weightKey(day, ex)] || ''; }
@@ -659,20 +665,21 @@
       }, { onConflict: 'user_id,day_idx,exercise_idx' });
     }
 
-    function setScreenState(state){ // 'auth' | 'mascot' | 'app'
+    function setScreenState(state){ // 'auth' | 'setup' | 'noplan' | 'app'
       document.getElementById('authScreen').hidden = state !== 'auth';
-      document.getElementById('mascotScreen').hidden = state !== 'mascot';
+      document.getElementById('setupScreen').hidden = state !== 'setup';
+      document.getElementById('noPlanScreen').hidden = state !== 'noplan';
       document.getElementById('app').hidden = state !== 'app';
       document.getElementById('tabbar').style.display = state === 'app' ? 'flex' : 'none';
     }
 
-    function applyMascotTheme(mascot){
-      document.documentElement.style.setProperty('--spark-color', mascot === 'christopher' ? '#3fa9e8' : '#ff2fa0');
+    function applyUserTheme(color){
+      document.documentElement.style.setProperty('--spark-color', color);
     }
 
     function renderGuideTips(){
       const el = document.getElementById('guideTips');
-      if(currentMascot === 'christopher'){
+      if(myProfile && myProfile.planKey === 'christopher'){
         el.innerHTML = `
           <section class="panel">
             <h4>Weight rule</h4>
@@ -714,12 +721,24 @@
       }
     }
 
-    async function chooseMascot(mascot){
-      currentMascot = mascot;
-      plan = planFor(mascot);
-      applyMascotTheme(mascot);
-      await sb.auth.updateUser({ data: { mascot } });
-      await sb.from('profiles').upsert({ user_id: currentUser.id, mascot, updated_at: new Date().toISOString() });
+    async function fetchOrInitProfile(){
+      const { data } = await sb.from('profiles').select('display_name, plan_key, connect_code').eq('user_id', currentUser.id).maybeSingle();
+      myProfile = data ? { displayName: data.display_name, planKey: data.plan_key, connectCode: data.connect_code } : null;
+    }
+
+    async function routeAfterLogin(){
+      await fetchOrInitProfile();
+      if(!myProfile || !myProfile.displayName){
+        setScreenState('setup');
+        return;
+      }
+      if(!myProfile.planKey){
+        document.getElementById('noPlanCode').textContent = myProfile.connectCode || '';
+        setScreenState('noplan');
+        return;
+      }
+      plan = planFor(myProfile.planKey);
+      applyUserTheme(colorForId(currentUser.id));
       await loadPartner();
       setScreenState('app');
       renderDashboard();
@@ -727,12 +746,27 @@
       renderGuideTips();
     }
 
-    document.querySelectorAll('.mascot-opt').forEach(btn=>{
-      btn.onclick = ()=>chooseMascot(btn.dataset.mascot);
-    });
+    document.getElementById('setupSaveBtn').onclick = async ()=>{
+      const name = document.getElementById('setupNameInput').value.trim();
+      const statusEl = document.getElementById('setupStatus');
+      if(!name){ statusEl.textContent = 'Enter your name first.'; return; }
+      const btn = document.getElementById('setupSaveBtn');
+      btn.disabled = true;
+      statusEl.textContent = 'Saving...';
+      await sb.from('profiles').upsert({ user_id: currentUser.id, display_name: name, updated_at: new Date().toISOString() });
+      btn.disabled = false;
+      statusEl.textContent = '';
+      await routeAfterLogin();
+    };
+
+    document.getElementById('noPlanRefreshBtn').onclick = ()=>routeAfterLogin();
+    document.getElementById('noPlanLogoutBtn').onclick = async ()=>{
+      await sb.auth.signOut();
+    };
 
     document.getElementById('changeProfileBtn').onclick = ()=>{
-      setScreenState('mascot');
+      document.getElementById('setupNameInput').value = (myProfile && myProfile.displayName) || '';
+      setScreenState('setup');
     };
 
     document.getElementById('authSendBtn').onclick = async ()=>{
@@ -769,22 +803,10 @@
         if(window.location.hash.includes('access_token')){
           window.history.replaceState(null, '', window.location.pathname + window.location.search);
         }
-        const mascot = currentUser.user_metadata && currentUser.user_metadata.mascot;
-        if(mascot){
-          currentMascot = mascot;
-          plan = planFor(mascot);
-          applyMascotTheme(mascot);
-          await loadPartner();
-          setScreenState('app');
-          renderDashboard();
-          updateProgress();
-          renderGuideTips();
-        } else {
-          setScreenState('mascot');
-        }
+        await routeAfterLogin();
       } else {
         currentUser = null;
-        currentMascot = null;
+        myProfile = null;
         doneCache = {};
         weightCache = {};
         setScreenState('auth');
@@ -802,10 +824,6 @@
           stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${offset}"
           transform="rotate(-90 ${mid} ${mid})" style="transition:stroke-dashoffset .5s var(--ease)"/>
       </svg>`;
-    }
-
-    function mascotColor(mascot){
-      return mascot === 'christopher' ? '#3fa9e8' : mascot === 'sarah' ? '#ff2fa0' : 'var(--accent)';
     }
 
     function dayStats(i){
@@ -1018,12 +1036,12 @@
     // ---------- PROGRESS / GUIDE / TAB SWITCHING ----------
     function updateProgress(){
       const {done, total, pct} = overallStats();
-      const youColor = mascotColor(currentMascot);
+      const youColor = colorForId(currentUser.id);
       document.getElementById('weekChip').textContent = `${pct}% this week`;
       document.getElementById('heroRing').innerHTML = ringSvg(pct, 60, 7, youColor);
       document.getElementById('heroBig').textContent = `${done}/${total} sets`;
       const heroYouNameEl = document.getElementById('heroYouName');
-      heroYouNameEl.textContent = mascotName(currentMascot);
+      heroYouNameEl.textContent = (myProfile && myProfile.displayName) || 'You';
       heroYouNameEl.style.color = youColor;
 
       document.getElementById('bigRing').innerHTML = ringSvg(pct, 176, 16);
@@ -1048,37 +1066,35 @@
     }
 
     let partnerId = null;
-    let partnerMascot = null;
-
-    function mascotName(mascot){
-      return mascot === 'christopher' ? 'Christopher' : mascot === 'sarah' ? 'Sarah' : 'Partner';
-    }
+    let partnerProfile = null;
 
     async function loadPartner(){
       const { data } = await sb.from('partners').select('partner_id').eq('user_id', currentUser.id).limit(1).maybeSingle();
       if(data && data.partner_id){
         partnerId = data.partner_id;
-        const { data: prof } = await sb.from('profiles').select('mascot').eq('user_id', partnerId).maybeSingle();
-        partnerMascot = prof && prof.mascot;
+        const { data: prof } = await sb.from('profiles').select('display_name, plan_key').eq('user_id', partnerId).maybeSingle();
+        partnerProfile = prof ? { displayName: prof.display_name, planKey: prof.plan_key } : null;
       } else {
         partnerId = null;
-        partnerMascot = null;
+        partnerProfile = null;
       }
       updatePartnerAccountUI();
     }
 
     function updatePartnerAccountUI(){
+      const codeEl = document.getElementById('yourConnectCode');
+      if(codeEl) codeEl.textContent = (myProfile && myProfile.connectCode) || '';
       document.getElementById('partnerLinked').hidden = !partnerId;
       document.getElementById('partnerConnectForm').hidden = !!partnerId;
-      if(partnerId) document.getElementById('partnerEmail').textContent = mascotName(partnerMascot);
+      if(partnerId) document.getElementById('partnerDisplayName').textContent = (partnerProfile && partnerProfile.displayName) || 'Partner';
     }
 
     document.getElementById('connectPartnerBtn').onclick = async ()=>{
-      const email = document.getElementById('partnerEmailInput').value.trim();
+      const code = document.getElementById('partnerCodeInput').value.trim().toUpperCase();
       const statusEl = document.getElementById('partnerStatus');
-      if(!email){ statusEl.textContent = 'Enter their email first.'; return; }
+      if(!code){ statusEl.textContent = 'Enter their code first.'; return; }
       statusEl.textContent = 'Connecting...';
-      const { error } = await sb.rpc('link_partner_by_email', { partner_email: email });
+      const { error } = await sb.rpc('link_partner_by_code', { p_code: code });
       if(error){ statusEl.textContent = error.message; return; }
       statusEl.textContent = '';
       await loadPartner();
@@ -1089,7 +1105,7 @@
       const cardEl = document.getElementById('partnerCard');
       const heroPersonPartner = document.getElementById('heroPersonPartner');
       const heroDivider = document.getElementById('heroDivider');
-      if(!partnerId || !partnerMascot){
+      if(!partnerId || !partnerProfile || !partnerProfile.planKey){
         titleEl.hidden = true;
         cardEl.innerHTML = '';
         heroPersonPartner.hidden = true;
@@ -1097,18 +1113,19 @@
         return;
       }
       const { data: rows } = await sb.from('progress').select('day_idx,exercise_idx,set_idx,done').eq('user_id', partnerId);
-      const partnerPlan = planFor(partnerMascot);
+      const partnerPlan = planFor(partnerProfile.planKey);
       let total = 0;
       partnerPlan.forEach(d=>d.exercises.forEach(ex=>{ total += setCount(ex[1]); }));
       const done = (rows || []).filter(r=>r.done).length;
       const pct = total ? Math.round(done/total*100) : 0;
-      const partnerColor = mascotColor(partnerMascot);
+      const partnerColor = colorForId(partnerId);
+      const partnerName = partnerProfile.displayName || 'Partner';
 
       titleEl.hidden = false;
       cardEl.innerHTML = `
         <div class="day-row">
           <div class="dr-ring">${ringSvg(pct, 40, 5, partnerColor)}</div>
-          <div class="dr-info"><b>${mascotName(partnerMascot)}</b><span>${pct}% this week</span></div>
+          <div class="dr-info"><b>${partnerName}</b><span>${pct}% this week</span></div>
           <div class="dr-frac">${done}/${total}</div>
         </div>`;
 
@@ -1116,7 +1133,7 @@
       heroDivider.hidden = false;
       document.getElementById('heroPartnerRing').innerHTML = ringSvg(pct, 60, 7, partnerColor);
       const partnerNameEl = document.getElementById('heroPartnerName');
-      partnerNameEl.textContent = mascotName(partnerMascot);
+      partnerNameEl.textContent = partnerName;
       partnerNameEl.style.color = partnerColor;
       document.getElementById('heroPartnerBig').textContent = `${done}/${total} sets`;
     }
