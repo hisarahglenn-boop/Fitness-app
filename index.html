@@ -606,7 +606,38 @@
       ]}
     ];
 
-    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN };
+    const TEST_PLAN = [
+      {title:'Day 1', subtitle:'Heavy Glutes', exercises:[
+        ['Barbell hip thrust','4 x 8–10','95–135 lb','Pause 1 sec at top, squeeze glutes hard.','bridge','/api/gif/0058'],
+        ['Barbell Romanian deadlift','4 x 8–10','65–95 lb','Hips back, soft knees, feel the stretch.','hinge','/api/gif/0085'],
+        ['Dumbbell frog pumps / glute bridge','3 x 15–25','25–50 lb DB','Squeeze glutes at the top, don’t arch your low back.','bridge','/api/gif/3013'],
+        ['B-stance hip thrust','3 x 10–12/side','65–115 lb','One glute works harder without knee stress.','bridge','/api/gif/0130'],
+        ['Weighted front plank','3 x 30–45 sec','Light plate on back, or bodyweight','Brace your core, don’t let your hips sag.','plank','/api/gif/2135']
+      ]},
+      {title:'Day 2', subtitle:'Chest + Triceps', exercises:[
+        ['Barbell bench press','4 x 6–8','65–95 lb','Elbows at 45°, drive feet into the floor, touch chest lightly.','press','/api/gif/0025'],
+        ['Incline dumbbell press','3 x 8–10','20–35 lb DBs','30–45° incline, control the descent.','press','/api/gif/0314'],
+        ['Bench dips','3 x 10–15','Bodyweight, feet elevated to add difficulty','Hands on bench edge, lower until elbows hit ~90°.','press','/api/gif/0129'],
+        ['Dumbbell chest fly','3 x 10–15','10–20 lb DBs','Slight elbow bend, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Overhead dumbbell triceps extension','3 x 10–15','15–25 lb DB','Elbows tucked in, full stretch at the bottom.','curl','/api/gif/0109']
+      ]},
+      {title:'Day 3', subtitle:'Abs + Glutes', exercises:[
+        ['Russian twist','3 x 20–30','Bodyweight or light plate','Rotate from your core, not your arms.','plank','/api/gif/0687'],
+        ['Glute bridge march','3 x 10–12/side','Bodyweight','March one leg up at a time, keep hips level.','bridge','/api/gif/3561'],
+        ['Side-lying hip abduction','3 x 15–25/side','Bodyweight or 5–10 lb','Slow reps for side glute/hip stability.','legraise','/api/gif/0710'],
+        ['Side plank','2–3 x 20–40 sec','Bodyweight','Stack hips, hold a straight line from shoulder to ankle.','plank','/api/gif/3544'],
+        ['Dumbbell sumo pull-through','4 x 12–20','20–35 lb DB','Hip snap, not a squat — swing the DB back through your legs.','hinge','/api/gif/2808']
+      ]},
+      {title:'Day 4', subtitle:'Chest + Abs Pump', exercises:[
+        ['Barbell bench press, lighter than Day 2','3 x 10–12','55–75 lb','Smooth reps, full lockout, chase the pump.','press','/api/gif/0025'],
+        ['Bench dips','3 x 10–15','Bodyweight, feet elevated to add difficulty','Hands on bench edge, lower until elbows hit ~90°.','press','/api/gif/0129'],
+        ['Dumbbell chest fly','3 x 12–15','10–15 lb DBs','Constant tension, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Frog pumps','2 x 30','Bodyweight to 25 lb DB','Finisher — quick tempo, squeeze at the top.','bridge','/api/gif/3013'],
+        ['Weighted front plank','3 x 30–45 sec','Light plate on back, or bodyweight','Brace your core, don’t let your hips sag.','plank','/api/gif/2135']
+      ]}
+    ];
+
+    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN, test: TEST_PLAN };
     let plan = null;
     function planFor(planKey){ return PLANS[planKey] || null; }
 
@@ -724,6 +755,21 @@
               <li>Bench / overhead press: add 5 lb at a time.</li>
               <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
               <li>Shoulders and arms accessories: add reps first, then weight.</li>
+            </ul>
+          </section>`;
+      } else if(planKey === 'test'){
+        el.innerHTML = `
+          <section class="panel">
+            <h4>Weight rule</h4>
+            <p>Choose a weight where the last 1–2 reps feel hard but clean. You've got some lifting experience, so it's fine to push glutes and chest days close to failure on the last set.</p>
+          </section>
+          <section class="panel">
+            <h4>Progression</h4>
+            <ul>
+              <li>Hip thrust / RDL: add 5–10 lb when form is clean.</li>
+              <li>Bench press / incline press: add 5 lb at a time.</li>
+              <li>Bodyweight glute finishers (frog pumps, bridge march): add reps before adding load.</li>
+              <li>Abs and core: add reps first, then hold time, before adding load.</li>
             </ul>
           </section>`;
       } else if(planKey === 'sarahj'){
