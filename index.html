@@ -57,18 +57,18 @@
     .hero{
       background:var(--surface);
       border:1px solid var(--border);border-radius:var(--radius-xl);
-      padding:16px 18px;display:flex;flex-direction:column;gap:12px;margin-bottom:18px;
+      padding:16px 18px;display:flex;flex-direction:column;gap:10px;margin-bottom:18px;
     }
-    .hero-main{display:flex;align-items:center;gap:16px}
+    .hero-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0}
+    .hero-people{display:flex;align-items:stretch;gap:14px}
+    .hero-person{flex:1;min-width:0;display:flex;align-items:center;gap:12px}
+    .hero-person[hidden]{display:none}
     .ring{flex:none}
-    .hero-info{flex:1;min-width:0}
-    .hero-info .label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0 0 4px}
-    .hero-info .big{font-size:22px;font-weight:900;letter-spacing:-.04em;margin:0}
-    .hero-info .sub{font-size:12.5px;color:var(--muted);margin:3px 0 0}
-    .hero-name{font-weight:900}
-    .hero-partner{display:flex;align-items:center;gap:12px;padding-top:12px;border-top:1px solid var(--border)}
-    .hero-partner[hidden]{display:none}
-    .hero-partner .big{font-size:16px;font-weight:900;letter-spacing:-.03em;margin:0}
+    .hero-divider{width:1px;align-self:stretch;background:var(--border);margin:2px 0}
+    .hero-divider[hidden]{display:none}
+    .hp-info{min-width:0}
+    .hp-info b{display:block;font-size:13px;font-weight:900;margin:0 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hp-info span{font-size:18px;font-weight:900;letter-spacing:-.03em;color:var(--text)}
 
     /* ---- big "current day" card (inverted black card) ---- */
     .day-hero{
@@ -289,16 +289,23 @@
     <!-- DASHBOARD -->
     <main class="screen" id="screen-dashboard">
       <div class="hero">
-        <div class="hero-main">
-          <div class="ring" id="heroRing"></div>
-          <div class="hero-info">
-            <p class="label">This week</p>
-            <p class="big"><span class="hero-name" id="heroYouName">You</span> <span id="heroBig">0/0 sets</span></p>
+        <p class="hero-label">This week</p>
+        <div class="hero-people">
+          <div class="hero-person" id="heroPersonYou">
+            <div class="ring" id="heroRing"></div>
+            <div class="hp-info">
+              <b id="heroYouName">You</b>
+              <span id="heroBig">0/0 sets</span>
+            </div>
           </div>
-        </div>
-        <div class="hero-partner" id="heroPartnerRow" hidden>
-          <div class="ring" id="heroPartnerRing"></div>
-          <p class="big"><span class="hero-name" id="heroPartnerName">Partner</span> <span id="heroPartnerBig">0/0 sets</span></p>
+          <div class="hero-divider" id="heroDivider" hidden></div>
+          <div class="hero-person" id="heroPersonPartner" hidden>
+            <div class="ring" id="heroPartnerRing"></div>
+            <div class="hp-info">
+              <b id="heroPartnerName">Partner</b>
+              <span id="heroPartnerBig">0/0 sets</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1015,7 +1022,9 @@
       document.getElementById('weekChip').textContent = `${pct}% this week`;
       document.getElementById('heroRing').innerHTML = ringSvg(pct, 60, 7, youColor);
       document.getElementById('heroBig').textContent = `${done}/${total} sets`;
-      document.getElementById('heroYouName').style.color = youColor;
+      const heroYouNameEl = document.getElementById('heroYouName');
+      heroYouNameEl.textContent = mascotName(currentMascot);
+      heroYouNameEl.style.color = youColor;
 
       document.getElementById('bigRing').innerHTML = ringSvg(pct, 176, 16);
       document.getElementById('bigPct').textContent = `${pct}%`;
@@ -1078,11 +1087,13 @@
     async function renderPartnerCard(){
       const titleEl = document.getElementById('partnerSectionTitle');
       const cardEl = document.getElementById('partnerCard');
-      const heroPartnerRow = document.getElementById('heroPartnerRow');
+      const heroPersonPartner = document.getElementById('heroPersonPartner');
+      const heroDivider = document.getElementById('heroDivider');
       if(!partnerId || !partnerMascot){
         titleEl.hidden = true;
         cardEl.innerHTML = '';
-        heroPartnerRow.hidden = true;
+        heroPersonPartner.hidden = true;
+        heroDivider.hidden = true;
         return;
       }
       const { data: rows } = await sb.from('progress').select('day_idx,exercise_idx,set_idx,done').eq('user_id', partnerId);
@@ -1101,7 +1112,8 @@
           <div class="dr-frac">${done}/${total}</div>
         </div>`;
 
-      heroPartnerRow.hidden = false;
+      heroPersonPartner.hidden = false;
+      heroDivider.hidden = false;
       document.getElementById('heroPartnerRing').innerHTML = ringSvg(pct, 60, 7, partnerColor);
       const partnerNameEl = document.getElementById('heroPartnerName');
       partnerNameEl.textContent = mascotName(partnerMascot);
