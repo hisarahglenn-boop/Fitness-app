@@ -241,6 +241,16 @@
     .overlaycard .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:15px;padding:14px;border-radius:14px}
     .overlaycard .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:14px;padding:12px;border-radius:14px;margin-top:10px}
     .overlaycard .code-display{font-size:32px;font-weight:900;letter-spacing:.12em;margin-bottom:18px}
+    .overlaycard.scrollable{max-height:88vh;overflow-y:auto;text-align:left;padding:4px 4px 20px}
+    .overlaycard.scrollable .eyebrow,.overlaycard.scrollable h2{text-align:center}
+    .q-section{margin-bottom:20px}
+    .q-label{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+    .chip-group,.choice-group{display:flex;flex-wrap:wrap;gap:8px}
+    .choice-chip,.choice-btn{background:var(--surface-2);border:1.5px solid var(--border);color:var(--text);font-weight:700;font-size:13px;padding:9px 14px;border-radius:var(--radius-pill);transition:transform .12s var(--ease),background .15s,border-color .15s,color .15s}
+    .choice-chip.active,.choice-btn.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+    .choice-chip:active,.choice-btn:active{transform:scale(.94)}
+    .overlaycard textarea{width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:14px;font-weight:600;color:var(--text);outline:none;font-family:inherit;resize:vertical;min-height:70px}
+    .overlaycard input[type=text].q-other{margin-top:10px}
 
     @media (min-width:600px){
       .app{max-width:560px}
@@ -270,6 +280,65 @@
       <input type="text" id="setupNameInput" placeholder="Your name">
       <button id="setupSaveBtn" class="primary-btn">Continue</button>
       <div class="status" id="setupStatus"></div>
+    </div>
+  </div>
+
+  <div class="overlayscreen" id="questionnaireScreen" hidden>
+    <div class="overlaycard scrollable">
+      <div class="eyebrow">before we build your plan</div>
+      <h2>Tell us a bit about your goals</h2>
+
+      <div class="q-section">
+        <label class="q-label">Target areas</label>
+        <div class="chip-group" id="qTargetAreas">
+          <button type="button" class="choice-chip" data-value="glutes">Glutes</button>
+          <button type="button" class="choice-chip" data-value="hips">Hips</button>
+          <button type="button" class="choice-chip" data-value="abs">Abs</button>
+          <button type="button" class="choice-chip" data-value="arms">Arms</button>
+          <button type="button" class="choice-chip" data-value="back">Back</button>
+          <button type="button" class="choice-chip" data-value="legs">Legs</button>
+          <button type="button" class="choice-chip" data-value="chest">Chest</button>
+          <button type="button" class="choice-chip" data-value="shoulders">Shoulders</button>
+        </div>
+      </div>
+
+      <div class="q-section">
+        <label class="q-label">Equipment access</label>
+        <div class="choice-group" id="qEquipment">
+          <button type="button" class="choice-btn" data-value="home-limited">Home gym (limited equipment)</button>
+          <button type="button" class="choice-btn" data-value="full-gym">Full commercial gym</button>
+          <button type="button" class="choice-btn" data-value="bodyweight">Bodyweight only</button>
+          <button type="button" class="choice-btn" data-value="other">Other</button>
+        </div>
+        <input type="text" class="q-other" id="qEquipmentOther" placeholder="Tell us what you have" hidden>
+      </div>
+
+      <div class="q-section">
+        <label class="q-label">Days per week</label>
+        <div class="choice-group" id="qDays">
+          <button type="button" class="choice-btn" data-value="3">3</button>
+          <button type="button" class="choice-btn" data-value="4">4</button>
+          <button type="button" class="choice-btn" data-value="5">5</button>
+          <button type="button" class="choice-btn" data-value="6">6</button>
+        </div>
+      </div>
+
+      <div class="q-section">
+        <label class="q-label">Experience level</label>
+        <div class="choice-group" id="qExperience">
+          <button type="button" class="choice-btn" data-value="new">New to lifting</button>
+          <button type="button" class="choice-btn" data-value="some">Some experience</button>
+          <button type="button" class="choice-btn" data-value="experienced">Experienced</button>
+        </div>
+      </div>
+
+      <div class="q-section">
+        <label class="q-label">Injuries or pain points</label>
+        <textarea id="qInjuries" placeholder="e.g. knee pain, lower back — or write &quot;none&quot;"></textarea>
+      </div>
+
+      <button id="questionnaireSaveBtn" class="primary-btn">Continue</button>
+      <div class="status" id="questionnaireStatus"></div>
     </div>
   </div>
 
@@ -626,9 +695,10 @@
       }, { onConflict: 'user_id,day_idx,exercise_idx' });
     }
 
-    function setScreenState(state){ // 'auth' | 'setup' | 'noplan' | 'app'
+    function setScreenState(state){ // 'auth' | 'setup' | 'questionnaire' | 'noplan' | 'app'
       document.getElementById('authScreen').hidden = state !== 'auth';
       document.getElementById('setupScreen').hidden = state !== 'setup';
+      document.getElementById('questionnaireScreen').hidden = state !== 'questionnaire';
       document.getElementById('noPlanScreen').hidden = state !== 'noplan';
       document.getElementById('app').hidden = state !== 'app';
       document.getElementById('tabbar').style.display = state === 'app' ? 'flex' : 'none';
@@ -699,14 +769,18 @@
     }
 
     async function fetchOrInitProfile(){
-      const { data } = await sb.from('profiles').select('display_name, plan_key, connect_code').eq('user_id', currentUser.id).maybeSingle();
-      myProfile = data ? { displayName: data.display_name, planKey: data.plan_key, connectCode: data.connect_code } : null;
+      const { data } = await sb.from('profiles').select('display_name, plan_key, connect_code, questionnaire').eq('user_id', currentUser.id).maybeSingle();
+      myProfile = data ? { displayName: data.display_name, planKey: data.plan_key, connectCode: data.connect_code, questionnaire: data.questionnaire } : null;
     }
 
     async function routeAfterLogin(){
       await fetchOrInitProfile();
       if(!myProfile || !myProfile.displayName){
         setScreenState('setup');
+        return;
+      }
+      if(!myProfile.planKey && !myProfile.questionnaire){
+        setScreenState('questionnaire');
         return;
       }
       if(!myProfile.planKey){
@@ -731,6 +805,56 @@
       btn.disabled = true;
       statusEl.textContent = 'Saving...';
       await sb.from('profiles').upsert({ user_id: currentUser.id, display_name: name, updated_at: new Date().toISOString() });
+      btn.disabled = false;
+      statusEl.textContent = '';
+      await routeAfterLogin();
+    };
+
+    document.getElementById('qTargetAreas').querySelectorAll('.choice-chip').forEach(chip=>{
+      chip.onclick = ()=> chip.classList.toggle('active');
+    });
+
+    ['qEquipment','qDays','qExperience'].forEach(groupId=>{
+      const group = document.getElementById(groupId);
+      group.querySelectorAll('.choice-btn').forEach(btn=>{
+        btn.onclick = ()=>{
+          group.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          if(groupId === 'qEquipment'){
+            document.getElementById('qEquipmentOther').hidden = btn.dataset.value !== 'other';
+          }
+        };
+      });
+    });
+
+    document.getElementById('questionnaireSaveBtn').onclick = async ()=>{
+      const statusEl = document.getElementById('questionnaireStatus');
+      const targetAreas = Array.from(document.querySelectorAll('#qTargetAreas .choice-chip.active')).map(c=>c.dataset.value);
+      const equipmentBtn = document.querySelector('#qEquipment .choice-btn.active');
+      const daysBtn = document.querySelector('#qDays .choice-btn.active');
+      const experienceBtn = document.querySelector('#qExperience .choice-btn.active');
+      const equipmentOther = document.getElementById('qEquipmentOther').value.trim();
+      const injuries = document.getElementById('qInjuries').value.trim();
+
+      if(!targetAreas.length){ statusEl.textContent = 'Pick at least one target area.'; return; }
+      if(!equipmentBtn){ statusEl.textContent = 'Select your equipment access.'; return; }
+      if(equipmentBtn.dataset.value === 'other' && !equipmentOther){ statusEl.textContent = 'Tell us what equipment you have.'; return; }
+      if(!daysBtn){ statusEl.textContent = 'Select days per week.'; return; }
+      if(!experienceBtn){ statusEl.textContent = 'Select your experience level.'; return; }
+
+      const questionnaire = {
+        targetAreas,
+        equipment: equipmentBtn.dataset.value,
+        equipmentOther: equipmentBtn.dataset.value === 'other' ? equipmentOther : null,
+        daysPerWeek: Number(daysBtn.dataset.value),
+        experience: experienceBtn.dataset.value,
+        injuries: injuries || null
+      };
+
+      const btn = document.getElementById('questionnaireSaveBtn');
+      btn.disabled = true;
+      statusEl.textContent = 'Saving...';
+      await sb.from('profiles').upsert({ user_id: currentUser.id, questionnaire, updated_at: new Date().toISOString() });
       btn.disabled = false;
       statusEl.textContent = '';
       await routeAfterLogin();
