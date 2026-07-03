@@ -241,6 +241,16 @@
     .overlaycard .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:15px;padding:14px;border-radius:14px}
     .overlaycard .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:14px;padding:12px;border-radius:14px;margin-top:10px}
     .overlaycard .code-display{font-size:32px;font-weight:900;letter-spacing:.12em;margin-bottom:18px}
+    .overlaycard.scrollable{max-height:88vh;overflow-y:auto;text-align:left;padding:4px 4px 20px}
+    .overlaycard.scrollable .eyebrow,.overlaycard.scrollable h2{text-align:center}
+    .q-section{margin-bottom:20px}
+    .q-label{display:block;font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+    .chip-group,.choice-group{display:flex;flex-wrap:wrap;gap:8px}
+    .choice-chip,.choice-btn{background:var(--surface-2);border:1.5px solid var(--border);color:var(--text);font-weight:700;font-size:13px;padding:9px 14px;border-radius:var(--radius-pill);transition:transform .12s var(--ease),background .15s,border-color .15s,color .15s}
+    .choice-chip.active,.choice-btn.active{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+    .choice-chip:active,.choice-btn:active{transform:scale(.94)}
+    .overlaycard textarea{width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:14px;font-weight:600;color:var(--text);outline:none;font-family:inherit;resize:vertical;min-height:70px}
+    .overlaycard input[type=text].q-other{margin-top:10px}
 
     @media (min-width:600px){
       .app{max-width:560px}
@@ -270,6 +280,65 @@
       <input type="text" id="setupNameInput" placeholder="Your name">
       <button id="setupSaveBtn" class="primary-btn">Continue</button>
       <div class="status" id="setupStatus"></div>
+    </div>
+  </div>
+
+  <div class="overlayscreen" id="questionnaireScreen" hidden>
+    <div class="overlaycard scrollable">
+      <div class="eyebrow">before we build your plan</div>
+      <h2>Tell us a bit about your goals</h2>
+
+      <div class="q-section">
+        <label class="q-label">Target areas</label>
+        <div class="chip-group" id="qTargetAreas">
+          <button type="button" class="choice-chip" data-value="glutes">Glutes</button>
+          <button type="button" class="choice-chip" data-value="hips">Hips</button>
+          <button type="button" class="choice-chip" data-value="abs">Abs</button>
+          <button type="button" class="choice-chip" data-value="arms">Arms</button>
+          <button type="button" class="choice-chip" data-value="back">Back</button>
+          <button type="button" class="choice-chip" data-value="legs">Legs</button>
+          <button type="button" class="choice-chip" data-value="chest">Chest</button>
+          <button type="button" class="choice-chip" data-value="shoulders">Shoulders</button>
+        </div>
+      </div>
+
+      <div class="q-section">
+        <label class="q-label">Equipment access</label>
+        <div class="choice-group" id="qEquipment">
+          <button type="button" class="choice-btn" data-value="home-limited">Home gym (limited equipment)</button>
+          <button type="button" class="choice-btn" data-value="full-gym">Full commercial gym</button>
+          <button type="button" class="choice-btn" data-value="bodyweight">Bodyweight only</button>
+          <button type="button" class="choice-btn" data-value="other">Other</button>
+        </div>
+        <input type="text" class="q-other" id="qEquipmentOther" placeholder="Tell us what you have" hidden>
+      </div>
+
+      <div class="q-section">
+        <label class="q-label">Days per week</label>
+        <div class="choice-group" id="qDays">
+          <button type="button" class="choice-btn" data-value="3">3</button>
+          <button type="button" class="choice-btn" data-value="4">4</button>
+          <button type="button" class="choice-btn" data-value="5">5</button>
+          <button type="button" class="choice-btn" data-value="6">6</button>
+        </div>
+      </div>
+
+      <div class="q-section">
+        <label class="q-label">Experience level</label>
+        <div class="choice-group" id="qExperience">
+          <button type="button" class="choice-btn" data-value="new">New to lifting</button>
+          <button type="button" class="choice-btn" data-value="some">Some experience</button>
+          <button type="button" class="choice-btn" data-value="experienced">Experienced</button>
+        </div>
+      </div>
+
+      <div class="q-section">
+        <label class="q-label">Injuries or pain points</label>
+        <textarea id="qInjuries" placeholder="e.g. knee pain, lower back — or write &quot;none&quot;"></textarea>
+      </div>
+
+      <button id="questionnaireSaveBtn" class="primary-btn">Continue</button>
+      <div class="status" id="questionnaireStatus"></div>
     </div>
   </div>
 
@@ -496,7 +565,79 @@
       ]}
     ];
 
-    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN };
+    const SARAHJ_PLAN = [
+      {title:'Day 1', subtitle:'Heavy Glutes + Hips', exercises:[
+        ['Barbell hip thrust','4 x 8–10','95–135 lb','Pause 1 sec at top, squeeze glutes hard.','bridge','/api/gif/0058'],
+        ['Barbell Romanian deadlift','4 x 8–10','65–95 lb','Hips back, soft knees, feel the stretch.','hinge','/api/gif/0085'],
+        ['Leg press, glute-biased','3 x 12–15','Moderate-heavy stack','Feet high and wide on the platform to bias glutes.','squat','/api/gif/0739'],
+        ['Hip abduction machine','3 x 15–20','Moderate machine weight','Slow and controlled, squeeze at the outer range.','legraise','/api/gif/0597'],
+        ['Standing calf raise','3 x 12–15','Moderate','Full stretch at bottom, pause at the top.','calf','/api/gif/0417'],
+        ['Weighted front plank','3 x 30–45 sec','Light plate on back, or bodyweight','Brace your core, don’t let your hips sag.','plank','/api/gif/2135']
+      ]},
+      {title:'Day 2', subtitle:'Abs + Arm Tone', exercises:[
+        ['Cable kneeling crunch','3 x 15–20','Light-moderate cable','Round through the spine, exhale as you crunch.','legraise','/api/gif/0175'],
+        ['Russian twist','3 x 20–30','Bodyweight or light plate','Rotate from your core, not your arms.','plank','/api/gif/0687'],
+        ['Dumbbell lateral raise','3 x 15–20','5–10 lb DBs','Light weight, lead with elbows, stop at shoulder height.','armraise','/api/gif/0334'],
+        ['Cable triceps pushdown','3 x 15–20','Light-moderate cable','Keep elbows pinned to your sides, full extension.','curl','/api/gif/0241'],
+        ['Dumbbell hammer curl','3 x 15–20','8–15 lb DBs','Light and controlled, no swinging.','curl','/api/gif/0313'],
+        ['Hanging leg raise','3 x 10–15','Bodyweight','Control the descent, don’t swing.','legraise','/api/gif/0472']
+      ]},
+      {title:'Day 3', subtitle:'Glutes + Hips, Unilateral', exercises:[
+        ['Bulgarian split squat','3 x 10–12/side','20–30 lb DBs','Front shin vertical, most weight on the front leg.','squat','/api/gif/0410'],
+        ['Cable standing hip extension','3 x 12–15/side','Light-moderate cable','Kick back and squeeze the glute at the top.','bridge','/api/gif/0228'],
+        ['Seated leg curl','3 x 12–15','Moderate machine','Control the release, don’t let the weight drop.','legcurl','/api/gif/0599'],
+        ['Kettlebell swing','4 x 15–20','25–35 lb','Hip snap, not a squat.','hinge','/api/gif/0549'],
+        ['Cable hip adduction','3 x 15–20/side','Light-moderate cable','Slow and controlled, squeeze the inner thigh.','legraise','/api/gif/0168']
+      ]},
+      {title:'Day 4', subtitle:'Abs + Hip Stability', exercises:[
+        ['Cable reverse crunch','3 x 15–20','Light-moderate cable','Curl your hips up and in, not just your legs.','legraise','/api/gif/0873'],
+        ['Hip abduction machine','3 x 15–20','Moderate machine weight','Slow and controlled, squeeze at the outer range.','legraise','/api/gif/0597'],
+        ['Cable standing crunch','3 x 15–20','Light-moderate cable','Crunch down and in, exhale fully.','legraise','/api/gif/0226'],
+        ['Glute bridge march','3 x 10–12/side','Bodyweight','March one leg up at a time, keep hips level.','bridge','/api/gif/3561'],
+        ['Russian twist','3 x 20–30','Bodyweight or light plate','Rotate from your core, not your arms.','plank','/api/gif/0687']
+      ]},
+      {title:'Day 5', subtitle:'Glute Pump + Arm Tone', exercises:[
+        ['Cable pull-through','4 x 12–15','Light-moderate cable','Hip hinge, squeeze glutes at the top.','hinge','/api/gif/0196'],
+        ['Hip thrust, lighter than Day 1','3 x 12–15','Lighter than Day 1','Smooth reps, full lockout, chase the pump.','bridge','/api/gif/0058'],
+        ['Cable lateral raise','3 x 15–20','Light-moderate cable','Constant tension, don’t rest at the bottom.','armraise','/api/gif/0178'],
+        ['Dumbbell overhead triceps extension','3 x 15–20','10–15 lb DB','Elbows tucked in, full stretch at the bottom.','curl','/api/gif/0109'],
+        ['Dumbbell hammer curl','3 x 15–20','8–12 lb DBs','Neutral grip, light and controlled.','curl','/api/gif/0313'],
+        ['Weighted front plank','3 x 30–45 sec','Light plate on back, or bodyweight','Brace your core, don’t let your hips sag.','plank','/api/gif/2135']
+      ]}
+    ];
+
+    const TEST_PLAN = [
+      {title:'Day 1', subtitle:'Heavy Glutes', exercises:[
+        ['Barbell hip thrust','4 x 8–10','95–135 lb','Pause 1 sec at top, squeeze glutes hard.','bridge','/api/gif/0058'],
+        ['Barbell Romanian deadlift','4 x 8–10','65–95 lb','Hips back, soft knees, feel the stretch.','hinge','/api/gif/0085'],
+        ['Dumbbell frog pumps / glute bridge','3 x 15–25','25–50 lb DB','Squeeze glutes at the top, don’t arch your low back.','bridge','/api/gif/3013'],
+        ['B-stance hip thrust','3 x 10–12/side','65–115 lb','One glute works harder without knee stress.','bridge','/api/gif/0130'],
+        ['Weighted front plank','3 x 30–45 sec','Light plate on back, or bodyweight','Brace your core, don’t let your hips sag.','plank','/api/gif/2135']
+      ]},
+      {title:'Day 2', subtitle:'Chest + Triceps', exercises:[
+        ['Barbell bench press','4 x 6–8','65–95 lb','Elbows at 45°, drive feet into the floor, touch chest lightly.','press','/api/gif/0025'],
+        ['Incline dumbbell press','3 x 8–10','20–35 lb DBs','30–45° incline, control the descent.','press','/api/gif/0314'],
+        ['Bench dips','3 x 10–15','Bodyweight, feet elevated to add difficulty','Hands on bench edge, lower until elbows hit ~90°.','press','/api/gif/0129'],
+        ['Dumbbell chest fly','3 x 10–15','10–20 lb DBs','Slight elbow bend, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Overhead dumbbell triceps extension','3 x 10–15','15–25 lb DB','Elbows tucked in, full stretch at the bottom.','curl','/api/gif/0109']
+      ]},
+      {title:'Day 3', subtitle:'Abs + Glutes', exercises:[
+        ['Russian twist','3 x 20–30','Bodyweight or light plate','Rotate from your core, not your arms.','plank','/api/gif/0687'],
+        ['Glute bridge march','3 x 10–12/side','Bodyweight','March one leg up at a time, keep hips level.','bridge','/api/gif/3561'],
+        ['Side-lying hip abduction','3 x 15–25/side','Bodyweight or 5–10 lb','Slow reps for side glute/hip stability.','legraise','/api/gif/0710'],
+        ['Side plank','2–3 x 20–40 sec','Bodyweight','Stack hips, hold a straight line from shoulder to ankle.','plank','/api/gif/3544'],
+        ['Dumbbell sumo pull-through','4 x 12–20','20–35 lb DB','Hip snap, not a squat — swing the DB back through your legs.','hinge','/api/gif/2808']
+      ]},
+      {title:'Day 4', subtitle:'Chest + Abs Pump', exercises:[
+        ['Barbell bench press, lighter than Day 2','3 x 10–12','55–75 lb','Smooth reps, full lockout, chase the pump.','press','/api/gif/0025'],
+        ['Bench dips','3 x 10–15','Bodyweight, feet elevated to add difficulty','Hands on bench edge, lower until elbows hit ~90°.','press','/api/gif/0129'],
+        ['Dumbbell chest fly','3 x 12–15','10–15 lb DBs','Constant tension, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Frog pumps','2 x 30','Bodyweight to 25 lb DB','Finisher — quick tempo, squeeze at the top.','bridge','/api/gif/3013'],
+        ['Weighted front plank','3 x 30–45 sec','Light plate on back, or bodyweight','Brace your core, don’t let your hips sag.','plank','/api/gif/2135']
+      ]}
+    ];
+
+    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN, test: TEST_PLAN };
     let plan = null;
     function planFor(planKey){ return PLANS[planKey] || null; }
 
@@ -585,9 +726,10 @@
       }, { onConflict: 'user_id,day_idx,exercise_idx' });
     }
 
-    function setScreenState(state){ // 'auth' | 'setup' | 'noplan' | 'app'
+    function setScreenState(state){ // 'auth' | 'setup' | 'questionnaire' | 'noplan' | 'app'
       document.getElementById('authScreen').hidden = state !== 'auth';
       document.getElementById('setupScreen').hidden = state !== 'setup';
+      document.getElementById('questionnaireScreen').hidden = state !== 'questionnaire';
       document.getElementById('noPlanScreen').hidden = state !== 'noplan';
       document.getElementById('app').hidden = state !== 'app';
       document.getElementById('tabbar').style.display = state === 'app' ? 'flex' : 'none';
@@ -599,7 +741,8 @@
 
     function renderGuideTips(){
       const el = document.getElementById('guideTips');
-      if(myProfile && myProfile.planKey === 'christopher'){
+      const planKey = myProfile && myProfile.planKey;
+      if(planKey === 'christopher'){
         el.innerHTML = `
           <section class="panel">
             <h4>Weight rule</h4>
@@ -612,6 +755,36 @@
               <li>Bench / overhead press: add 5 lb at a time.</li>
               <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
               <li>Shoulders and arms accessories: add reps first, then weight.</li>
+            </ul>
+          </section>`;
+      } else if(planKey === 'test'){
+        el.innerHTML = `
+          <section class="panel">
+            <h4>Weight rule</h4>
+            <p>Choose a weight where the last 1–2 reps feel hard but clean. You've got some lifting experience, so it's fine to push glutes and chest days close to failure on the last set.</p>
+          </section>
+          <section class="panel">
+            <h4>Progression</h4>
+            <ul>
+              <li>Hip thrust / RDL: add 5–10 lb when form is clean.</li>
+              <li>Bench press / incline press: add 5 lb at a time.</li>
+              <li>Bodyweight glute finishers (frog pumps, bridge march): add reps before adding load.</li>
+              <li>Abs and core: add reps first, then hold time, before adding load.</li>
+            </ul>
+          </section>`;
+      } else if(planKey === 'sarahj'){
+        el.innerHTML = `
+          <section class="panel">
+            <h4>Weight rule</h4>
+            <p>Choose a weight where the last 1–2 reps feel hard but clean. Arms and abs work is meant to stay light and high-rep — chase the burn, not heavier weight.</p>
+          </section>
+          <section class="panel">
+            <h4>Progression</h4>
+            <ul>
+              <li>Hip thrust / RDL / leg press: add 5–10 lb when form is clean.</li>
+              <li>Cable and machine glute/hip work: add a plate or two when all reps feel controlled.</li>
+              <li>Abs and core: add reps first, then hold time, before adding load.</li>
+              <li>Shoulders and arms: keep the weight light — add reps, not pounds, to stay toned rather than bulky.</li>
             </ul>
           </section>`;
       } else {
@@ -642,14 +815,18 @@
     }
 
     async function fetchOrInitProfile(){
-      const { data } = await sb.from('profiles').select('display_name, plan_key, connect_code').eq('user_id', currentUser.id).maybeSingle();
-      myProfile = data ? { displayName: data.display_name, planKey: data.plan_key, connectCode: data.connect_code } : null;
+      const { data } = await sb.from('profiles').select('display_name, plan_key, connect_code, questionnaire').eq('user_id', currentUser.id).maybeSingle();
+      myProfile = data ? { displayName: data.display_name, planKey: data.plan_key, connectCode: data.connect_code, questionnaire: data.questionnaire } : null;
     }
 
     async function routeAfterLogin(){
       await fetchOrInitProfile();
       if(!myProfile || !myProfile.displayName){
         setScreenState('setup');
+        return;
+      }
+      if(!myProfile.planKey && !myProfile.questionnaire){
+        setScreenState('questionnaire');
         return;
       }
       if(!myProfile.planKey){
@@ -674,6 +851,56 @@
       btn.disabled = true;
       statusEl.textContent = 'Saving...';
       await sb.from('profiles').upsert({ user_id: currentUser.id, display_name: name, updated_at: new Date().toISOString() });
+      btn.disabled = false;
+      statusEl.textContent = '';
+      await routeAfterLogin();
+    };
+
+    document.getElementById('qTargetAreas').querySelectorAll('.choice-chip').forEach(chip=>{
+      chip.onclick = ()=> chip.classList.toggle('active');
+    });
+
+    ['qEquipment','qDays','qExperience'].forEach(groupId=>{
+      const group = document.getElementById(groupId);
+      group.querySelectorAll('.choice-btn').forEach(btn=>{
+        btn.onclick = ()=>{
+          group.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          if(groupId === 'qEquipment'){
+            document.getElementById('qEquipmentOther').hidden = btn.dataset.value !== 'other';
+          }
+        };
+      });
+    });
+
+    document.getElementById('questionnaireSaveBtn').onclick = async ()=>{
+      const statusEl = document.getElementById('questionnaireStatus');
+      const targetAreas = Array.from(document.querySelectorAll('#qTargetAreas .choice-chip.active')).map(c=>c.dataset.value);
+      const equipmentBtn = document.querySelector('#qEquipment .choice-btn.active');
+      const daysBtn = document.querySelector('#qDays .choice-btn.active');
+      const experienceBtn = document.querySelector('#qExperience .choice-btn.active');
+      const equipmentOther = document.getElementById('qEquipmentOther').value.trim();
+      const injuries = document.getElementById('qInjuries').value.trim();
+
+      if(!targetAreas.length){ statusEl.textContent = 'Pick at least one target area.'; return; }
+      if(!equipmentBtn){ statusEl.textContent = 'Select your equipment access.'; return; }
+      if(equipmentBtn.dataset.value === 'other' && !equipmentOther){ statusEl.textContent = 'Tell us what equipment you have.'; return; }
+      if(!daysBtn){ statusEl.textContent = 'Select days per week.'; return; }
+      if(!experienceBtn){ statusEl.textContent = 'Select your experience level.'; return; }
+
+      const questionnaire = {
+        targetAreas,
+        equipment: equipmentBtn.dataset.value,
+        equipmentOther: equipmentBtn.dataset.value === 'other' ? equipmentOther : null,
+        daysPerWeek: Number(daysBtn.dataset.value),
+        experience: experienceBtn.dataset.value,
+        injuries: injuries || null
+      };
+
+      const btn = document.getElementById('questionnaireSaveBtn');
+      btn.disabled = true;
+      statusEl.textContent = 'Saving...';
+      await sb.from('profiles').upsert({ user_id: currentUser.id, questionnaire, updated_at: new Date().toISOString() });
       btn.disabled = false;
       statusEl.textContent = '';
       await routeAfterLogin();
