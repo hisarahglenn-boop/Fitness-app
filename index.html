@@ -637,7 +637,28 @@
       ]}
     ];
 
-    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN, test: TEST_PLAN };
+    const EMILY_PLAN = [
+      {title:'Day 1', subtitle:'Legs Fundamentals', exercises:[
+        ['Dumbbell goblet squat','3 x 10–12','15–25 lb DB','Hold the DB at your chest, squat down between your knees, drive through your heels to stand.','squat','/api/gif/1760'],
+        ['Dumbbell Romanian deadlift','3 x 10–12','15–25 lb DBs','Soft knees, hinge your hips back, feel a stretch in the back of your legs, then stand tall.','hinge','/api/gif/0085'],
+        ['Dumbbell frog pumps / glute bridge','3 x 12–15','Bodyweight to 15 lb DB','Lie on your back, squeeze your glutes to lift your hips, pause at the top.','bridge','/api/gif/3013'],
+        ['Standing calf raise','3 x 12–15','Bodyweight to 15 lb DBs','Rise onto your toes, pause, lower slowly.','calf','/api/gif/0417']
+      ]},
+      {title:'Day 2', subtitle:'Single-Leg + Hamstrings', exercises:[
+        ['Walking lunges','3 x 8–10/side','Bodyweight or 10–15 lb DBs','Take a long step forward, back knee taps the floor, push through your front foot to stand.','squat','/api/gif/1460'],
+        ['Kickstand RDL','3 x 8–10/side','10–20 lb DBs','One foot slightly behind you for balance, hinge at your hips, feel the stretch in your hamstring.','hinge','/api/gif/1459'],
+        ['Dumbbell hamstring curl','3 x 10–12','10–15 lb DB','Hold the DB between your feet, curl your heels toward your glutes, lower slowly.','legcurl','/api/gif/0586'],
+        ['Standing calf raise','3 x 12–15','Bodyweight to 15 lb DBs','Rise onto your toes, pause, lower slowly.','calf','/api/gif/0417']
+      ]},
+      {title:'Day 3', subtitle:'Legs Pump', exercises:[
+        ['Bulgarian split squat','3 x 8–10/side','10–20 lb DBs','Back foot up on a bench, front shin vertical, most of your weight on the front leg.','squat','/api/gif/0410'],
+        ['Dumbbell goblet squat','3 x 12–15','15–25 lb DB','Same as Day 1, but higher reps — chase a light burn in your thighs.','squat','/api/gif/1760'],
+        ['Glute bridge march','3 x 10–12/side','Bodyweight','From a glute bridge, lift one knee at a time, keep your hips level.','bridge','/api/gif/3561'],
+        ['Side-lying hip abduction','3 x 15–20/side','Bodyweight or 5–10 lb','Lie on your side, lift your top leg slowly, feel it in the side of your hip.','legraise','/api/gif/0710']
+      ]}
+    ];
+
+    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN, test: TEST_PLAN, emily: EMILY_PLAN };
     let plan = null;
     function planFor(planKey){ return PLANS[planKey] || null; }
 
@@ -755,6 +776,21 @@
               <li>Bench / overhead press: add 5 lb at a time.</li>
               <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
               <li>Shoulders and arms accessories: add reps first, then weight.</li>
+            </ul>
+          </section>`;
+      } else if(planKey === 'emily'){
+        el.innerHTML = `
+          <section class="panel">
+            <h4>Weight rule</h4>
+            <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
+          </section>
+          <section class="panel">
+            <h4>Progression</h4>
+            <ul>
+              <li>Squats / RDLs: once all sets feel easy with good form, add 5 lb.</li>
+              <li>Lunges / split squats: master bodyweight or light DBs before adding more weight.</li>
+              <li>Glute and calf work: add reps first, then start adding light weight.</li>
+              <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
             </ul>
           </section>`;
       } else if(planKey === 'test'){
