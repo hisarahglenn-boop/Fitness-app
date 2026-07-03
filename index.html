@@ -496,7 +496,48 @@
       ]}
     ];
 
-    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN };
+    const SARAHJ_PLAN = [
+      {title:'Day 1', subtitle:'Heavy Glutes + Hips', exercises:[
+        ['Barbell hip thrust','4 x 8–10','95–135 lb','Pause 1 sec at top, squeeze glutes hard.','bridge','/api/gif/0058'],
+        ['Barbell Romanian deadlift','4 x 8–10','65–95 lb','Hips back, soft knees, feel the stretch.','hinge','/api/gif/0085'],
+        ['Leg press, glute-biased','3 x 12–15','Moderate-heavy stack','Feet high and wide on the platform to bias glutes.','squat','/api/gif/0739'],
+        ['Hip abduction machine','3 x 15–20','Moderate machine weight','Slow and controlled, squeeze at the outer range.','legraise','/api/gif/0597'],
+        ['Standing calf raise','3 x 12–15','Moderate','Full stretch at bottom, pause at the top.','calf','/api/gif/0417'],
+        ['Weighted front plank','3 x 30–45 sec','Light plate on back, or bodyweight','Brace your core, don’t let your hips sag.','plank','/api/gif/2135']
+      ]},
+      {title:'Day 2', subtitle:'Abs + Arm Tone', exercises:[
+        ['Cable kneeling crunch','3 x 15–20','Light-moderate cable','Round through the spine, exhale as you crunch.','legraise','/api/gif/0175'],
+        ['Russian twist','3 x 20–30','Bodyweight or light plate','Rotate from your core, not your arms.','plank','/api/gif/0687'],
+        ['Dumbbell lateral raise','3 x 15–20','5–10 lb DBs','Light weight, lead with elbows, stop at shoulder height.','armraise','/api/gif/0334'],
+        ['Cable triceps pushdown','3 x 15–20','Light-moderate cable','Keep elbows pinned to your sides, full extension.','curl','/api/gif/0241'],
+        ['Dumbbell hammer curl','3 x 15–20','8–15 lb DBs','Light and controlled, no swinging.','curl','/api/gif/0313'],
+        ['Hanging leg raise','3 x 10–15','Bodyweight','Control the descent, don’t swing.','legraise','/api/gif/0472']
+      ]},
+      {title:'Day 3', subtitle:'Glutes + Hips, Unilateral', exercises:[
+        ['Bulgarian split squat','3 x 10–12/side','20–30 lb DBs','Front shin vertical, most weight on the front leg.','squat','/api/gif/0410'],
+        ['Cable standing hip extension','3 x 12–15/side','Light-moderate cable','Kick back and squeeze the glute at the top.','bridge','/api/gif/0228'],
+        ['Seated leg curl','3 x 12–15','Moderate machine','Control the release, don’t let the weight drop.','legcurl','/api/gif/0599'],
+        ['Kettlebell swing','4 x 15–20','25–35 lb','Hip snap, not a squat.','hinge','/api/gif/0549'],
+        ['Cable hip adduction','3 x 15–20/side','Light-moderate cable','Slow and controlled, squeeze the inner thigh.','legraise','/api/gif/0168']
+      ]},
+      {title:'Day 4', subtitle:'Abs + Hip Stability', exercises:[
+        ['Cable reverse crunch','3 x 15–20','Light-moderate cable','Curl your hips up and in, not just your legs.','legraise','/api/gif/0873'],
+        ['Hip abduction machine','3 x 15–20','Moderate machine weight','Slow and controlled, squeeze at the outer range.','legraise','/api/gif/0597'],
+        ['Cable standing crunch','3 x 15–20','Light-moderate cable','Crunch down and in, exhale fully.','legraise','/api/gif/0226'],
+        ['Glute bridge march','3 x 10–12/side','Bodyweight','March one leg up at a time, keep hips level.','bridge','/api/gif/3561'],
+        ['Russian twist','3 x 20–30','Bodyweight or light plate','Rotate from your core, not your arms.','plank','/api/gif/0687']
+      ]},
+      {title:'Day 5', subtitle:'Glute Pump + Arm Tone', exercises:[
+        ['Cable pull-through','4 x 12–15','Light-moderate cable','Hip hinge, squeeze glutes at the top.','hinge','/api/gif/0196'],
+        ['Hip thrust, lighter than Day 1','3 x 12–15','Lighter than Day 1','Smooth reps, full lockout, chase the pump.','bridge','/api/gif/0058'],
+        ['Cable lateral raise','3 x 15–20','Light-moderate cable','Constant tension, don’t rest at the bottom.','armraise','/api/gif/0178'],
+        ['Dumbbell overhead triceps extension','3 x 15–20','10–15 lb DB','Elbows tucked in, full stretch at the bottom.','curl','/api/gif/0109'],
+        ['Dumbbell hammer curl','3 x 15–20','8–12 lb DBs','Neutral grip, light and controlled.','curl','/api/gif/0313'],
+        ['Weighted front plank','3 x 30–45 sec','Light plate on back, or bodyweight','Brace your core, don’t let your hips sag.','plank','/api/gif/2135']
+      ]}
+    ];
+
+    const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN };
     let plan = null;
     function planFor(planKey){ return PLANS[planKey] || null; }
 
@@ -599,7 +640,8 @@
 
     function renderGuideTips(){
       const el = document.getElementById('guideTips');
-      if(myProfile && myProfile.planKey === 'christopher'){
+      const planKey = myProfile && myProfile.planKey;
+      if(planKey === 'christopher'){
         el.innerHTML = `
           <section class="panel">
             <h4>Weight rule</h4>
@@ -612,6 +654,21 @@
               <li>Bench / overhead press: add 5 lb at a time.</li>
               <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
               <li>Shoulders and arms accessories: add reps first, then weight.</li>
+            </ul>
+          </section>`;
+      } else if(planKey === 'sarahj'){
+        el.innerHTML = `
+          <section class="panel">
+            <h4>Weight rule</h4>
+            <p>Choose a weight where the last 1–2 reps feel hard but clean. Arms and abs work is meant to stay light and high-rep — chase the burn, not heavier weight.</p>
+          </section>
+          <section class="panel">
+            <h4>Progression</h4>
+            <ul>
+              <li>Hip thrust / RDL / leg press: add 5–10 lb when form is clean.</li>
+              <li>Cable and machine glute/hip work: add a plate or two when all reps feel controlled.</li>
+              <li>Abs and core: add reps first, then hold time, before adding load.</li>
+              <li>Shoulders and arms: keep the weight light — add reps, not pounds, to stay toned rather than bulky.</li>
             </ul>
           </section>`;
       } else {
