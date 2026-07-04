@@ -692,6 +692,45 @@
       ]}
     ];
 
+    // Shared library of vetted, GIF-confirmed exercises — independent of any single
+    // person's plan. Grows incrementally as new exercises get sourced and verified
+    // (e.g. from imported workout links), seeding future rules-based plan generation.
+    const EXERCISE_LIBRARY = [
+      {
+        name: 'Around the World',
+        targetAreas: ['shoulders'],
+        equipment: 'dumbbell',
+        difficulty: 'beginner',
+        dose: '3 x 8–12',
+        weight: '5–10 lb DBs',
+        cue: 'Arms straight out to your sides, circle the dumbbells forward and overhead, then back down.',
+        type: 'armraise',
+        gifPath: '/api/gif/2143'
+      },
+      {
+        name: 'Shoulder Tap',
+        targetAreas: ['abs'],
+        equipment: 'bodyweight',
+        difficulty: 'beginner',
+        dose: '3 x 10–15/side',
+        weight: 'Bodyweight',
+        cue: 'From a high plank, tap the opposite shoulder while keeping your hips and torso stable.',
+        type: 'plank',
+        gifPath: '/api/gif/3699'
+      },
+      {
+        name: 'Front Plank',
+        targetAreas: ['abs'],
+        equipment: 'bodyweight',
+        difficulty: 'beginner',
+        dose: '3 x 30–45 sec',
+        weight: 'Bodyweight, add a light plate later',
+        cue: 'Forearms under your shoulders, body in a straight line, squeeze your glutes so your hips don’t sag.',
+        type: 'plank',
+        gifPath: '/api/gif/2135'
+      }
+    ];
+
     const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN, test: TEST_PLAN, emily: EMILY_PLAN, gleamotest: GLEAMOTEST_PLAN };
     let plan = null;
     function planFor(planKey){ return PLANS[planKey] || null; }
