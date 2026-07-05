@@ -193,6 +193,25 @@
     .swap:first-child{border-top:0;padding-top:0}
     .swap b{color:var(--text)}.swap span{color:var(--muted);text-align:right}
 
+    /* ---- imports screen ---- */
+    #screen-imports .panel input[type=text]{border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--text);outline:none;margin-top:2px}
+    #screen-imports .panel input[type=file]{width:100%;font-size:13px;color:var(--muted);margin-top:4px}
+    #screen-imports .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;padding:12px;border-radius:12px}
+    #screen-imports .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--text);font-weight:800;font-size:14px;padding:11px;border-radius:12px;margin-top:8px}
+    .import-or{text-align:center;color:var(--muted-2);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin:16px 0}
+    .import-card{display:flex;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;margin-bottom:10px;align-items:center;text-align:left;width:100%}
+    .import-card img{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--surface-3)}
+    .import-card .import-card-info{flex:1;min-width:0}
+    .import-card .import-card-info b{display:block;font-size:14px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .import-card .import-card-info span{font-size:12px;color:var(--muted)}
+    .import-status-chip{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:var(--surface-2);padding:4px 8px;border-radius:var(--radius-pill)}
+    .import-exercise-row{display:flex;gap:10px;align-items:center;background:var(--surface-2);border-radius:12px;padding:10px;margin-bottom:8px}
+    .import-exercise-row img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--surface-3);flex-shrink:0}
+    .import-exercise-row .import-exercise-info{flex:1;min-width:0}
+    .import-exercise-row .import-exercise-info b{display:block;font-size:13.5px}
+    .import-exercise-row .import-exercise-info span{font-size:12px;color:var(--muted)}
+    .import-exercise-row .import-noimg{width:44px;height:44px;border-radius:8px;background:var(--surface-3);flex-shrink:0}
+
     /* ---- bottom tab bar (floating pill) ---- */
     .tabbar{
       position:fixed;bottom:0;left:0;right:0;z-index:40;
@@ -456,6 +475,40 @@
         </div>
       </section>
     </main>
+
+    <!-- IMPORTS -->
+    <main class="screen" id="screen-imports" hidden>
+      <div class="section-label">Import a workout</div>
+      <section class="panel">
+        <label class="q-label">Paste a link (Instagram, TikTok)</label>
+        <input type="text" id="importLinkInput" placeholder="https://instagram.com/reel/...">
+        <button id="importLinkBtn" class="primary-btn" style="margin-top:10px">Import from link</button>
+        <div class="import-or">or</div>
+        <label class="q-label">Upload a video</label>
+        <input type="file" id="importVideoInput" accept="video/*">
+        <button id="importVideoBtn" class="primary-btn" style="margin-top:10px">Analyze video</button>
+        <div id="importStatus" style="margin-top:10px;font-size:12.5px;color:var(--muted);min-height:16px"></div>
+      </section>
+      <div class="section-label">Your imports</div>
+      <div id="importsList"></div>
+    </main>
+
+    <!-- IMPORT REVIEW OVERLAY -->
+    <div class="overlayscreen" id="importReviewScreen" hidden>
+      <div class="overlaycard scrollable">
+        <div class="eyebrow">review import</div>
+        <h2 id="importReviewTitle">Imported workout</h2>
+        <img id="importReviewThumb" style="width:100%;border-radius:12px;margin-bottom:14px;display:none">
+        <div id="importReviewExercises"></div>
+        <div class="q-section">
+          <label class="q-label">Add to day</label>
+          <div class="choice-group" id="importDayPicker"></div>
+        </div>
+        <button id="importAddToDayBtn" class="primary-btn">Add to selected day</button>
+        <button id="importReviewCloseBtn" class="secondary-btn">Close</button>
+        <div id="importReviewStatus" style="margin-top:10px;font-size:12.5px;color:var(--muted);min-height:16px"></div>
+      </div>
+    </div>
   </div>
 
   <nav class="tabbar" id="tabbar">
@@ -471,6 +524,10 @@
       <button class="tabbtn" data-screen="guide">
         <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="8.5"/><line x1="12" y1="11" x2="12" y2="16"/></svg>
         Guide
+      </button>
+      <button class="tabbtn" data-screen="imports">
+        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12l3 3 5-6"/></svg>
+        Imports
       </button>
     </div>
   </nav>
@@ -695,41 +752,16 @@
     // Shared library of vetted, GIF-confirmed exercises — independent of any single
     // person's plan. Grows incrementally as new exercises get sourced and verified
     // (e.g. from imported workout links), seeding future rules-based plan generation.
-    const EXERCISE_LIBRARY = [
-      {
-        name: 'Around the World',
-        targetAreas: ['shoulders'],
-        equipment: 'dumbbell',
-        difficulty: 'beginner',
-        dose: '3 x 8–12',
-        weight: '5–10 lb DBs',
-        cue: 'Arms straight out to your sides, circle the dumbbells forward and overhead, then back down.',
-        type: 'armraise',
-        gifPath: '/api/gif/2143'
-      },
-      {
-        name: 'Shoulder Tap',
-        targetAreas: ['abs'],
-        equipment: 'bodyweight',
-        difficulty: 'beginner',
-        dose: '3 x 10–15/side',
-        weight: 'Bodyweight',
-        cue: 'From a high plank, tap the opposite shoulder while keeping your hips and torso stable.',
-        type: 'plank',
-        gifPath: '/api/gif/3699'
-      },
-      {
-        name: 'Front Plank',
-        targetAreas: ['abs'],
-        equipment: 'bodyweight',
-        difficulty: 'beginner',
-        dose: '3 x 30–45 sec',
-        weight: 'Bodyweight, add a light plate later',
-        cue: 'Forearms under your shoulders, body in a straight line, squeeze your glutes so your hips don’t sag.',
-        type: 'plank',
-        gifPath: '/api/gif/2135'
-      }
-    ];
+    // Loaded from exercise-library.json, the single source of truth also read
+    // server-side by /api/import/structure.js so the AI only matches against real,
+    // GIF-confirmed exercises.
+    let EXERCISE_LIBRARY = [];
+    async function loadExerciseLibrary(){
+      try {
+        const res = await fetch('/exercise-library.json');
+        EXERCISE_LIBRARY = await res.json();
+      } catch { EXERCISE_LIBRARY = []; }
+    }
 
     const PLANS = { sarah: SARAH_PLAN, christopher: CHRISTOPHER_PLAN, sarahj: SARAHJ_PLAN, test: TEST_PLAN, emily: EMILY_PLAN, gleamotest: GLEAMOTEST_PLAN };
     let plan = null;
@@ -959,12 +991,27 @@
         return;
       }
       plan = planFor(myProfile.planKey);
+      await applyPlanAdditions();
       applyUserTheme(colorForId(currentUser.id));
       await loadPartner();
       setScreenState('app');
       renderDashboard();
       updateProgress();
       renderGuideTips();
+    }
+
+    // Merges any user-added exercises (from imports) into the in-memory plan,
+    // once, right after the base plan loads — every existing render function
+    // that reads plan[day].exercises picks these up automatically.
+    async function applyPlanAdditions(){
+      if(!plan) return;
+      const { data } = await sb.from('plan_additions').select('day_idx, exercises').eq('user_id', currentUser.id);
+      if(!data) return;
+      data.forEach(row => {
+        const day = plan[row.day_idx];
+        if(!day || !Array.isArray(row.exercises)) return;
+        row.exercises.forEach(ex => day.exercises.push(ex));
+      });
     }
 
     document.getElementById('setupSaveBtn').onclick = async ()=>{
@@ -1070,6 +1117,7 @@
       if(session && session.user){
         currentUser = session.user;
         document.getElementById('accountEmail').textContent = currentUser.email;
+        loadExerciseLibrary();
         await loadUserData();
         if(window.location.hash.includes('access_token')){
           window.history.replaceState(null, '', window.location.pathname + window.location.search);
@@ -1409,6 +1457,201 @@
       document.getElementById('heroPartnerBig').textContent = `${done}/${total} sets`;
     }
 
+    // ---- Imports (paste a link or upload a video, AI structures it into exercises) ----
+    let currentReviewImport = null;
+    let selectedImportDay = null;
+
+    function importExerciseRowHtml(ex){
+      const img = ex.gifPath
+        ? `<img src="${ex.gifPath}" alt="">`
+        : `<div class="import-noimg"></div>`;
+      return `<div class="import-exercise-row">
+        ${img}
+        <div class="import-exercise-info">
+          <b>${ex.name}</b>
+          <span>${ex.dose || ''}${ex.weight ? ' · ' + ex.weight : ''}</span>
+        </div>
+      </div>`;
+    }
+
+    async function renderImports(){
+      const listEl = document.getElementById('importsList');
+      const { data, error } = await sb.from('imports').select('*').eq('user_id', currentUser.id).order('created_at', { ascending: false });
+      if(error || !data || !data.length){
+        listEl.innerHTML = `<p style="color:var(--muted);font-size:13.5px">No imports yet — paste a link or upload a video above.</p>`;
+        return;
+      }
+      listEl.innerHTML = data.map(imp => `
+        <button class="import-card" data-id="${imp.id}">
+          ${imp.thumbnail_url ? `<img src="${imp.thumbnail_url}" alt="">` : `<div class="import-noimg" style="width:56px;height:56px;border-radius:10px"></div>`}
+          <div class="import-card-info">
+            <b>${imp.title || 'Imported workout'}</b>
+            <span>${(imp.exercises || []).length} exercises</span>
+          </div>
+          <span class="import-status-chip">${imp.status}</span>
+        </button>
+      `).join('');
+      listEl.querySelectorAll('.import-card').forEach(card => {
+        card.onclick = () => openImportReview(data.find(d => d.id === card.dataset.id));
+      });
+    }
+
+    function openImportReview(imp){
+      currentReviewImport = imp;
+      selectedImportDay = null;
+      document.getElementById('importReviewTitle').textContent = imp.title || 'Imported workout';
+      const thumbEl = document.getElementById('importReviewThumb');
+      if(imp.thumbnail_url){ thumbEl.src = imp.thumbnail_url; thumbEl.style.display = 'block'; }
+      else { thumbEl.style.display = 'none'; }
+      document.getElementById('importReviewExercises').innerHTML = (imp.exercises || []).map(importExerciseRowHtml).join('');
+      const dayPicker = document.getElementById('importDayPicker');
+      dayPicker.innerHTML = plan.map((d,i) => `<button type="button" class="choice-btn" data-day="${i}">${d.title}</button>`).join('');
+      dayPicker.querySelectorAll('.choice-btn').forEach(btn => {
+        btn.onclick = () => {
+          dayPicker.querySelectorAll('.choice-btn').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          selectedImportDay = Number(btn.dataset.day);
+        };
+      });
+      document.getElementById('importReviewStatus').textContent = '';
+      setScreenState('app');
+      document.getElementById('importReviewScreen').hidden = false;
+    }
+
+    document.getElementById('importReviewCloseBtn').onclick = () => {
+      document.getElementById('importReviewScreen').hidden = true;
+    };
+
+    document.getElementById('importAddToDayBtn').onclick = async () => {
+      const statusEl = document.getElementById('importReviewStatus');
+      if(selectedImportDay === null){ statusEl.textContent = 'Pick a day first.'; return; }
+      if(!currentReviewImport){ return; }
+      statusEl.textContent = 'Adding...';
+      const exercisesToAdd = (currentReviewImport.exercises || []).map(ex => [ex.name, ex.dose, ex.weight, ex.cue, ex.type, ex.gifPath || null]);
+      await sb.from('plan_additions').insert({
+        user_id: currentUser.id,
+        day_idx: selectedImportDay,
+        exercises: exercisesToAdd,
+        source_import_id: currentReviewImport.id
+      });
+      await sb.from('imports').update({ status: 'added' }).eq('id', currentReviewImport.id);
+      await applyPlanAdditions();
+      document.getElementById('importReviewScreen').hidden = true;
+      renderDashboard();
+      renderImports();
+    };
+
+    document.getElementById('importLinkBtn').onclick = async () => {
+      const statusEl = document.getElementById('importStatus');
+      const url = document.getElementById('importLinkInput').value.trim();
+      if(!url){ statusEl.textContent = 'Paste a link first.'; return; }
+      statusEl.textContent = 'Fetching post...';
+      try {
+        const fetchRes = await fetch('/api/import/fetch', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url })
+        });
+        const fetchData = await fetchRes.json();
+        if(!fetchRes.ok){ statusEl.textContent = fetchData.error || 'Could not read that post.'; return; }
+
+        statusEl.textContent = 'Structuring exercises...';
+        const structRes = await fetch('/api/import/structure', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ caption: fetchData.caption, title: fetchData.title })
+        });
+        const structData = await structRes.json();
+        if(!structRes.ok){ statusEl.textContent = structData.error || 'Could not structure that post.'; return; }
+
+        const exercises = (structData.exercises || []).map(ex => ({
+          name: ex.name, dose: ex.dose, weight: ex.weight, cue: ex.cue, type: ex.type,
+          gifPath: ex.gifPath || null
+        }));
+
+        await sb.from('imports').insert({
+          user_id: currentUser.id,
+          source_url: url,
+          thumbnail_url: fetchData.thumbnailUrl,
+          title: fetchData.title,
+          caption: fetchData.caption,
+          exercises,
+          status: 'pending'
+        });
+
+        document.getElementById('importLinkInput').value = '';
+        statusEl.textContent = exercises.length ? `Imported ${exercises.length} exercises.` : 'No specific exercises found in that post.';
+        renderImports();
+      } catch (err) {
+        statusEl.textContent = 'Something went wrong: ' + err.message;
+      }
+    };
+
+    function extractVideoFrames(file, frameCount){
+      return new Promise((resolve, reject) => {
+        const video = document.createElement('video');
+        video.preload = 'auto';
+        video.muted = true;
+        video.src = URL.createObjectURL(file);
+        const frames = [];
+        video.onloadedmetadata = async () => {
+          const duration = video.duration;
+          const timestamps = Array.from({ length: frameCount }, (_, i) => (duration * (i + 1)) / (frameCount + 1));
+          const canvas = document.createElement('canvas');
+          canvas.width = 360;
+          canvas.height = video.videoHeight && video.videoWidth ? Math.round(360 * video.videoHeight / video.videoWidth) : 640;
+          const ctx = canvas.getContext('2d');
+          for(const t of timestamps){
+            await new Promise(r => {
+              video.currentTime = t;
+              video.onseeked = r;
+            });
+            ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+            frames.push(canvas.toDataURL('image/jpeg', 0.7));
+          }
+          URL.revokeObjectURL(video.src);
+          resolve(frames);
+        };
+        video.onerror = () => reject(new Error('Could not read that video file.'));
+      });
+    }
+
+    document.getElementById('importVideoBtn').onclick = async () => {
+      const statusEl = document.getElementById('importStatus');
+      const file = document.getElementById('importVideoInput').files[0];
+      if(!file){ statusEl.textContent = 'Choose a video file first.'; return; }
+      try {
+        statusEl.textContent = 'Reading video frames...';
+        const frames = await extractVideoFrames(file, 5);
+
+        statusEl.textContent = 'Analyzing video...';
+        const res = await fetch('/api/import/analyze-video', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ frames })
+        });
+        const data = await res.json();
+        if(!res.ok){ statusEl.textContent = data.error || 'Could not analyze that video.'; return; }
+
+        const exercises = (data.exercises || []).map(ex => ({
+          name: ex.name, dose: ex.dose, weight: ex.weight, cue: ex.cue, type: ex.type,
+          gifPath: ex.gifPath || null
+        }));
+
+        await sb.from('imports').insert({
+          user_id: currentUser.id,
+          source_url: null,
+          thumbnail_url: frames[0] || null,
+          title: file.name,
+          caption: null,
+          exercises,
+          status: 'pending'
+        });
+
+        document.getElementById('importVideoInput').value = '';
+        statusEl.textContent = exercises.length ? `Found ${exercises.length} exercises.` : 'No clear exercises found in that video.';
+        renderImports();
+      } catch (err) {
+        statusEl.textContent = 'Something went wrong: ' + err.message;
+      }
+    };
+
     function switchScreen(name){
       document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== `screen-${name}`);
       document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.screen===name));
@@ -1416,6 +1659,7 @@
       if(name==='progress' || name==='dashboard') updateProgress();
       if(name==='dashboard') renderDashboard();
       if(name==='guide') renderGuideTips();
+      if(name==='imports') renderImports();
     }
     document.querySelectorAll('.tabbtn').forEach(b=>{
       b.onclick = ()=>switchScreen(b.dataset.screen);
