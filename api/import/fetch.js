@@ -21,7 +21,10 @@ module.exports = async (req, res) => {
     });
 
     if (!upstream.ok) {
-      res.status(upstream.status).json({ error: 'Could not reach that post', status: upstream.status });
+      const message = upstream.status === 429
+        ? 'Instagram is temporarily rate-limiting requests right now — wait a minute or two and try again.'
+        : 'Could not reach that post — double check the link is public and correct.';
+      res.status(upstream.status).json({ error: message, status: upstream.status });
       return;
     }
 
