@@ -121,10 +121,11 @@
     .fig-missing svg{width:34px;height:34px}
     .fig-missing span{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
     .cue{color:var(--muted);font-size:13px;line-height:1.4;margin:0 15px 12px}
-    .weight-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 15px 14px}
-    .weight-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
+    .weight-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin:0 15px 14px}
     .weight-box label{display:block;font-size:10px;color:var(--muted-2);font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
-    .suggest{font-size:14.5px;font-weight:800;color:var(--text)}
+    .weight-box .suggest-caption{font-size:10.5px;color:var(--muted-2);font-weight:700;margin-bottom:5px}
+    .weight-box .saved-caption{font-size:10.5px;font-weight:800;color:var(--text);height:13px;margin-top:4px;opacity:0;transition:opacity .25s var(--ease)}
+    .weight-box .saved-caption.show{opacity:1}
     input[type="text"]{width:100%;border:0;background:transparent;padding:0;font-size:15px;font-weight:800;color:var(--text);outline:none}
     input[type="text"]::placeholder{color:var(--muted-2);font-weight:600}
     .sets{display:flex;gap:8px;flex-wrap:wrap;padding:2px 15px 16px}
@@ -151,7 +152,7 @@
     .session-exercise .ex-name{font-size:21px}
     .session-exercise .ex-dose{font-size:12.5px;padding:6px 12px}
     .session-exercise .cue{margin:0 20px 16px;font-size:14px}
-    .session-exercise .weight-row{padding:0 20px 18px}
+    .session-exercise .weight-box{margin:0 20px 18px}
     .session-exercise .sets{padding:4px 20px 24px;justify-content:center}
     .session-exercise .setdot{width:46px;height:46px;font-size:15px}
 
@@ -1495,9 +1496,11 @@
           ${hasSwapCandidates ? `<div style="padding:0 20px 8px"><button id="swapBtn" class="swap-btn"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>Swap exercise</button></div>` : ''}
           <div class="fig-box">${figHtml}</div>
           <p class="cue">${ex[3]}</p>
-          <div class="weight-row">
-            <div class="weight-box"><label>Start with</label><div class="suggest">${ex[2]}</div></div>
-            <div class="weight-box"><label>Your weight</label><input type="text" inputmode="decimal" placeholder="ex: 115 lb" value="${savedWeight}" data-weight="${weightKey(sessionDay, exi)}"></div>
+          <div class="weight-box">
+            <div class="suggest-caption">Suggested ${ex[2]}</div>
+            <label>Weight</label>
+            <input type="text" inputmode="decimal" placeholder="ex: 115 lb" value="${savedWeight}" data-weight="${weightKey(sessionDay, exi)}">
+            <div class="saved-caption" aria-hidden="true"></div>
           </div>
           <div class="sets">${dots}</div>
         </article>
@@ -1528,9 +1531,20 @@
           }
         };
       });
-      body.querySelector('input[data-weight]').oninput = e=>{
+      const weightInputEl = body.querySelector('input[data-weight]');
+      const savedCaptionEl = body.querySelector('.saved-caption');
+      let lastSavedWeight = weightInputEl.value;
+      weightInputEl.oninput = e=>{
         weightCache[weightKey(sessionDay, exi)] = e.target.value;
         persistWeight(sessionDay, exi, e.target.value);
+      };
+      weightInputEl.onblur = e=>{
+        const val = e.target.value;
+        if(!val || val === lastSavedWeight) return;
+        lastSavedWeight = val;
+        savedCaptionEl.textContent = 'Saved for next week';
+        savedCaptionEl.classList.add('show');
+        setTimeout(()=>savedCaptionEl.classList.remove('show'), 1700);
       };
     }
 
