@@ -157,6 +157,26 @@
 
     .session-nav{display:flex;gap:10px;margin-top:16px}
     .session-nav button{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px;font-weight:850;color:var(--muted);transition:transform .12s var(--ease)}
+
+    /* ---- exercise swap ---- */
+    .swap-btn{display:flex;align-items:center;gap:4px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);font-weight:800;font-size:11.5px;padding:6px 10px;border-radius:var(--radius-pill);flex:none;white-space:nowrap}
+    .swap-btn svg{width:13px;height:13px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .swap-btn:active{transform:scale(.94)}
+    .swap-sheet{position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;background:rgba(20,20,18,.4)}
+    .swap-sheet-card{width:100%;max-width:520px;margin:0 auto;background:var(--surface);border-radius:22px 22px 0 0;padding:20px 20px calc(20px + env(safe-area-inset-bottom));max-height:80vh;overflow-y:auto}
+    .swap-sheet-card h3{margin:0 0 4px;font-size:17px;font-weight:900}
+    .swap-sheet-card .swap-sub{color:var(--muted);font-size:13px;margin:0 0 16px}
+    .swap-option{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:var(--surface-2);border:1.5px solid var(--border);border-radius:14px;padding:12px;margin-bottom:10px}
+    .swap-option img{width:48px;height:48px;border-radius:10px;object-fit:cover;flex:none;background:var(--surface-3)}
+    .swap-option .swap-noimg{width:48px;height:48px;border-radius:10px;background:var(--surface-3);flex:none}
+    .swap-option b{display:block;font-size:14px}
+    .swap-option span{font-size:12px;color:var(--muted)}
+    .swap-cancel{width:100%;background:transparent;border:none;color:var(--muted);font-weight:800;font-size:14px;padding:12px;margin-top:4px}
+    .swap-decision-card h3{margin:0 0 8px;font-size:17px;font-weight:900}
+    .swap-decision-card p{color:var(--muted);font-size:13.5px;line-height:1.5;margin:0 0 18px}
+    .swap-decision-card button{width:100%;border-radius:14px;padding:14px;font-weight:850;font-size:14.5px;margin-bottom:10px}
+    .swap-decision-card .primary-choice{background:var(--accent);color:var(--accent-ink);border:none}
+    .swap-decision-card .secondary-choice{background:var(--surface-2);color:var(--text);border:1.5px solid var(--border)}
     .session-nav button:active{transform:scale(.96)}
     .session-nav button:disabled{opacity:.35}
     .session-nav button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
@@ -576,6 +596,14 @@
         ['Hamstring curl variation','3 x 12–15','10–25 lb DB','Control the lowering.','legcurl','/api/gif/0586'],
         ['Side bridge hip abduction','4 x 20–30/side','Bodyweight','Side-glute burnout, top leg lifts and lowers.','legraise','/api/gif/1774'],
         ['Frog pumps','2 x 30','Bodyweight to 25 lb DB','Finisher.','bridge','/api/gif/3013']
+      ]},
+      {title:'Bonus Day', subtitle:'Quick Full Body, Medium Weight', exercises:[
+        ['Barbell hip thrust','3 x 10–12','95–115 lb','Medium weight, smooth reps, squeeze at the top.','bridge','/api/gif/0058'],
+        ['Chest-supported dumbbell row','3 x 10–12','20–30 lb DBs','Squeeze shoulder blades back and down.','row','/api/gif/0327'],
+        ['Dumbbell Romanian deadlift','3 x 10–12','40–60 lb','Hips back, soft knees, moderate weight.','hinge','/api/gif/0085'],
+        ['Overhead dumbbell triceps extension','3 x 10–12','15–25 lb DB','Long head of triceps, controlled tempo.','curl','/api/gif/0109'],
+        ['Dumbbell rear delt fly','3 x 12–15','5–10 lb DBs','Light and strict, posture focus.','armraise','/api/gif/0383'],
+        ['Weighted front plank','2 x 30–45 sec','Light plate on back, or bodyweight','Quick core finisher.','plank','/api/gif/2135']
       ]}
     ];
 
@@ -767,6 +795,81 @@
     let plan = null;
     function planFor(planKey){ return PLANS[planKey] || null; }
 
+    // Swap candidates for the "swap this exercise" feature — grouped by movement `type`,
+    // one alternate list per type. Deliberately scoped to home-equipment-only exercises
+    // (dumbbell/barbell/bodyweight) already vetted elsewhere in this file, so a swap can
+    // never suggest something requiring a cable machine, kettlebell, or gym-only equipment
+    // that a given user might not actually have. Each entry mirrors the standard exercise
+    // tuple format: [name, dose, weight, cue, type, gifPath].
+    const SWAP_CANDIDATES = {
+      bridge: [
+        ['Barbell hip thrust','4 x 8–10','95–135 lb','Pause 1 sec at top, squeeze glutes hard.','bridge','/api/gif/0058'],
+        ['Dumbbell frog pumps / glute bridge','3 x 15–25','25–50 lb DB','Squeeze glutes at the top, don’t arch your low back.','bridge','/api/gif/3013'],
+        ['Barbell glute bridge from floor','4 x 8–10','95–145 lb','Go heavy, but keep low back quiet.','bridge','/api/gif/1409'],
+        ['B-stance hip thrust','3 x 10–12/side','65–115 lb','One glute works harder without knee stress.','bridge','/api/gif/0130'],
+        ['Glute bridge march','3 x 10–12/side','Bodyweight','March one leg up at a time, keep hips level.','bridge','/api/gif/3561']
+      ],
+      hinge: [
+        ['Barbell Romanian deadlift','4 x 8–10','65–95 lb','Hips back, soft knees, feel the stretch.','hinge','/api/gif/0085'],
+        ['Kickstand RDL','3 x 8–10/side','20–40 lb DBs','Stable single-leg-ish hinge.','hinge','/api/gif/1459'],
+        ['Dumbbell sumo pull-through','4 x 12–20','25–40 lb DB','Hip snap, not a squat.','hinge','/api/gif/2808'],
+        ['Conventional or sumo deadlift','3 x 3–5','95–135 lb','Heavy clean reps. Sumo may feel better for glutes/knees.','hinge','/api/gif/0032']
+      ],
+      legraise: [
+        ['Side-lying hip abduction','3 x 15–25/side','Bodyweight or 5–10 lb','Slow reps for side glute/hip stability.','legraise','/api/gif/0710'],
+        ['Side bridge hip abduction','4 x 20–30/side','Bodyweight','Side-glute burnout, top leg lifts and lowers.','legraise','/api/gif/1774']
+      ],
+      calf: [
+        ['Standing calf raise','3 x 10–15','25–50 lb total','Full stretch at bottom, pause at the top.','calf','/api/gif/0417']
+      ],
+      row: [
+        ['Chest-supported dumbbell row','4 x 8–10','20–35 lb DBs','Squeeze shoulder blades back and down.','row','/api/gif/0327'],
+        ['Barbell bent-over row','4 x 6–8','45–75 lb','Heavy but controlled. No yanking.','row','/api/gif/0027'],
+        ['Single-arm dumbbell row','4 x 8–12/side','25–45 lb DB','Pull elbow toward hip.','row','/api/gif/0064'],
+        ['Dumbbell pullover','4 x 8–12','35–55 lb DB','Lie on the bench, arc the DB back behind your head, pull over with the lats.','row','/api/gif/0375']
+      ],
+      armraise: [
+        ['Dumbbell rear delt fly','3 x 12–20','5–12 lb DBs','Light and strict.','armraise','/api/gif/0383'],
+        ['Prone Y-raise','3 x 10–15','2.5–8 lb DBs','Lower traps. Tiny weights are enough.','armraise','/api/gif/3541'],
+        ['Dumbbell chest fly','3 x 10–15','15–25 lb DBs','Slight elbow bend, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Lateral raise','4 x 12–15','10–20 lb DBs','Lead with elbows, stop at shoulder height.','armraise','/api/gif/0334'],
+        ['Seated dumbbell shoulder press','3 x 8–10','25–40 lb DBs','Controlled descent to ear level.','armraise','/api/gif/0405']
+      ],
+      press: [
+        ['Barbell bench press','4 x 6–8','95–135 lb','Elbows at 45°, drive feet into the floor, touch chest lightly.','press','/api/gif/0025'],
+        ['Incline dumbbell press','3 x 8–10','30–50 lb DBs','30–45° incline, control the descent.','press','/api/gif/0314'],
+        ['Bench dips','3 x 10–15','Bodyweight, feet elevated to add difficulty','Hands on bench edge, lower until elbows hit ~90°.','press','/api/gif/0129'],
+        ['Scapular push-up','3 x 10–15','Bodyweight','Serratus for shoulder position.','press','/api/gif/3011']
+      ],
+      curl: [
+        ['Overhead dumbbell triceps extension','3 x 10–15','15–30 lb DB','Long head of triceps.','curl','/api/gif/0109'],
+        ['Dumbbell skull crushers','3 x 8–12','8–15 lb DBs','Keep elbows steady.','curl','/api/gif/0351'],
+        ['Triceps kickbacks','2–3 x 12–20','5–12 lb DBs','Light, strict, squeeze.','curl','/api/gif/0333'],
+        ['Hammer curl','3 x 10–15','20–30 lb DBs','Neutral grip, controlled tempo.','curl','/api/gif/0313'],
+        ['Barbell curl','3 x 8–12','30–50 lb','Elbows locked at your sides, no swinging.','curl','/api/gif/0031']
+      ],
+      legcurl: [
+        ['Dumbbell hamstring curl','3 x 10–15','10–25 lb DB','Hold DB between feet or use sliders.','legcurl','/api/gif/0586']
+      ],
+      plank: [
+        ['Side plank / Copenhagen plank','2–3 x 20–40 sec','Bodyweight','Optional hip/core stability.','plank','/api/gif/3544'],
+        ['Weighted front plank','3 x 30–45 sec','Light plate on back, or bodyweight','Brace your core, don’t let your hips sag.','plank','/api/gif/2135'],
+        ['Russian twist','3 x 20–30','Bodyweight or light plate','Rotate from your core, not your arms.','plank','/api/gif/0687']
+      ],
+      squat: [
+        ['Dumbbell goblet squat','4 x 10–12','40–60 lb DB','Hold DB at chest, squat between your knees, drive through the heels.','squat','/api/gif/1760']
+      ]
+    };
+
+    // Returns up to 3 alternates for the given exercise tuple's type, excluding the
+    // exercise itself (matched by name). Used by the swap-exercise UI in a session.
+    function swapCandidatesFor(exerciseTuple){
+      const type = exerciseTuple[4];
+      const currentName = exerciseTuple[0];
+      const pool = SWAP_CANDIDATES[type] || [];
+      return pool.filter(ex => ex[0] !== currentName).slice(0, 3);
+    }
+
     const missingImageHtml = `<div class="fig-missing">
       <svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <rect x="3" y="4" width="18" height="16" rx="2"/>
@@ -779,6 +882,10 @@
 
     let sessionDay = null;
     let sessionExercise = 0;
+    // Holds { day, exi, originalExercise, newExercise } while a swap is active in this
+    // session but the user hasn't yet decided whether to keep it permanently — asked once
+    // they move on to the next exercise, not at swap time.
+    let pendingSwapDecision = null;
 
     function setCount(dose){
       const m = dose.match(/^(\d+)/);
@@ -992,6 +1099,7 @@
       }
       plan = planFor(myProfile.planKey);
       await applyPlanAdditions();
+      await applyExerciseSwaps();
       applyUserTheme(colorForId(currentUser.id));
       await loadPartner();
       setScreenState('app');
@@ -1011,6 +1119,20 @@
         const day = plan[row.day_idx];
         if(!day || !Array.isArray(row.exercises)) return;
         row.exercises.forEach(ex => day.exercises.push(ex));
+      });
+    }
+
+    // Merges any permanent ("always use this") exercise swaps into the in-memory plan,
+    // replacing the exercise at that exact day/slot. Same one-time-merge-at-load pattern
+    // as applyPlanAdditions — every render function downstream is unaffected by this change.
+    async function applyExerciseSwaps(){
+      if(!plan) return;
+      const { data } = await sb.from('exercise_swaps').select('day_idx, exercise_idx, exercise').eq('user_id', currentUser.id);
+      if(!data) return;
+      data.forEach(row => {
+        const day = plan[row.day_idx];
+        if(!day || !Array.isArray(day.exercises) || !day.exercises[row.exercise_idx] || !Array.isArray(row.exercise)) return;
+        day.exercises[row.exercise_idx] = row.exercise;
       });
     }
 
@@ -1260,6 +1382,76 @@
       renderSession();
     }
 
+    // Wraps advanceExercise: if the exercise being left has an undecided swap, ask
+    // "keep it, or just this once?" before actually moving on — never at swap time itself.
+    function tryAdvanceExercise(){
+      if(pendingSwapDecision && pendingSwapDecision.day === sessionDay && pendingSwapDecision.exi === sessionExercise){
+        showSwapDecisionModal(pendingSwapDecision, ()=>{
+          pendingSwapDecision = null;
+          advanceExercise();
+        });
+        return;
+      }
+      advanceExercise();
+    }
+
+    function openSwapPicker(day, exi){
+      const current = plan[day].exercises[exi];
+      const candidates = swapCandidatesFor(current);
+      const overlay = document.createElement('div');
+      overlay.className = 'swap-sheet';
+      overlay.innerHTML = `
+        <div class="swap-sheet-card">
+          <h3>Swap this exercise</h3>
+          <p class="swap-sub">Same muscle group, different movement — good if your setup doesn't work for this one today.</p>
+          ${candidates.map((cand,i) => `
+            <button class="swap-option" data-i="${i}">
+              ${cand[5] ? `<img src="${cand[5]}" alt="">` : `<div class="swap-noimg"></div>`}
+              <div><b>${cand[0]}</b><span>${cand[1]}${cand[2] ? ' · ' + cand[2] : ''}</span></div>
+            </button>
+          `).join('')}
+          <button class="swap-cancel" id="swapCancelBtn">Never mind</button>
+        </div>`;
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
+      document.getElementById('swapCancelBtn').onclick = ()=>overlay.remove();
+      overlay.querySelectorAll('.swap-option').forEach(btn=>{
+        btn.onclick = ()=>{
+          applySwap(day, exi, candidates[Number(btn.dataset.i)]);
+          overlay.remove();
+        };
+      });
+    }
+
+    function applySwap(day, exi, newExercise){
+      const originalExercise = plan[day].exercises[exi];
+      plan[day].exercises[exi] = newExercise;
+      pendingSwapDecision = { day, exi, originalExercise, newExercise };
+      if(sessionDay === day && sessionExercise === exi) renderSession();
+    }
+
+    function showSwapDecisionModal(decision, onDone){
+      const overlay = document.createElement('div');
+      overlay.className = 'swap-sheet';
+      overlay.innerHTML = `
+        <div class="swap-sheet-card swap-decision-card">
+          <h3>Keep this swap?</h3>
+          <p>You swapped in <b>${decision.newExercise[0]}</b> instead of <b>${decision.originalExercise[0]}</b> for ${plan[decision.day].title}.</p>
+          <button class="primary-choice" id="swapAlways">Always use this from now on</button>
+          <button class="secondary-choice" id="swapOnce">Just this time</button>
+        </div>`;
+      document.body.appendChild(overlay);
+      document.getElementById('swapOnce').onclick = ()=>{ overlay.remove(); onDone(); };
+      document.getElementById('swapAlways').onclick = async ()=>{
+        await sb.from('exercise_swaps').upsert({
+          user_id: currentUser.id, day_idx: decision.day, exercise_idx: decision.exi,
+          exercise: decision.newExercise
+        }, { onConflict: 'user_id,day_idx,exercise_idx' });
+        overlay.remove();
+        onDone();
+      };
+    }
+
     function renderSession(){
       const day = plan[sessionDay];
       document.getElementById('sessionDayTitle').textContent = day.title;
@@ -1292,9 +1484,15 @@
       const gifPath = ex[5];
       const figHtml = gifPath ? `<img src="${gifPath}" alt="${ex[0]}" loading="lazy">` : missingImageHtml;
 
+      const hasSwapCandidates = swapCandidatesFor(ex).length > 0;
+
       body.innerHTML = `
         <article class="exercise session-exercise">
-          <div class="ex-head"><div class="ex-name">${ex[0]}</div><div class="ex-dose">${ex[1]}</div></div>
+          <div class="ex-head">
+            <div class="ex-name">${ex[0]}</div>
+            <div class="ex-dose">${ex[1]}</div>
+          </div>
+          ${hasSwapCandidates ? `<div style="padding:0 20px 8px"><button id="swapBtn" class="swap-btn"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>Swap exercise</button></div>` : ''}
           <div class="fig-box">${figHtml}</div>
           <p class="cue">${ex[3]}</p>
           <div class="weight-row">
@@ -1309,7 +1507,9 @@
         </div>`;
 
       document.getElementById('sessPrev').onclick = ()=>{ sessionExercise = Math.max(0, sessionExercise-1); renderSession(); };
-      document.getElementById('sessNext').onclick = ()=>advanceExercise();
+      document.getElementById('sessNext').onclick = ()=>tryAdvanceExercise();
+      const swapBtnEl = document.getElementById('swapBtn');
+      if(swapBtnEl) swapBtnEl.onclick = ()=>openSwapPicker(sessionDay, exi);
 
       const imgEl = body.querySelector('.fig-box img');
       if(imgEl) imgEl.onerror = ()=>{ imgEl.closest('.fig-box').innerHTML = missingImageHtml; };
