@@ -120,17 +120,17 @@
     .ex-head{padding:15px 15px 8px;display:flex;flex-direction:column;gap:8px}
     .ex-name{font-family:var(--font-display);font-weight:900;font-size:15.5px;letter-spacing:0}
     .ex-dose{font-size:11.5px;color:var(--muted);font-weight:800;background:transparent;border:none;padding:0;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;flex:none}
-    .fig-box{position:relative;background:#fff;border:1px solid var(--border);border-radius:0;margin:2px 24px 20px;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;height:266px}
+    .fig-box{position:relative;background:#fff;border:1px solid var(--border);border-radius:0;margin:2px 0 20px;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;height:266px}
     .fig-box .swap-btn{position:absolute;bottom:12px;right:12px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(20,20,18,.15)}
-    .fig-box img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
+    .fig-box img{width:100%;height:100%;object-fit:contain;display:block;border-radius:0}
     .fig-box.loading{background-image:linear-gradient(110deg, var(--surface-2) 8%, var(--surface-3) 18%, var(--surface-2) 33%);background-size:200% 100%;animation:img-shimmer-sweep 1.6s linear infinite}
     .fig-missing{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);padding:20px 0}
     .fig-missing svg{width:34px;height:34px}
     .fig-missing span{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-    .cue-divider{height:1px;background:var(--border);margin:0 24px 12px}
-    .cue{color:var(--text);font-size:13px;line-height:1.4;margin:0 24px 20px;font-weight:400}
-    .weight-box{background:none;border:none;border-radius:0;padding:0;margin:0 24px 8px}
-    .weight-box-divider{height:1px;background:var(--border);margin:0 24px 20px}
+    .cue-divider{height:1px;background:var(--border);margin:0 0 12px}
+    .cue{color:var(--text);font-size:13px;line-height:1.4;margin:0 0 20px;font-weight:400}
+    .weight-box{background:none;border:none;border-radius:0;padding:0;margin:0 0 8px}
+    .weight-box-divider{height:1px;background:var(--border);margin:0 0 20px}
     .weight-box .weight-label-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:5px}
     .weight-box .weight-label-row label{font-size:10px;color:var(--muted-2);font-weight:800;text-transform:uppercase;letter-spacing:.07em}
     .weight-box .suggest-inline{font-size:10.5px;color:var(--muted-2);font-weight:700;white-space:nowrap;transition:color .2s var(--ease)}
@@ -147,7 +147,7 @@
     .topbar-exit:active{transform:scale(.88)}
     .topbar-exit svg{width:15px;height:15px;stroke:var(--text);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
-    .breadcrumb-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;width:100%;padding:16px 2px 12px}
+    .breadcrumb-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;width:100%;padding:16px 0 12px}
     .breadcrumb-info{display:flex;flex-direction:column;gap:10px}
     .pips{display:flex;gap:8px}
     .pip{flex:none;width:6px;height:6px;border-radius:50%;background:var(--border);transition:background .2s}
@@ -158,23 +158,23 @@
     .reset-icon-btn:active{transform:scale(.88)}
     .reset-icon-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
-    .session-exercise{box-shadow:none;padding-bottom:190px}
-    .session-exercise .ex-head{padding:24px 24px 10px}
+    .session-exercise{box-shadow:none;padding-bottom:220px}
+    .session-exercise .ex-head{padding:24px 0 10px}
     .session-exercise .ex-name{font-size:34px;line-height:1.1}
     .session-exercise .ex-dose{font-size:18px;font-weight:700;letter-spacing:.04em}
-    .session-exercise .cue-divider{margin:0 24px 12px}
-    .session-exercise .cue{margin:0 24px 20px;font-size:13px}
-    .session-exercise .weight-box{margin:0 24px 8px}
-    .session-exercise .weight-box-divider{margin:0 24px 20px}
+    .session-exercise .cue-divider{margin:0 0 12px}
+    .session-exercise .cue{margin:0 0 20px;font-size:13px}
+    .session-exercise .weight-box{margin:0 0 8px}
+    .session-exercise .weight-box-divider{margin:0 0 20px}
     .session-exercise .sets{padding:0 0 16px;justify-content:center}
     .session-exercise .setdot{width:46px;height:46px;font-size:15px}
 
     .session-footer{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;background:var(--bg);border-top:1px solid var(--border)}
-    .session-footer-inner{max-width:520px;width:100%;padding:14px 20px calc(14px + env(safe-area-inset-bottom))}
+    .session-footer-inner{max-width:520px;width:100%;padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
     .session-nav{display:flex;gap:12px;margin-top:0;align-items:stretch}
     .session-nav button{flex:1;border-radius:14px;padding:13px;font-weight:800;font-size:13.5px;text-transform:uppercase;letter-spacing:.03em;transition:transform .12s var(--ease)}
     .session-nav #sessPrev{background:transparent;border:1.5px solid var(--border);color:var(--muted)}
-    .session-nav button.primary{background:var(--accent);color:var(--accent-ink);border:1.5px solid var(--accent)}
+    .session-nav button.primary{background:transparent;color:var(--muted);border:1.5px solid var(--border)}
     .session-nav button.primary:active{transform:scale(.98)}
 
     /* ---- exercise swap ---- */
