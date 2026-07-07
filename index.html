@@ -227,10 +227,7 @@
     .panel h4{margin:0 0 8px;font-size:15px;font-weight:850}
     .panel p,.panel li{color:var(--muted);font-size:13.5px;line-height:1.5}
     .panel ul{padding-left:18px;margin:8px 0 0}
-    .swaps{display:grid;gap:10px}
-    .swap{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--border);padding-top:10px;font-size:13px}
-    .swap:first-child{border-top:0;padding-top:0}
-    .swap b{color:var(--text)}.swap span{color:var(--muted);text-align:right}
+    .tips-more-btn{background:transparent;border:none;color:var(--text);font-weight:800;font-size:13px;text-decoration:underline;padding:10px 0 0;margin-top:4px}
 
     /* ---- imports screen ---- */
     #screen-imports .panel input[type=text]{border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--text);outline:none;margin-top:2px}
@@ -973,109 +970,136 @@
       document.getElementById('tabbar').style.display = state === 'app' ? 'flex' : 'none';
     }
 
+    const GUIDE_TIPS = {
+      christopher: {
+        bullets: [
+          'Pick a weight where the last 1–2 reps feel hard but clean — add weight once a set feels too easy.',
+          'Add 5–10 lb to squats and deadlifts, 5 lb to presses and rows, once form is clean.',
+          'For shoulder and arm accessories, add reps before adding weight.'
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If form breaks down, lower the weight.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Squats / deadlifts: add 5–10 lb when form is clean.</li>
+            <li>Bench / overhead press: add 5 lb at a time.</li>
+            <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
+            <li>Shoulders and arms accessories: add reps first, then weight.</li>
+          </ul>`
+      },
+      gleamotest: {
+        bullets: [
+          'Start lighter than you think — nail the form cues first, then add weight next week.',
+          'Once a lift feels easy with good form, add 5 lb (master the bodyweight version first for fly/dips).',
+          "For abs, add reps or hold time before adding load. It's normal to be sore the first couple weeks."
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Bench press / incline press: once all sets feel easy with good form, add 5 lb.</li>
+            <li>Chest fly / bench dips: master the bodyweight or light-DB version before adding more weight.</li>
+            <li>Abs and core: add reps or hold time first, then start adding load.</li>
+            <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
+          </ul>`
+      },
+      emily: {
+        bullets: [
+          'Start lighter than you think — nail the form cues first, then add weight next week.',
+          'Once squats or RDLs feel easy with good form, add 5 lb; master bodyweight lunges/split squats before loading them.',
+          "For glutes and calves, add reps before adding weight. It's normal to be sore the first couple weeks."
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Squats / RDLs: once all sets feel easy with good form, add 5 lb.</li>
+            <li>Lunges / split squats: master bodyweight or light DBs before adding more weight.</li>
+            <li>Glute and calf work: add reps first, then start adding light weight.</li>
+            <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
+          </ul>`
+      },
+      test: {
+        bullets: [
+          "Choose a weight where the last 1–2 reps feel hard but clean — it's fine to push glutes and chest close to failure on your last set.",
+          'Add 5–10 lb to hip thrusts and RDLs, 5 lb to presses, once form is clean.',
+          'For finishers and core work, add reps before adding load.'
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>Choose a weight where the last 1–2 reps feel hard but clean. You've got some lifting experience, so it's fine to push glutes and chest days close to failure on the last set.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Hip thrust / RDL: add 5–10 lb when form is clean.</li>
+            <li>Bench press / incline press: add 5 lb at a time.</li>
+            <li>Bodyweight glute finishers (frog pumps, bridge march): add reps before adding load.</li>
+            <li>Abs and core: add reps first, then hold time, before adding load.</li>
+          </ul>`
+      },
+      sarahj: {
+        bullets: [
+          'Choose a weight where the last 1–2 reps feel hard but clean.',
+          'Add 5–10 lb to hip thrusts, RDLs, and leg press as reps get easy; add a plate on cable/machine work.',
+          'Keep shoulders and arms light — add reps, not pounds, to stay toned rather than bulky.'
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>Choose a weight where the last 1–2 reps feel hard but clean. Arms and abs work is meant to stay light and high-rep — chase the burn, not heavier weight.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Hip thrust / RDL / leg press: add 5–10 lb when form is clean.</li>
+            <li>Cable and machine glute/hip work: add a plate or two when all reps feel controlled.</li>
+            <li>Abs and core: add reps first, then hold time, before adding load.</li>
+            <li>Shoulders and arms: keep the weight light — add reps, not pounds, to stay toned rather than bulky.</li>
+          </ul>`
+      },
+      default: {
+        bullets: [
+          'Choose a weight where the last 1–2 reps feel hard but clean — if knee pain goes above 3/10, drop the weight or swap the exercise.',
+          'Add 10 lb to hip thrusts and bridges, 5–10 lb to deadlifts and RDLs, once form is clean.',
+          'For rows, bench, and posture/triceps accessories, add reps first, then weight.'
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If your knee pain goes above 3/10, lower the weight or use a swap.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Hip thrust / glute bridge: add 10 lb when all sets feel good.</li>
+            <li>Deadlift / RDL: add 5–10 lb when form is clean.</li>
+            <li>Rows / bench: add 5 lb at a time.</li>
+            <li>Posture and triceps accessories: add reps first, then weight.</li>
+          </ul>`
+      }
+    };
+
     function renderGuideTips(){
       const el = document.getElementById('guideTips');
       const planKey = myProfile && myProfile.planKey;
-      if(planKey === 'christopher'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If form breaks down, lower the weight.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Squats / deadlifts: add 5–10 lb when form is clean.</li>
-              <li>Bench / overhead press: add 5 lb at a time.</li>
-              <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
-              <li>Shoulders and arms accessories: add reps first, then weight.</li>
-            </ul>
-          </section>`;
-      } else if(planKey === 'gleamotest'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Bench press / incline press: once all sets feel easy with good form, add 5 lb.</li>
-              <li>Chest fly / bench dips: master the bodyweight or light-DB version before adding more weight.</li>
-              <li>Abs and core: add reps or hold time first, then start adding load.</li>
-              <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
-            </ul>
-          </section>`;
-      } else if(planKey === 'emily'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Squats / RDLs: once all sets feel easy with good form, add 5 lb.</li>
-              <li>Lunges / split squats: master bodyweight or light DBs before adding more weight.</li>
-              <li>Glute and calf work: add reps first, then start adding light weight.</li>
-              <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
-            </ul>
-          </section>`;
-      } else if(planKey === 'test'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>Choose a weight where the last 1–2 reps feel hard but clean. You've got some lifting experience, so it's fine to push glutes and chest days close to failure on the last set.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Hip thrust / RDL: add 5–10 lb when form is clean.</li>
-              <li>Bench press / incline press: add 5 lb at a time.</li>
-              <li>Bodyweight glute finishers (frog pumps, bridge march): add reps before adding load.</li>
-              <li>Abs and core: add reps first, then hold time, before adding load.</li>
-            </ul>
-          </section>`;
-      } else if(planKey === 'sarahj'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>Choose a weight where the last 1–2 reps feel hard but clean. Arms and abs work is meant to stay light and high-rep — chase the burn, not heavier weight.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Hip thrust / RDL / leg press: add 5–10 lb when form is clean.</li>
-              <li>Cable and machine glute/hip work: add a plate or two when all reps feel controlled.</li>
-              <li>Abs and core: add reps first, then hold time, before adding load.</li>
-              <li>Shoulders and arms: keep the weight light — add reps, not pounds, to stay toned rather than bulky.</li>
-            </ul>
-          </section>`;
-      } else {
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If your knee pain goes above 3/10, lower the weight or use a swap.</p>
-          </section>
-          <section class="panel">
-            <h4>Knee-friendly swaps</h4>
-            <div class="swaps">
-              <div class="swap"><b>Squats</b><span>Hip thrusts, glute bridges, RDLs</span></div>
-              <div class="swap"><b>Lunges</b><span>Kickstand RDLs, B-stance hip thrusts</span></div>
-              <div class="swap"><b>Step-ups</b><span>Kettlebell swings or hamstring curls</span></div>
-              <div class="swap"><b>Bulgarian split squats</b><span>Single-leg glute bridge</span></div>
-            </div>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Hip thrust / glute bridge: add 10 lb when all sets feel good.</li>
-              <li>Deadlift / RDL: add 5–10 lb when form is clean.</li>
-              <li>Rows / bench: add 5 lb at a time.</li>
-              <li>Posture and triceps accessories: add reps first, then weight.</li>
-            </ul>
-          </section>`;
-      }
+      const tips = GUIDE_TIPS[planKey] || GUIDE_TIPS.default;
+      el.innerHTML = `
+        <section class="panel">
+          <h4>Tips</h4>
+          <ul>${tips.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+          <button class="tips-more-btn" id="tipsMoreBtn">More details</button>
+        </section>`;
+      document.getElementById('tipsMoreBtn').onclick = ()=>openTipsSheet(tips.detailHtml);
+    }
+
+    function openTipsSheet(detailHtml){
+      const overlay = document.createElement('div');
+      overlay.className = 'swap-sheet';
+      overlay.innerHTML = `
+        <div class="swap-sheet-card">
+          <h3>Tips</h3>
+          ${detailHtml}
+          <button class="swap-cancel" id="tipsSheetCloseBtn">Close</button>
+        </div>`;
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
+      document.getElementById('tipsSheetCloseBtn').onclick = ()=>overlay.remove();
     }
 
     async function fetchOrInitProfile(){
