@@ -273,6 +273,12 @@
     .tabbtn.active{color:var(--text)}
     .tabbtn.active .icon-wrap{background:#fff;box-shadow:0 1px 4px rgba(20,20,18,.15)}
 
+    /* ---- splash / session-check loading state ---- */
+    .splashscreen{position:fixed;inset:0;z-index:110;background:var(--bg);display:flex;align-items:center;justify-content:center}
+    .splashscreen[hidden]{display:none}
+    .splashscreen .wordmark{font-size:36px;animation:splash-pulse 1.3s ease-in-out infinite}
+    @keyframes splash-pulse{0%,100%{opacity:1}50%{opacity:.35}}
+
     /* ---- auth screen ---- */
     .authscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
     .authscreen[hidden]{display:none}
@@ -322,7 +328,11 @@
   </style>
 </head>
 <body>
-  <div class="authscreen" id="authScreen">
+  <div class="splashscreen" id="splashScreen">
+    <span class="wordmark"><span>gle</span><span class="spark"><svg viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z"/></svg></span><span>mo</span></span>
+  </div>
+
+  <div class="authscreen" id="authScreen" hidden>
     <div class="authcard">
       <span class="wordmark"><span>gle</span><span class="spark"><svg viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z"/></svg></span><span>mo</span></span>
       <p>Sign in to start strength training.</p>
@@ -969,6 +979,7 @@
     }
 
     function setScreenState(state){ // 'auth' | 'setup' | 'questionnaire' | 'noplan' | 'app'
+      document.getElementById('splashScreen').hidden = true;
       document.getElementById('authScreen').hidden = state !== 'auth';
       document.getElementById('setupScreen').hidden = state !== 'setup';
       document.getElementById('questionnaireScreen').hidden = state !== 'questionnaire';
