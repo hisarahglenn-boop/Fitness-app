@@ -207,19 +207,20 @@
     .day-complete p{color:var(--muted);font-size:14px;margin:0 0 28px}
     .day-complete button{background:var(--accent);color:var(--accent-ink);font-weight:900;padding:14px 26px;border-radius:16px;font-size:15px}
 
-    /* ---- progress screen ---- */
-    .big-ring-wrap{display:flex;flex-direction:column;align-items:center;padding:20px 0 8px}
-    .big-ring-wrap .pct{font-size:38px;font-weight:900;letter-spacing:-.04em;margin-top:-96px}
-    .big-ring-wrap .pct-sub{font-size:13px;color:var(--muted);font-weight:700;margin-top:2px}
-    .section-title{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:22px 4px 10px}
-    .day-row{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:13px 14px;margin-bottom:8px;transition:transform .12s var(--ease)}
-    .day-row:active{transform:scale(.97)}
-    .day-row .dr-ring{flex:none}
-    .day-row .dr-info{flex:1;min-width:0}
-    .day-row .dr-info b{display:block;font-size:14px;font-weight:850}
-    .day-row .dr-info span{font-size:12px;color:var(--muted)}
-    .day-row .dr-frac{font-size:13px;font-weight:800;color:var(--text);flex:none}
-    .danger-btn{width:100%;background:transparent;border:1.5px solid #d64545;color:#d64545;font-weight:800;font-size:13.5px;padding:13px;border-radius:14px;margin:26px 0 8px;transition:transform .12s var(--ease)}
+    /* ---- history screen (drill-in from Guide) ---- */
+    .history-stats-row{display:flex;gap:32px;padding:8px 0 28px}
+    .history-stat{display:flex;flex-direction:column;gap:4px}
+    .streak-num{font-family:var(--font-display);font-weight:900;font-size:56px;line-height:1;color:var(--text)}
+    .streak-sub{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
+    .history-row{display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--border);padding:16px 0}
+    .history-row:last-child{border-bottom:none}
+    .history-week-label{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+    .history-week-label b{font-size:14px;font-weight:900;color:var(--text)}
+    .history-week-label span{font-size:13px;color:var(--muted);font-weight:600}
+    .history-bars{display:flex;flex-direction:column;gap:6px}
+    .history-track{height:4px;border-radius:2px;background:var(--border);overflow:hidden;width:100%}
+    .history-track .history-fill{height:100%;border-radius:2px;transition:width .4s var(--ease)}
+    .danger-btn{width:100%;background:transparent;border:1.5px solid #d64545;color:#d64545;font-weight:800;font-size:13.5px;padding:13px;border-radius:14px;margin:14px 0 0;transition:transform .12s var(--ease)}
     .danger-btn:active{transform:scale(.97)}
 
     /* ---- guide screen ---- */
@@ -227,10 +228,7 @@
     .panel h4{margin:0 0 8px;font-size:15px;font-weight:850}
     .panel p,.panel li{color:var(--muted);font-size:13.5px;line-height:1.5}
     .panel ul{padding-left:18px;margin:8px 0 0}
-    .swaps{display:grid;gap:10px}
-    .swap{display:flex;justify-content:space-between;gap:10px;border-top:1px solid var(--border);padding-top:10px;font-size:13px}
-    .swap:first-child{border-top:0;padding-top:0}
-    .swap b{color:var(--text)}.swap span{color:var(--muted);text-align:right}
+    .tips-more-btn{background:transparent;border:none;color:var(--text);font-weight:800;font-size:13px;text-decoration:underline;padding:10px 0 0;margin-top:4px}
 
     /* ---- imports screen ---- */
     #screen-imports .panel input[type=text]{border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--text);outline:none;margin-top:2px}
@@ -265,11 +263,10 @@
       border:.5px solid var(--nav-border);border-radius:var(--radius-pill);
       padding:14px 8px;
     }
-    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0;color:var(--muted);font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;transition:color .15s,transform .12s var(--ease)}
+    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:0;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;transition:color .15s,transform .12s var(--ease)}
     .tabbtn:active{transform:scale(.92)}
-    .tabbtn .tab-dot{width:4px;height:4px;border-radius:50%;background:transparent}
+    .tabbtn svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     .tabbtn.active{color:var(--text)}
-    .tabbtn.active .tab-dot{background:var(--text)}
 
     /* ---- auth screen ---- */
     .authscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
@@ -290,6 +287,8 @@
     .authcard .status{margin-top:14px;font-size:13px;color:var(--muted);min-height:16px}
     .account-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
     .account-row button{background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:var(--radius-pill);white-space:nowrap}
+    .nav-row{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;padding:14px 0 0;font-size:13.5px;color:var(--text);font-weight:700}
+    .nav-row .chevron{color:var(--muted-2)}
 
     /* ---- setup / no-plan overlay screens ---- */
     .overlayscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
@@ -468,18 +467,20 @@
       <div id="sessionBody"></div>
     </main>
 
-    <!-- PROGRESS -->
+    <!-- HISTORY (drill-in from Guide, not a top-level tab) -->
     <main class="screen" id="screen-progress" hidden>
-      <div class="big-ring-wrap">
-        <div id="bigRing"></div>
-        <div class="pct" id="bigPct">0%</div>
-        <div class="pct-sub" id="bigPctSub">0/0 sets complete</div>
+      <div class="history-stats-row">
+        <div class="history-stat">
+          <div class="streak-num" id="streakNum">0</div>
+          <div class="streak-sub">week streak</div>
+        </div>
+        <div class="history-stat">
+          <div class="streak-num" id="allTimeNum">0</div>
+          <div class="streak-sub">sets all-time</div>
+        </div>
       </div>
-      <div class="section-title">By day</div>
-      <div id="dayList"></div>
-      <div class="section-title" id="partnerSectionTitle" hidden>Partner</div>
-      <div id="partnerCard"></div>
-      <button id="resetWeekBtn" class="danger-btn">Reset this week</button>
+      <div class="section-label">Last 12 weeks</div>
+      <div id="historyList"></div>
     </main>
 
     <!-- GUIDE -->
@@ -495,6 +496,11 @@
           <span style="font-size:13.5px;color:var(--muted)">Profile</span>
           <button id="changeProfileBtn">Change</button>
         </div>
+        <button class="nav-row" id="historyEntryBtn">
+          <span>History</span>
+          <span class="chevron">→</span>
+        </button>
+        <button id="resetWeekBtn" class="danger-btn">Reset this week</button>
       </section>
       <section class="panel" id="partnerPanel">
         <h4>Partner</h4>
@@ -555,20 +561,16 @@
   <nav class="tabbar" id="tabbar">
     <div class="inner">
       <button class="tabbtn active" data-screen="dashboard">
+        <svg viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-6h4v6"/></svg>
         Home
-        <span class="tab-dot"></span>
-      </button>
-      <button class="tabbtn" data-screen="progress">
-        Progress
-        <span class="tab-dot"></span>
       </button>
       <button class="tabbtn" data-screen="guide">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3.5-6.5 7-6.5s7 2.5 7 6.5"/></svg>
         Guide
-        <span class="tab-dot"></span>
       </button>
       <button class="tabbtn" data-screen="imports">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
         Imports
-        <span class="tab-dot"></span>
       </button>
     </div>
   </nav>
@@ -973,109 +975,136 @@
       document.getElementById('tabbar').style.display = state === 'app' ? 'flex' : 'none';
     }
 
+    const GUIDE_TIPS = {
+      christopher: {
+        bullets: [
+          'Pick a weight where the last 1–2 reps feel hard but clean — add weight once a set feels too easy.',
+          'Add 5–10 lb to squats and deadlifts, 5 lb to presses and rows, once form is clean.',
+          'For shoulder and arm accessories, add reps before adding weight.'
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If form breaks down, lower the weight.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Squats / deadlifts: add 5–10 lb when form is clean.</li>
+            <li>Bench / overhead press: add 5 lb at a time.</li>
+            <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
+            <li>Shoulders and arms accessories: add reps first, then weight.</li>
+          </ul>`
+      },
+      gleamotest: {
+        bullets: [
+          'Start lighter than you think — nail the form cues first, then add weight next week.',
+          'Once a lift feels easy with good form, add 5 lb (master the bodyweight version first for fly/dips).',
+          "For abs, add reps or hold time before adding load. It's normal to be sore the first couple weeks."
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Bench press / incline press: once all sets feel easy with good form, add 5 lb.</li>
+            <li>Chest fly / bench dips: master the bodyweight or light-DB version before adding more weight.</li>
+            <li>Abs and core: add reps or hold time first, then start adding load.</li>
+            <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
+          </ul>`
+      },
+      emily: {
+        bullets: [
+          'Start lighter than you think — nail the form cues first, then add weight next week.',
+          'Once squats or RDLs feel easy with good form, add 5 lb; master bodyweight lunges/split squats before loading them.',
+          "For glutes and calves, add reps before adding weight. It's normal to be sore the first couple weeks."
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Squats / RDLs: once all sets feel easy with good form, add 5 lb.</li>
+            <li>Lunges / split squats: master bodyweight or light DBs before adding more weight.</li>
+            <li>Glute and calf work: add reps first, then start adding light weight.</li>
+            <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
+          </ul>`
+      },
+      test: {
+        bullets: [
+          "Choose a weight where the last 1–2 reps feel hard but clean — it's fine to push glutes and chest close to failure on your last set.",
+          'Add 5–10 lb to hip thrusts and RDLs, 5 lb to presses, once form is clean.',
+          'For finishers and core work, add reps before adding load.'
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>Choose a weight where the last 1–2 reps feel hard but clean. You've got some lifting experience, so it's fine to push glutes and chest days close to failure on the last set.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Hip thrust / RDL: add 5–10 lb when form is clean.</li>
+            <li>Bench press / incline press: add 5 lb at a time.</li>
+            <li>Bodyweight glute finishers (frog pumps, bridge march): add reps before adding load.</li>
+            <li>Abs and core: add reps first, then hold time, before adding load.</li>
+          </ul>`
+      },
+      sarahj: {
+        bullets: [
+          'Choose a weight where the last 1–2 reps feel hard but clean.',
+          'Add 5–10 lb to hip thrusts, RDLs, and leg press as reps get easy; add a plate on cable/machine work.',
+          'Keep shoulders and arms light — add reps, not pounds, to stay toned rather than bulky.'
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>Choose a weight where the last 1–2 reps feel hard but clean. Arms and abs work is meant to stay light and high-rep — chase the burn, not heavier weight.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Hip thrust / RDL / leg press: add 5–10 lb when form is clean.</li>
+            <li>Cable and machine glute/hip work: add a plate or two when all reps feel controlled.</li>
+            <li>Abs and core: add reps first, then hold time, before adding load.</li>
+            <li>Shoulders and arms: keep the weight light — add reps, not pounds, to stay toned rather than bulky.</li>
+          </ul>`
+      },
+      default: {
+        bullets: [
+          'Choose a weight where the last 1–2 reps feel hard but clean — if knee pain goes above 3/10, drop the weight or swap the exercise.',
+          'Add 10 lb to hip thrusts and bridges, 5–10 lb to deadlifts and RDLs, once form is clean.',
+          'For rows, bench, and posture/triceps accessories, add reps first, then weight.'
+        ],
+        detailHtml: `
+          <h4>Weight rule</h4>
+          <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If your knee pain goes above 3/10, lower the weight or use a swap.</p>
+          <h4>Progression</h4>
+          <ul>
+            <li>Hip thrust / glute bridge: add 10 lb when all sets feel good.</li>
+            <li>Deadlift / RDL: add 5–10 lb when form is clean.</li>
+            <li>Rows / bench: add 5 lb at a time.</li>
+            <li>Posture and triceps accessories: add reps first, then weight.</li>
+          </ul>`
+      }
+    };
+
     function renderGuideTips(){
       const el = document.getElementById('guideTips');
       const planKey = myProfile && myProfile.planKey;
-      if(planKey === 'christopher'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If form breaks down, lower the weight.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Squats / deadlifts: add 5–10 lb when form is clean.</li>
-              <li>Bench / overhead press: add 5 lb at a time.</li>
-              <li>Rows / pulldowns: add 5 lb when all reps feel controlled.</li>
-              <li>Shoulders and arms accessories: add reps first, then weight.</li>
-            </ul>
-          </section>`;
-      } else if(planKey === 'gleamotest'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Bench press / incline press: once all sets feel easy with good form, add 5 lb.</li>
-              <li>Chest fly / bench dips: master the bodyweight or light-DB version before adding more weight.</li>
-              <li>Abs and core: add reps or hold time first, then start adding load.</li>
-              <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
-            </ul>
-          </section>`;
-      } else if(planKey === 'emily'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>You're new to lifting, so start lighter than you think you need to. Focus on nailing the form cues first — you can always add weight next week once a move feels easy and controlled.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Squats / RDLs: once all sets feel easy with good form, add 5 lb.</li>
-              <li>Lunges / split squats: master bodyweight or light DBs before adding more weight.</li>
-              <li>Glute and calf work: add reps first, then start adding light weight.</li>
-              <li>It's normal to feel sore the first couple weeks — that's not a sign to skip, just ease into the next session.</li>
-            </ul>
-          </section>`;
-      } else if(planKey === 'test'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>Choose a weight where the last 1–2 reps feel hard but clean. You've got some lifting experience, so it's fine to push glutes and chest days close to failure on the last set.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Hip thrust / RDL: add 5–10 lb when form is clean.</li>
-              <li>Bench press / incline press: add 5 lb at a time.</li>
-              <li>Bodyweight glute finishers (frog pumps, bridge march): add reps before adding load.</li>
-              <li>Abs and core: add reps first, then hold time, before adding load.</li>
-            </ul>
-          </section>`;
-      } else if(planKey === 'sarahj'){
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>Choose a weight where the last 1–2 reps feel hard but clean. Arms and abs work is meant to stay light and high-rep — chase the burn, not heavier weight.</p>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Hip thrust / RDL / leg press: add 5–10 lb when form is clean.</li>
-              <li>Cable and machine glute/hip work: add a plate or two when all reps feel controlled.</li>
-              <li>Abs and core: add reps first, then hold time, before adding load.</li>
-              <li>Shoulders and arms: keep the weight light — add reps, not pounds, to stay toned rather than bulky.</li>
-            </ul>
-          </section>`;
-      } else {
-        el.innerHTML = `
-          <section class="panel">
-            <h4>Weight rule</h4>
-            <p>Choose a weight where the last 1–2 reps feel hard but clean. If you could do 5+ more reps, increase next set. If your knee pain goes above 3/10, lower the weight or use a swap.</p>
-          </section>
-          <section class="panel">
-            <h4>Knee-friendly swaps</h4>
-            <div class="swaps">
-              <div class="swap"><b>Squats</b><span>Hip thrusts, glute bridges, RDLs</span></div>
-              <div class="swap"><b>Lunges</b><span>Kickstand RDLs, B-stance hip thrusts</span></div>
-              <div class="swap"><b>Step-ups</b><span>Kettlebell swings or hamstring curls</span></div>
-              <div class="swap"><b>Bulgarian split squats</b><span>Single-leg glute bridge</span></div>
-            </div>
-          </section>
-          <section class="panel">
-            <h4>Progression</h4>
-            <ul>
-              <li>Hip thrust / glute bridge: add 10 lb when all sets feel good.</li>
-              <li>Deadlift / RDL: add 5–10 lb when form is clean.</li>
-              <li>Rows / bench: add 5 lb at a time.</li>
-              <li>Posture and triceps accessories: add reps first, then weight.</li>
-            </ul>
-          </section>`;
-      }
+      const tips = GUIDE_TIPS[planKey] || GUIDE_TIPS.default;
+      el.innerHTML = `
+        <section class="panel">
+          <h4>Tips</h4>
+          <ul>${tips.bullets.map(b => `<li>${b}</li>`).join('')}</ul>
+          <button class="tips-more-btn" id="tipsMoreBtn">More details</button>
+        </section>`;
+      document.getElementById('tipsMoreBtn').onclick = ()=>openTipsSheet(tips.detailHtml);
+    }
+
+    function openTipsSheet(detailHtml){
+      const overlay = document.createElement('div');
+      overlay.className = 'swap-sheet';
+      overlay.innerHTML = `
+        <div class="swap-sheet-card">
+          <h3>Tips</h3>
+          ${detailHtml}
+          <button class="swap-cancel" id="tipsSheetCloseBtn">Close</button>
+        </div>`;
+      document.body.appendChild(overlay);
+      overlay.addEventListener('click', (e)=>{ if(e.target === overlay) overlay.remove(); });
+      document.getElementById('tipsSheetCloseBtn').onclick = ()=>overlay.remove();
     }
 
     async function fetchOrInitProfile(){
@@ -1254,19 +1283,6 @@
       }
     });
 
-    function ringSvg(pct, size, stroke, color){
-      const r = (size - stroke) / 2;
-      const c = 2 * Math.PI * r;
-      const offset = c - (Math.min(100,Math.max(0,pct)) / 100) * c;
-      const mid = size / 2;
-      return `<svg width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-        <circle cx="${mid}" cy="${mid}" r="${r}" stroke="var(--surface-3)" stroke-width="${stroke}" fill="none"/>
-        <circle cx="${mid}" cy="${mid}" r="${r}" stroke="${color || 'var(--accent)'}" stroke-width="${stroke}" fill="none"
-          stroke-linecap="round" stroke-dasharray="${c}" stroke-dashoffset="${offset}"
-          transform="rotate(-90 ${mid} ${mid})" style="transition:stroke-dashoffset .5s var(--ease)"/>
-      </svg>`;
-    }
-
     function dayStats(i){
       const d = plan[i];
       let total=0, done=0;
@@ -1371,7 +1387,9 @@
       sessionDay = dayIndex;
       sessionExercise = firstIncompleteExercise(dayIndex);
       document.getElementById('tabbar').style.display = 'none';
-      document.getElementById('topbarExit').hidden = false;
+      const topbarExitEl = document.getElementById('topbarExit');
+      topbarExitEl.hidden = false;
+      topbarExitEl.onclick = closeSession;
       document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-session');
       window.scrollTo({top:0, behavior:'smooth'});
       renderSession();
@@ -1382,6 +1400,22 @@
       document.getElementById('tabbar').style.display = 'flex';
       document.getElementById('topbarExit').hidden = true;
       switchScreen('dashboard');
+    }
+
+    function openHistory(){
+      document.getElementById('tabbar').style.display = 'none';
+      const topbarExitEl = document.getElementById('topbarExit');
+      topbarExitEl.hidden = false;
+      topbarExitEl.onclick = closeHistory;
+      document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-progress');
+      window.scrollTo({top:0, behavior:'smooth'});
+      renderProgressHistory();
+    }
+
+    function closeHistory(){
+      document.getElementById('tabbar').style.display = 'flex';
+      document.getElementById('topbarExit').hidden = true;
+      switchScreen('guide');
     }
 
     function pipsHtml(day, activeIndex){
@@ -1588,7 +1622,7 @@
       };
     }
 
-    document.getElementById('topbarExit').onclick = closeSession;
+    document.getElementById('historyEntryBtn').onclick = openHistory;
 
     document.getElementById('resetDayBtn').onclick = async ()=>{
       if(sessionDay === null) return;
@@ -1618,25 +1652,73 @@
       const heroYouNameEl = document.getElementById('heroYouName');
       heroYouNameEl.textContent = (myProfile && myProfile.displayName) || 'You';
 
-      document.getElementById('bigRing').innerHTML = ringSvg(pct, 176, 16);
-      document.getElementById('bigPct').textContent = `${pct}%`;
-      document.getElementById('bigPctSub').textContent = `${done}/${total} sets complete`;
-
-      const dayList = document.getElementById('dayList');
-      dayList.innerHTML = '';
-      plan.forEach((d,i)=>{
-        const s = dayStats(i);
-        const row = document.createElement('div');
-        row.className = 'day-row';
-        row.innerHTML = `
-          <div class="dr-ring">${ringSvg(s.pct, 40, 5)}</div>
-          <div class="dr-info"><b>${d.title}</b><span>${d.subtitle}</span></div>
-          <div class="dr-frac">${s.done}/${s.total}</div>`;
-        row.onclick = ()=>openSession(i);
-        dayList.appendChild(row);
-      });
-
       renderPartnerCard();
+    }
+
+    function startOfWeek(d){
+      const date = new Date(d);
+      const day = date.getDay();
+      const diff = (day === 0 ? -6 : 1) - day;
+      date.setDate(date.getDate() + diff);
+      date.setHours(0,0,0,0);
+      return date;
+    }
+
+    async function loadHistoryDates(userId){
+      const { data } = await sb.from('workout_history').select('completed_at').eq('user_id', userId);
+      return (data || []).map(r => new Date(r.completed_at));
+    }
+
+    function bucketByWeek(dates, weekCount){
+      const thisWeekStart = startOfWeek(new Date());
+      const buckets = [];
+      for(let i = weekCount - 1; i >= 0; i--){
+        const start = new Date(thisWeekStart);
+        start.setDate(start.getDate() - i*7);
+        const end = new Date(start);
+        end.setDate(end.getDate() + 7);
+        const count = dates.filter(d => d >= start && d < end).length;
+        buckets.push({ start, count });
+      }
+      return buckets;
+    }
+
+    async function renderProgressHistory(){
+      const WEEK_COUNT = 12;
+      const myDates = await loadHistoryDates(currentUser.id);
+      const myBuckets = bucketByWeek(myDates, WEEK_COUNT);
+
+      const partnerLinked = partnerId && partnerProfile && partnerProfile.planKey;
+      const partnerBuckets = partnerLinked ? bucketByWeek(await loadHistoryDates(partnerId), WEEK_COUNT) : null;
+
+      let streak = 0;
+      for(let i = myBuckets.length - 1; i >= 0; i--){
+        if(myBuckets[i].count > 0) streak++;
+        else break;
+      }
+      document.getElementById('streakNum').textContent = streak;
+      document.getElementById('allTimeNum').textContent = myDates.length;
+
+      const maxCount = Math.max(1, ...myBuckets.map(b=>b.count), ...(partnerBuckets ? partnerBuckets.map(b=>b.count) : []));
+      const youColor = colorForId(currentUser.id);
+      const partnerColor = partnerLinked ? colorForId(partnerId) : null;
+
+      const listEl = document.getElementById('historyList');
+      listEl.innerHTML = myBuckets.map((b, i) => {
+        const label = i === myBuckets.length - 1 ? 'This week'
+          : i === myBuckets.length - 2 ? 'Last week'
+          : `Week of ${b.start.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
+        const pct = Math.round(b.count / maxCount * 100);
+        const partnerPct = partnerLinked ? Math.round(partnerBuckets[i].count / maxCount * 100) : null;
+        return `
+          <div class="history-row">
+            <div class="history-week-label"><b>${label}</b><span>${b.count} sets</span></div>
+            <div class="history-bars">
+              <div class="history-track"><div class="history-fill" style="width:${pct}%;background:${youColor}"></div></div>
+              ${partnerLinked ? `<div class="history-track"><div class="history-fill" style="width:${partnerPct}%;background:${partnerColor}"></div></div>` : ''}
+            </div>
+          </div>`;
+      }).join('');
     }
 
     let partnerId = null;
@@ -1675,12 +1757,8 @@
     };
 
     async function renderPartnerCard(){
-      const titleEl = document.getElementById('partnerSectionTitle');
-      const cardEl = document.getElementById('partnerCard');
       const heroPersonPartner = document.getElementById('heroPersonPartner');
       if(!partnerId || !partnerProfile || !partnerProfile.planKey){
-        titleEl.hidden = true;
-        cardEl.innerHTML = '';
         heroPersonPartner.hidden = true;
         return;
       }
@@ -1692,14 +1770,6 @@
       const pct = total ? Math.round(done/total*100) : 0;
       const partnerColor = colorForId(partnerId);
       const partnerName = partnerProfile.displayName || 'Partner';
-
-      titleEl.hidden = false;
-      cardEl.innerHTML = `
-        <div class="day-row">
-          <div class="dr-ring">${ringSvg(pct, 40, 5, partnerColor)}</div>
-          <div class="dr-info"><b>${partnerName}</b><span>${pct}% this week</span></div>
-          <div class="dr-frac">${done}/${total}</div>
-        </div>`;
 
       heroPersonPartner.hidden = false;
       const heroPartnerFillEl = document.getElementById('heroPartnerFill');
@@ -1909,7 +1979,7 @@
       document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== `screen-${name}`);
       document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.screen===name));
       window.scrollTo({top:0, behavior:'smooth'});
-      if(name==='progress' || name==='dashboard') updateProgress();
+      if(name==='dashboard') updateProgress();
       if(name==='dashboard') renderDashboard();
       if(name==='guide') renderGuideTips();
       if(name==='imports') renderImports();
