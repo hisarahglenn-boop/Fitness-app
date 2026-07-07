@@ -207,8 +207,9 @@
     .day-complete p{color:var(--muted);font-size:14px;margin:0 0 28px}
     .day-complete button{background:var(--accent);color:var(--accent-ink);font-weight:900;padding:14px 26px;border-radius:16px;font-size:15px}
 
-    /* ---- progress screen (history/trends) ---- */
-    .streak-block{display:flex;flex-direction:column;gap:4px;padding:8px 0 28px}
+    /* ---- history screen (drill-in from Guide) ---- */
+    .history-stats-row{display:flex;gap:32px;padding:8px 0 28px}
+    .history-stat{display:flex;flex-direction:column;gap:4px}
     .streak-num{font-family:var(--font-display);font-weight:900;font-size:56px;line-height:1;color:var(--text)}
     .streak-sub{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.06em}
     .history-row{display:flex;flex-direction:column;gap:8px;border-bottom:1px solid var(--border);padding:16px 0}
@@ -287,6 +288,8 @@
     .authcard .status{margin-top:14px;font-size:13px;color:var(--muted);min-height:16px}
     .account-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
     .account-row button{background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:var(--radius-pill);white-space:nowrap}
+    .nav-row{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;padding:14px 0 0;font-size:13.5px;color:var(--text);font-weight:700}
+    .nav-row .chevron{color:var(--muted-2)}
 
     /* ---- setup / no-plan overlay screens ---- */
     .overlayscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
@@ -465,13 +468,19 @@
       <div id="sessionBody"></div>
     </main>
 
-    <!-- PROGRESS (history/trends) -->
+    <!-- HISTORY (drill-in from Guide, not a top-level tab) -->
     <main class="screen" id="screen-progress" hidden>
-      <div class="streak-block">
-        <div class="streak-num" id="streakNum">0</div>
-        <div class="streak-sub" id="streakSub">week streak</div>
+      <div class="history-stats-row">
+        <div class="history-stat">
+          <div class="streak-num" id="streakNum">0</div>
+          <div class="streak-sub">week streak</div>
+        </div>
+        <div class="history-stat">
+          <div class="streak-num" id="allTimeNum">0</div>
+          <div class="streak-sub">sets all-time</div>
+        </div>
       </div>
-      <div class="section-label">Last 6 weeks</div>
+      <div class="section-label">Last 12 weeks</div>
       <div id="historyList"></div>
     </main>
 
@@ -488,6 +497,10 @@
           <span style="font-size:13.5px;color:var(--muted)">Profile</span>
           <button id="changeProfileBtn">Change</button>
         </div>
+        <button class="nav-row" id="historyEntryBtn">
+          <span>History</span>
+          <span class="chevron">→</span>
+        </button>
         <button id="resetWeekBtn" class="danger-btn">Reset this week</button>
       </section>
       <section class="panel" id="partnerPanel">
@@ -550,10 +563,6 @@
     <div class="inner">
       <button class="tabbtn active" data-screen="dashboard">
         Home
-        <span class="tab-dot"></span>
-      </button>
-      <button class="tabbtn" data-screen="progress">
-        Progress
         <span class="tab-dot"></span>
       </button>
       <button class="tabbtn" data-screen="guide">
@@ -1379,7 +1388,9 @@
       sessionDay = dayIndex;
       sessionExercise = firstIncompleteExercise(dayIndex);
       document.getElementById('tabbar').style.display = 'none';
-      document.getElementById('topbarExit').hidden = false;
+      const topbarExitEl = document.getElementById('topbarExit');
+      topbarExitEl.hidden = false;
+      topbarExitEl.onclick = closeSession;
       document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-session');
       window.scrollTo({top:0, behavior:'smooth'});
       renderSession();
@@ -1390,6 +1401,22 @@
       document.getElementById('tabbar').style.display = 'flex';
       document.getElementById('topbarExit').hidden = true;
       switchScreen('dashboard');
+    }
+
+    function openHistory(){
+      document.getElementById('tabbar').style.display = 'none';
+      const topbarExitEl = document.getElementById('topbarExit');
+      topbarExitEl.hidden = false;
+      topbarExitEl.onclick = closeHistory;
+      document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-progress');
+      window.scrollTo({top:0, behavior:'smooth'});
+      renderProgressHistory();
+    }
+
+    function closeHistory(){
+      document.getElementById('tabbar').style.display = 'flex';
+      document.getElementById('topbarExit').hidden = true;
+      switchScreen('guide');
     }
 
     function pipsHtml(day, activeIndex){
@@ -1596,7 +1623,7 @@
       };
     }
 
-    document.getElementById('topbarExit').onclick = closeSession;
+    document.getElementById('historyEntryBtn').onclick = openHistory;
 
     document.getElementById('resetDayBtn').onclick = async ()=>{
       if(sessionDay === null) return;
@@ -1639,8 +1666,8 @@
     }
 
     async function loadHistoryDates(userId){
-      const { data } = await sb.from('workout_history').select('created_at').eq('user_id', userId);
-      return (data || []).map(r => new Date(r.created_at));
+      const { data } = await sb.from('workout_history').select('completed_at').eq('user_id', userId);
+      return (data || []).map(r => new Date(r.completed_at));
     }
 
     function bucketByWeek(dates, weekCount){
@@ -1658,7 +1685,7 @@
     }
 
     async function renderProgressHistory(){
-      const WEEK_COUNT = 6;
+      const WEEK_COUNT = 12;
       const myDates = await loadHistoryDates(currentUser.id);
       const myBuckets = bucketByWeek(myDates, WEEK_COUNT);
 
@@ -1671,6 +1698,7 @@
         else break;
       }
       document.getElementById('streakNum').textContent = streak;
+      document.getElementById('allTimeNum').textContent = myDates.length;
 
       const maxCount = Math.max(1, ...myBuckets.map(b=>b.count), ...(partnerBuckets ? partnerBuckets.map(b=>b.count) : []));
       const youColor = colorForId(currentUser.id);
@@ -1954,7 +1982,6 @@
       window.scrollTo({top:0, behavior:'smooth'});
       if(name==='dashboard') updateProgress();
       if(name==='dashboard') renderDashboard();
-      if(name==='progress') renderProgressHistory();
       if(name==='guide') renderGuideTips();
       if(name==='imports') renderImports();
     }
