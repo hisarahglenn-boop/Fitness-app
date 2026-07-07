@@ -60,8 +60,9 @@
     .week-chip{color:var(--text);font-weight:800;font-size:12px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
 
     /* ---- wordmark (logo) ---- */
-    .wordmark{font-family:var(--font-display);font-weight:900;color:var(--text);position:relative;display:inline-block;line-height:1;letter-spacing:0}
-    .wordmark .bullet{margin:0 .05em}
+    .wordmark{font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;font-weight:700;color:var(--text);display:inline-flex;align-items:center;line-height:1;letter-spacing:0}
+    .wordmark .spark{display:inline-flex;align-items:center;justify-content:center;width:.5em;height:.5em;margin:0 .06em}
+    .wordmark .spark svg{width:100%;height:100%;fill:#FF2FA0}
 
     /* ---- screens ---- */
     .screen{padding:16px 16px 8px;max-width:520px;margin:0 auto}
@@ -85,24 +86,25 @@
     .day-hero{
       position:relative;overflow:hidden;
       background:var(--accent);
-      border-radius:0;
+      border-radius:12px;
+      box-shadow:var(--shadow), 0 4px 14px rgba(0,0,0,.25);
       padding:20px;margin-bottom:22px;
     }
     .day-hero h2{font-family:var(--font-display);font-size:34px;font-weight:900;letter-spacing:0;margin:0 0 18px;line-height:1.1;color:#fff}
-    .day-hero .hero-image{width:100%;min-height:230px;display:flex;align-items:center;justify-content:center;margin:0 0 18px}
-    .day-hero .hero-image img{max-width:70%;max-height:260px;object-fit:contain;filter:drop-shadow(0 10px 24px rgba(0,0,0,.5))}
+    .day-hero .hero-image{width:100%;min-height:300px;display:flex;align-items:center;justify-content:center;margin:0 0 18px}
+    .day-hero .hero-image img{max-width:78%;max-height:340px;object-fit:contain;filter:drop-shadow(0 -1px 30px var(--accent-cyan))}
     .day-hero .hero-image.loading{background-image:linear-gradient(110deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.16) 18%, rgba(255,255,255,.06) 33%);background-size:200% 100%;animation:img-shimmer-sweep 1.6s linear infinite}
     .hero-image.loading img, .fig-box.loading img{opacity:0}
     .hero-image img, .fig-box img{transition:opacity .25s ease}
     @keyframes img-shimmer-sweep{0%{background-position:200% 0}100%{background-position:-200% 0}}
-    .day-hero .meta-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .day-hero .meta-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:20px}
     .day-hero .meta-row .meta-exercises{margin:0;color:#bebebe;font-size:14px;font-weight:500;white-space:nowrap}
     .day-hero .meta-row .meta-frac{margin:0;color:#fff;font-size:14px;font-weight:900;white-space:nowrap}
     .day-hero .bar{height:4px;background:rgba(255,255,255,.16);border-radius:2px;overflow:hidden;margin-bottom:18px}
     .day-hero .bar > div{height:100%;background:#fff;border-radius:2px;transition:width .4s var(--ease)}
-    .day-hero .cta{width:100%;background:transparent;border:none;color:#fff;font-weight:900;font-size:18px;text-transform:uppercase;text-decoration:underline;padding:0;text-align:left;transition:opacity .12s var(--ease)}
+    .day-hero .cta{width:100%;background:#fff;border:none;color:#000;font-weight:900;font-size:18px;text-transform:uppercase;text-decoration:none;padding:10px;text-align:center;border-radius:5px;box-shadow:0 1px 24px 0 var(--accent-cyan);transition:opacity .12s var(--ease)}
     .day-hero .cta:active{opacity:.6}
-    .day-hero .cta.done{color:rgba(255,255,255,.7)}
+    .day-hero .cta.done{color:rgba(0,0,0,.6)}
     .day-hero .badge-done{position:absolute;top:20px;right:20px;background:#fff;color:var(--accent);font-size:11px;font-weight:900;padding:6px 10px;border-radius:0}
 
     /* ---- schedule list rows ---- */
@@ -224,30 +226,30 @@
     .danger-btn:active{transform:scale(.97)}
 
     /* ---- guide screen ---- */
-    .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin:0 0 12px}
-    .panel h4{margin:0 0 8px;font-size:15px;font-weight:850}
+    .panel{background:none;border:none;border-radius:0;padding:0;margin:0 0 32px}
+    .panel h4{font-family:var(--font-display);font-weight:900;font-size:24px;letter-spacing:0;margin:0 0 14px;color:var(--text)}
     .panel p,.panel li{color:var(--muted);font-size:13.5px;line-height:1.5}
     .panel ul{padding-left:18px;margin:8px 0 0}
     .tips-more-btn{background:transparent;border:none;color:var(--text);font-weight:800;font-size:13px;text-decoration:underline;padding:10px 0 0;margin-top:4px}
 
     /* ---- imports screen ---- */
-    #screen-imports .panel input[type=text]{border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--text);outline:none;margin-top:2px}
+    #screen-imports .panel input[type=text]{border:1px solid var(--border);background:var(--surface);border-radius:0;padding:12px 14px;font-size:15px;font-weight:700;color:var(--text);outline:none;margin-top:2px}
     #screen-imports .panel input[type=file]{width:100%;font-size:13px;color:var(--muted);margin-top:4px}
-    #screen-imports .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;padding:12px;border-radius:12px}
-    #screen-imports .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--text);font-weight:800;font-size:14px;padding:11px;border-radius:12px;margin-top:8px}
-    .import-or{text-align:center;color:var(--muted-2);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin:16px 0}
-    .import-card{display:flex;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;margin-bottom:10px;align-items:center;text-align:left;width:100%}
-    .import-card img{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--surface-3)}
+    #screen-imports .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;text-transform:uppercase;letter-spacing:.03em;padding:14px;border-radius:0}
+    .import-or{display:flex;align-items:center;gap:10px;color:var(--muted-2);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin:20px 0}
+    .import-or::before,.import-or::after{content:'';flex:1;height:1px;background:var(--border)}
+    .import-card{display:flex;gap:12px;border:none;border-bottom:1px solid var(--border);padding:14px 0;align-items:center;text-align:left;width:100%;background:none}
+    .import-card img{width:48px;height:48px;border-radius:0;object-fit:cover;flex-shrink:0;background:var(--surface-2)}
     .import-card .import-card-info{flex:1;min-width:0}
-    .import-card .import-card-info b{display:block;font-size:14px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .import-card .import-card-info b{display:block;font-size:14px;font-weight:900;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .import-card .import-card-info span{font-size:12px;color:var(--muted)}
     .import-status-chip{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:var(--surface-2);padding:4px 8px;border-radius:var(--radius-pill)}
-    .import-exercise-row{display:flex;gap:10px;align-items:center;background:var(--surface-2);border-radius:12px;padding:10px;margin-bottom:8px}
-    .import-exercise-row img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--surface-3);flex-shrink:0}
+    .import-exercise-row{display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--border);padding:10px 0}
+    .import-exercise-row img{width:44px;height:44px;border-radius:0;object-fit:cover;background:var(--surface-2);flex-shrink:0}
     .import-exercise-row .import-exercise-info{flex:1;min-width:0}
-    .import-exercise-row .import-exercise-info b{display:block;font-size:13.5px}
+    .import-exercise-row .import-exercise-info b{display:block;font-size:13.5px;font-weight:800}
     .import-exercise-row .import-exercise-info span{font-size:12px;color:var(--muted)}
-    .import-exercise-row .import-noimg{width:44px;height:44px;border-radius:8px;background:var(--surface-3);flex-shrink:0}
+    .import-exercise-row .import-noimg{width:44px;height:44px;border-radius:0;background:var(--surface-2);flex-shrink:0}
 
     /* ---- bottom tab bar (floating pill) ---- */
     .tabbar{
@@ -258,15 +260,18 @@
     }
     .tabbar .inner{
       pointer-events:auto;
-      max-width:420px;width:100%;display:flex;
-      background:rgba(250,250,248,.75);backdrop-filter:blur(14px) saturate(140%);
-      border:.5px solid var(--nav-border);border-radius:var(--radius-pill);
+      max-width:210px;width:50%;display:flex;
+      background:rgba(255,255,255,.28);backdrop-filter:blur(20px) saturate(180%);-webkit-backdrop-filter:blur(20px) saturate(180%);
+      border:1px solid rgba(255,255,255,.4);border-radius:var(--radius-pill);
+      box-shadow:0 8px 32px rgba(20,20,18,.12);
       padding:14px 8px;
     }
-    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:0;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;transition:color .15s,transform .12s var(--ease)}
+    .tabbtn{flex:1;background:transparent;border:0;display:flex;align-items:center;justify-content:center;padding:6px 0;color:var(--muted-2);transition:color .15s,transform .12s var(--ease)}
     .tabbtn:active{transform:scale(.92)}
-    .tabbtn svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .tabbtn .icon-wrap{display:flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:transparent;transition:background .2s var(--ease)}
+    .tabbtn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
     .tabbtn.active{color:var(--text)}
+    .tabbtn.active .icon-wrap{background:#fff;box-shadow:0 1px 4px rgba(20,20,18,.15)}
 
     /* ---- auth screen ---- */
     .authscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
@@ -286,7 +291,7 @@
     .authcard .authdivider::before,.authcard .authdivider::after{content:'';flex:1;height:1px;background:var(--border)}
     .authcard .status{margin-top:14px;font-size:13px;color:var(--muted);min-height:16px}
     .account-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .account-row button{background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:var(--radius-pill);white-space:nowrap}
+    .account-row button{background:transparent;border:1.5px solid var(--border);color:var(--muted);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:14px;white-space:nowrap}
     .nav-row{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;padding:14px 0 0;font-size:13.5px;color:var(--text);font-weight:700}
     .nav-row .chevron{color:var(--muted-2)}
 
@@ -295,11 +300,11 @@
     .overlayscreen[hidden]{display:none}
     .overlaycard{max-width:380px;width:100%;text-align:center}
     .overlaycard .eyebrow{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:8px}
-    .overlaycard h2{font-size:22px;font-weight:900;letter-spacing:-.03em;margin:0 0 22px}
-    .overlaycard input[type=text]{width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:13px 14px;font-size:16px;font-weight:700;color:var(--text);outline:none;margin-bottom:14px;text-align:center}
-    .overlaycard .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:15px;padding:14px;border-radius:14px}
-    .overlaycard .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:14px;padding:12px;border-radius:14px;margin-top:10px}
-    .overlaycard .code-display{font-size:32px;font-weight:900;letter-spacing:.12em;margin-bottom:18px}
+    .overlaycard h2{font-family:var(--font-display);font-size:28px;font-weight:900;letter-spacing:0;margin:0 0 22px}
+    .overlaycard input[type=text]{width:100%;border:1px solid var(--border);background:var(--surface);border-radius:0;padding:13px 14px;font-size:16px;font-weight:700;color:var(--text);outline:none;margin-bottom:14px;text-align:center}
+    .overlaycard .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:15px;text-transform:uppercase;letter-spacing:.03em;padding:14px;border-radius:0}
+    .overlaycard .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--muted);font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.03em;padding:12px;border-radius:0;margin-top:10px}
+    .overlaycard .code-display{font-family:var(--font-display);font-size:36px;font-weight:900;letter-spacing:.08em;margin-bottom:18px}
     .overlaycard.scrollable{max-height:88vh;overflow-y:auto;text-align:left;padding:4px 4px 20px}
     .overlaycard.scrollable .eyebrow,.overlaycard.scrollable h2{text-align:center}
     .q-section{margin-bottom:20px}
@@ -319,7 +324,7 @@
 <body>
   <div class="authscreen" id="authScreen">
     <div class="authcard">
-      <span class="wordmark">gle<span class="bullet">•</span>mo</span>
+      <span class="wordmark"><span>gle</span><span class="spark"><svg viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z"/></svg></span><span>mo</span></span>
       <p>Sign in to sync your progress and workout history across devices.</p>
       <button id="googleSignInBtn" class="google-btn">
         <svg viewBox="0 0 20 20" width="18" height="18"><path fill="#4285F4" d="M19.6 10.23c0-.68-.06-1.36-.18-2H10v3.79h5.4a4.6 4.6 0 0 1-2 3.02v2.5h3.23c1.9-1.75 2.97-4.32 2.97-7.31z"/><path fill="#34A853" d="M10 20c2.7 0 4.96-.89 6.62-2.42l-3.23-2.5c-.9.6-2.05.95-3.39.95-2.6 0-4.8-1.76-5.59-4.12H1.06v2.58A10 10 0 0 0 10 20z"/><path fill="#FBBC05" d="M4.41 11.9a6 6 0 0 1 0-3.8V5.51H1.06a10 10 0 0 0 0 8.98z"/><path fill="#EA4335" d="M10 3.98c1.47 0 2.79.5 3.83 1.5l2.87-2.87A9.6 9.6 0 0 0 10 0 10 10 0 0 0 1.06 5.51L4.41 8.1C5.2 5.74 7.4 3.98 10 3.98z"/></svg>
@@ -419,7 +424,7 @@
           <button class="topbar-exit" id="topbarExit" aria-label="Back to dashboard" hidden>
             <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
           </button>
-          <span class="wordmark" style="font-size:26px">gle<span class="bullet">•</span>mo</span>
+          <span class="wordmark" style="font-size:26px"><span>gle</span><span class="spark"><svg viewBox="0 0 24 24"><path d="M12 0L14.5 9.5L24 12L14.5 14.5L12 24L9.5 14.5L0 12L9.5 9.5Z"/></svg></span><span>mo</span></span>
         </div>
         <div class="week-chip" id="weekChip">0% this week</div>
       </div>
@@ -507,7 +512,7 @@
         <p style="margin:0 0 12px">Share your code so a friend can connect with you, or enter theirs below.</p>
         <div class="account-row" style="margin-bottom:12px">
           <span style="font-size:13.5px;color:var(--muted)">Your code</span>
-          <span id="yourConnectCode" style="font-weight:900;font-size:15px;letter-spacing:.08em"></span>
+          <span id="yourConnectCode" style="font-family:var(--font-display);font-weight:900;font-size:20px;letter-spacing:.06em"></span>
         </div>
         <div id="partnerLinked" hidden>
           <div class="account-row">
@@ -516,8 +521,8 @@
           </div>
         </div>
         <div id="partnerConnectForm">
-          <input type="text" id="partnerCodeInput" placeholder="Their code" maxlength="6" style="width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:11px 12px;font-size:14px;font-weight:700;color:var(--text);outline:none;margin-bottom:10px;text-transform:uppercase">
-          <button id="connectPartnerBtn" style="width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;padding:12px;border-radius:12px">Connect</button>
+          <input type="text" id="partnerCodeInput" placeholder="Their code" maxlength="6" style="width:100%;border:1px solid var(--border);background:var(--surface);border-radius:0;padding:11px 12px;font-size:14px;font-weight:700;color:var(--text);outline:none;margin-bottom:10px;text-transform:uppercase">
+          <button id="connectPartnerBtn" style="width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;text-transform:uppercase;letter-spacing:.03em;padding:14px;border-radius:0">Connect</button>
           <div id="partnerStatus" style="margin-top:10px;font-size:12.5px;color:var(--muted);min-height:16px"></div>
         </div>
       </section>
@@ -560,17 +565,14 @@
 
   <nav class="tabbar" id="tabbar">
     <div class="inner">
-      <button class="tabbtn active" data-screen="dashboard">
-        <svg viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-6h4v6"/></svg>
-        Home
+      <button class="tabbtn active" data-screen="dashboard" aria-label="Home">
+        <span class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M4 11.5L12 5l8 6.5"/><path d="M6 10.5V19h12v-8.5"/></svg></span>
       </button>
-      <button class="tabbtn" data-screen="guide">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3.5-6.5 7-6.5s7 2.5 7 6.5"/></svg>
-        Guide
+      <button class="tabbtn" data-screen="guide" aria-label="Guide">
+        <span class="icon-wrap"><svg viewBox="0 0 24 24"><circle cx="12" cy="7.5" r="3"/><path d="M5.5 19.5c0-4 3-6.5 6.5-6.5s6.5 2.5 6.5 6.5"/></svg></span>
       </button>
-      <button class="tabbtn" data-screen="imports">
-        <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
-        Imports
+      <button class="tabbtn" data-screen="imports" aria-label="Imports">
+        <span class="icon-wrap"><svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="M8 11l4 4 4-4"/><path d="M6 19h12"/></svg></span>
       </button>
     </div>
   </nav>
@@ -1108,8 +1110,8 @@
     }
 
     async function fetchOrInitProfile(){
-      const { data } = await sb.from('profiles').select('display_name, plan_key, connect_code, questionnaire').eq('user_id', currentUser.id).maybeSingle();
-      myProfile = data ? { displayName: data.display_name, planKey: data.plan_key, connectCode: data.connect_code, questionnaire: data.questionnaire } : null;
+      const { data } = await sb.from('profiles').select('display_name, plan_key, connect_code, questionnaire, plan').eq('user_id', currentUser.id).maybeSingle();
+      myProfile = data ? { displayName: data.display_name, planKey: data.plan_key, connectCode: data.connect_code, questionnaire: data.questionnaire, plan: data.plan } : null;
     }
 
     async function routeAfterLogin(){
@@ -1118,16 +1120,16 @@
         setScreenState('setup');
         return;
       }
-      if(!myProfile.planKey && !myProfile.questionnaire){
+      if(!myProfile.planKey && !myProfile.plan && !myProfile.questionnaire){
         setScreenState('questionnaire');
         return;
       }
-      if(!myProfile.planKey){
+      if(!myProfile.planKey && !myProfile.plan){
         document.getElementById('noPlanCode').textContent = myProfile.connectCode || '';
         setScreenState('noplan');
         return;
       }
-      plan = planFor(myProfile.planKey);
+      plan = myProfile.planKey ? planFor(myProfile.planKey) : myProfile.plan;
       await applyPlanAdditions();
       await applyExerciseSwaps();
       await loadPartner();
@@ -1223,6 +1225,23 @@
       btn.disabled = true;
       statusEl.textContent = 'Saving...';
       await sb.from('profiles').upsert({ user_id: currentUser.id, questionnaire, updated_at: new Date().toISOString() });
+
+      statusEl.textContent = 'Building your plan… this can take a few seconds';
+      try{
+        const res = await fetch('/api/plan/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ questionnaire })
+        });
+        const body = await res.json();
+        if(res.ok && Array.isArray(body.plan) && body.plan.length){
+          await sb.from('profiles').upsert({ user_id: currentUser.id, plan: body.plan, updated_at: new Date().toISOString() });
+        }
+      }catch(err){
+        // Swallow — routeAfterLogin below falls back to the "not set up yet" screen
+        // when no plan was saved, so the user is never left stuck on an error.
+      }
+
       btn.disabled = false;
       statusEl.textContent = '';
       await routeAfterLogin();
@@ -1343,7 +1362,7 @@
       const bigDay = plan[bigIndex];
 
       const heroEl = document.getElementById('dayHero');
-      const ctaLabel = bigStats.pct===100 ? 'Review day' : (bigStats.done>0 ? 'Continue workout' : 'Start workout');
+      const ctaLabel = bigStats.pct===100 ? 'Review day' : (bigStats.done>0 ? 'Resume workout' : 'Start workout');
       const heroImg = muscleImageFor(bigDay.subtitle);
       heroEl.innerHTML = `
         ${bigStats.pct===100 ? '<div class="badge-done">✓ Done</div>' : ''}
@@ -1353,8 +1372,8 @@
           <p class="meta-exercises">${bigDay.exercises.length} exercises · ${bigStats.total} sets</p>
           <p class="meta-frac">${bigStats.done}/${bigStats.total}</p>
         </div>
-        <div class="bar"><div style="width:${bigStats.pct}%"></div></div>
-        <button class="cta${bigStats.pct===100?' done':''}">${ctaLabel} →</button>
+        ${bigStats.done>0 ? `<div class="bar"><div style="width:${bigStats.pct}%"></div></div>` : ''}
+        <button class="cta${bigStats.pct===100?' done':''}">${ctaLabel}</button>
       `;
       heroEl.onclick = ()=>openSession(bigIndex);
 
