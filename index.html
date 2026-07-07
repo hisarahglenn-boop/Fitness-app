@@ -1340,7 +1340,7 @@
       const bigDay = plan[bigIndex];
 
       const heroEl = document.getElementById('dayHero');
-      const ctaLabel = bigStats.pct===100 ? 'Review day' : (bigStats.done>0 ? 'Continue workout' : 'Start workout');
+      const ctaLabel = bigStats.pct===100 ? 'Review day' : (bigStats.done>0 ? 'Resume workout' : 'Start workout');
       const heroImg = muscleImageFor(bigDay.subtitle);
       heroEl.innerHTML = `
         ${bigStats.pct===100 ? '<div class="badge-done">✓ Done</div>' : ''}
@@ -1350,7 +1350,7 @@
           <p class="meta-exercises">${bigDay.exercises.length} exercises · ${bigStats.total} sets</p>
           <p class="meta-frac">${bigStats.done}/${bigStats.total}</p>
         </div>
-        <div class="bar"><div style="width:${bigStats.pct}%"></div></div>
+        ${bigStats.done>0 ? `<div class="bar"><div style="width:${bigStats.pct}%"></div></div>` : ''}
         <button class="cta${bigStats.pct===100?' done':''}">${ctaLabel} →</button>
       `;
       heroEl.onclick = ()=>openSession(bigIndex);
