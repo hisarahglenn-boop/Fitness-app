@@ -263,11 +263,10 @@
       border:.5px solid var(--nav-border);border-radius:var(--radius-pill);
       padding:14px 8px;
     }
-    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0;color:var(--muted);font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;transition:color .15s,transform .12s var(--ease)}
+    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:0;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;transition:color .15s,transform .12s var(--ease)}
     .tabbtn:active{transform:scale(.92)}
-    .tabbtn .tab-dot{width:4px;height:4px;border-radius:50%;background:transparent}
+    .tabbtn svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
     .tabbtn.active{color:var(--text)}
-    .tabbtn.active .tab-dot{background:var(--text)}
 
     /* ---- auth screen ---- */
     .authscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
@@ -562,16 +561,16 @@
   <nav class="tabbar" id="tabbar">
     <div class="inner">
       <button class="tabbtn active" data-screen="dashboard">
+        <svg viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-6h4v6"/></svg>
         Home
-        <span class="tab-dot"></span>
       </button>
       <button class="tabbtn" data-screen="guide">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3.5-6.5 7-6.5s7 2.5 7 6.5"/></svg>
         Guide
-        <span class="tab-dot"></span>
       </button>
       <button class="tabbtn" data-screen="imports">
+        <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
         Imports
-        <span class="tab-dot"></span>
       </button>
     </div>
   </nav>
