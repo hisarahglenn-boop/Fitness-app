@@ -224,30 +224,30 @@
     .danger-btn:active{transform:scale(.97)}
 
     /* ---- guide screen ---- */
-    .panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:16px;margin:0 0 12px}
-    .panel h4{margin:0 0 8px;font-size:15px;font-weight:850}
+    .panel{background:none;border:none;border-radius:0;padding:0;margin:0 0 32px}
+    .panel h4{font-family:var(--font-display);font-weight:900;font-size:24px;letter-spacing:0;margin:0 0 14px;color:var(--text)}
     .panel p,.panel li{color:var(--muted);font-size:13.5px;line-height:1.5}
     .panel ul{padding-left:18px;margin:8px 0 0}
     .tips-more-btn{background:transparent;border:none;color:var(--text);font-weight:800;font-size:13px;text-decoration:underline;padding:10px 0 0;margin-top:4px}
 
     /* ---- imports screen ---- */
-    #screen-imports .panel input[type=text]{border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:12px 14px;font-size:15px;font-weight:700;color:var(--text);outline:none;margin-top:2px}
+    #screen-imports .panel input[type=text]{border:1px solid var(--border);background:var(--surface);border-radius:0;padding:12px 14px;font-size:15px;font-weight:700;color:var(--text);outline:none;margin-top:2px}
     #screen-imports .panel input[type=file]{width:100%;font-size:13px;color:var(--muted);margin-top:4px}
-    #screen-imports .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;padding:12px;border-radius:12px}
-    #screen-imports .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--text);font-weight:800;font-size:14px;padding:11px;border-radius:12px;margin-top:8px}
-    .import-or{text-align:center;color:var(--muted-2);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin:16px 0}
-    .import-card{display:flex;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:12px;margin-bottom:10px;align-items:center;text-align:left;width:100%}
-    .import-card img{width:56px;height:56px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--surface-3)}
+    #screen-imports .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;text-transform:uppercase;letter-spacing:.03em;padding:14px;border-radius:0}
+    .import-or{display:flex;align-items:center;gap:10px;color:var(--muted-2);font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;margin:20px 0}
+    .import-or::before,.import-or::after{content:'';flex:1;height:1px;background:var(--border)}
+    .import-card{display:flex;gap:12px;border:none;border-bottom:1px solid var(--border);padding:14px 0;align-items:center;text-align:left;width:100%;background:none}
+    .import-card img{width:48px;height:48px;border-radius:0;object-fit:cover;flex-shrink:0;background:var(--surface-2)}
     .import-card .import-card-info{flex:1;min-width:0}
-    .import-card .import-card-info b{display:block;font-size:14px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .import-card .import-card-info b{display:block;font-size:14px;font-weight:900;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
     .import-card .import-card-info span{font-size:12px;color:var(--muted)}
     .import-status-chip{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);background:var(--surface-2);padding:4px 8px;border-radius:var(--radius-pill)}
-    .import-exercise-row{display:flex;gap:10px;align-items:center;background:var(--surface-2);border-radius:12px;padding:10px;margin-bottom:8px}
-    .import-exercise-row img{width:44px;height:44px;border-radius:8px;object-fit:cover;background:var(--surface-3);flex-shrink:0}
+    .import-exercise-row{display:flex;gap:10px;align-items:center;border-bottom:1px solid var(--border);padding:10px 0}
+    .import-exercise-row img{width:44px;height:44px;border-radius:0;object-fit:cover;background:var(--surface-2);flex-shrink:0}
     .import-exercise-row .import-exercise-info{flex:1;min-width:0}
-    .import-exercise-row .import-exercise-info b{display:block;font-size:13.5px}
+    .import-exercise-row .import-exercise-info b{display:block;font-size:13.5px;font-weight:800}
     .import-exercise-row .import-exercise-info span{font-size:12px;color:var(--muted)}
-    .import-exercise-row .import-noimg{width:44px;height:44px;border-radius:8px;background:var(--surface-3);flex-shrink:0}
+    .import-exercise-row .import-noimg{width:44px;height:44px;border-radius:0;background:var(--surface-2);flex-shrink:0}
 
     /* ---- bottom tab bar (floating pill) ---- */
     .tabbar{
@@ -263,9 +263,9 @@
       border:.5px solid var(--nav-border);border-radius:var(--radius-pill);
       padding:14px 8px;
     }
-    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:0;color:var(--muted);font-size:10px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;transition:color .15s,transform .12s var(--ease)}
+    .tabbtn{flex:1;background:transparent;border:0;display:flex;align-items:center;justify-content:center;padding:8px 0;color:var(--muted-2);transition:color .15s,transform .12s var(--ease)}
     .tabbtn:active{transform:scale(.92)}
-    .tabbtn svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+    .tabbtn svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round}
     .tabbtn.active{color:var(--text)}
 
     /* ---- auth screen ---- */
@@ -286,7 +286,7 @@
     .authcard .authdivider::before,.authcard .authdivider::after{content:'';flex:1;height:1px;background:var(--border)}
     .authcard .status{margin-top:14px;font-size:13px;color:var(--muted);min-height:16px}
     .account-row{display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .account-row button{background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:var(--radius-pill);white-space:nowrap}
+    .account-row button{background:transparent;border:1.5px solid var(--border);color:var(--muted);font-weight:800;font-size:12.5px;padding:8px 14px;border-radius:14px;white-space:nowrap}
     .nav-row{display:flex;align-items:center;justify-content:space-between;width:100%;background:none;border:none;padding:14px 0 0;font-size:13.5px;color:var(--text);font-weight:700}
     .nav-row .chevron{color:var(--muted-2)}
 
@@ -295,11 +295,11 @@
     .overlayscreen[hidden]{display:none}
     .overlaycard{max-width:380px;width:100%;text-align:center}
     .overlaycard .eyebrow{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.15em;margin-bottom:8px}
-    .overlaycard h2{font-size:22px;font-weight:900;letter-spacing:-.03em;margin:0 0 22px}
-    .overlaycard input[type=text]{width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:13px 14px;font-size:16px;font-weight:700;color:var(--text);outline:none;margin-bottom:14px;text-align:center}
-    .overlaycard .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:15px;padding:14px;border-radius:14px}
-    .overlaycard .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--text);color:var(--text);font-weight:800;font-size:14px;padding:12px;border-radius:14px;margin-top:10px}
-    .overlaycard .code-display{font-size:32px;font-weight:900;letter-spacing:.12em;margin-bottom:18px}
+    .overlaycard h2{font-family:var(--font-display);font-size:28px;font-weight:900;letter-spacing:0;margin:0 0 22px}
+    .overlaycard input[type=text]{width:100%;border:1px solid var(--border);background:var(--surface);border-radius:0;padding:13px 14px;font-size:16px;font-weight:700;color:var(--text);outline:none;margin-bottom:14px;text-align:center}
+    .overlaycard .primary-btn{width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:15px;text-transform:uppercase;letter-spacing:.03em;padding:14px;border-radius:0}
+    .overlaycard .secondary-btn{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--muted);font-weight:800;font-size:14px;text-transform:uppercase;letter-spacing:.03em;padding:12px;border-radius:0;margin-top:10px}
+    .overlaycard .code-display{font-family:var(--font-display);font-size:36px;font-weight:900;letter-spacing:.08em;margin-bottom:18px}
     .overlaycard.scrollable{max-height:88vh;overflow-y:auto;text-align:left;padding:4px 4px 20px}
     .overlaycard.scrollable .eyebrow,.overlaycard.scrollable h2{text-align:center}
     .q-section{margin-bottom:20px}
@@ -507,7 +507,7 @@
         <p style="margin:0 0 12px">Share your code so a friend can connect with you, or enter theirs below.</p>
         <div class="account-row" style="margin-bottom:12px">
           <span style="font-size:13.5px;color:var(--muted)">Your code</span>
-          <span id="yourConnectCode" style="font-weight:900;font-size:15px;letter-spacing:.08em"></span>
+          <span id="yourConnectCode" style="font-family:var(--font-display);font-weight:900;font-size:20px;letter-spacing:.06em"></span>
         </div>
         <div id="partnerLinked" hidden>
           <div class="account-row">
@@ -516,8 +516,8 @@
           </div>
         </div>
         <div id="partnerConnectForm">
-          <input type="text" id="partnerCodeInput" placeholder="Their code" maxlength="6" style="width:100%;border:1.5px solid var(--text);background:var(--surface-2);border-radius:12px;padding:11px 12px;font-size:14px;font-weight:700;color:var(--text);outline:none;margin-bottom:10px;text-transform:uppercase">
-          <button id="connectPartnerBtn" style="width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;padding:12px;border-radius:12px">Connect</button>
+          <input type="text" id="partnerCodeInput" placeholder="Their code" maxlength="6" style="width:100%;border:1px solid var(--border);background:var(--surface);border-radius:0;padding:11px 12px;font-size:14px;font-weight:700;color:var(--text);outline:none;margin-bottom:10px;text-transform:uppercase">
+          <button id="connectPartnerBtn" style="width:100%;background:var(--accent);color:var(--accent-ink);font-weight:900;font-size:14px;text-transform:uppercase;letter-spacing:.03em;padding:14px;border-radius:0">Connect</button>
           <div id="partnerStatus" style="margin-top:10px;font-size:12.5px;color:var(--muted);min-height:16px"></div>
         </div>
       </section>
@@ -560,17 +560,14 @@
 
   <nav class="tabbar" id="tabbar">
     <div class="inner">
-      <button class="tabbtn active" data-screen="dashboard">
-        <svg viewBox="0 0 24 24"><path d="M3 11.5L12 4l9 7.5"/><path d="M5.5 10v9.5h13V10"/><path d="M10 19.5v-6h4v6"/></svg>
-        Home
+      <button class="tabbtn active" data-screen="dashboard" aria-label="Home">
+        <svg viewBox="0 0 24 24"><path d="M4 11.5L12 5l8 6.5"/><path d="M6 10.5V19h12v-8.5"/></svg>
       </button>
-      <button class="tabbtn" data-screen="guide">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="3.5"/><path d="M5 20c0-4 3.5-6.5 7-6.5s7 2.5 7 6.5"/></svg>
-        Guide
+      <button class="tabbtn" data-screen="guide" aria-label="Guide">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="7.5" r="3"/><path d="M5.5 19.5c0-4 3-6.5 6.5-6.5s6.5 2.5 6.5 6.5"/></svg>
       </button>
-      <button class="tabbtn" data-screen="imports">
-        <svg viewBox="0 0 24 24"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M4 19h16"/></svg>
-        Imports
+      <button class="tabbtn" data-screen="imports" aria-label="Imports">
+        <svg viewBox="0 0 24 24"><path d="M12 4v11"/><path d="M8 11l4 4 4-4"/><path d="M6 19h12"/></svg>
       </button>
     </div>
   </nav>
