@@ -1,7 +1,801 @@
 [
   {
+    "name": "Barbell hip thrust",
+    "targetAreas": [
+      "glutes"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "5 x 5–8",
+    "weight": "95–135 lb",
+    "cue": "Pause 1 sec at top. Ribs down, chin tucked, shins vertical.",
+    "type": "bridge",
+    "gifPath": "/api/gif/0058"
+  },
+  {
+    "name": "Barbell Romanian deadlift",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "4 x 6–8",
+    "weight": "65–95 lb",
+    "cue": "Hips back, soft knees, feel hamstrings and glutes.",
+    "type": "hinge",
+    "gifPath": "/api/gif/0085"
+  },
+  {
+    "name": "Conventional or sumo deadlift",
+    "targetAreas": [
+      "glutes",
+      "back",
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 3–5",
+    "weight": "95–135 lb",
+    "cue": "Heavy clean reps. Sumo may feel better for glutes/knees.",
+    "type": "hinge",
+    "gifPath": "/api/gif/0032"
+  },
+  {
+    "name": "Dumbbell frog pumps / glute bridge",
+    "targetAreas": [
+      "glutes"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 15–25",
+    "weight": "25–50 lb DB",
+    "cue": "Burnout. Squeeze glutes, don’t arch low back.",
+    "type": "bridge",
+    "gifPath": "/api/gif/3013"
+  },
+  {
+    "name": "Side-lying hip abduction",
+    "targetAreas": [
+      "glutes",
+      "hips"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 15–25/side",
+    "weight": "Bodyweight or 5–10 lb",
+    "cue": "Slow reps for side glute/hip stability.",
+    "type": "legraise",
+    "gifPath": "/api/gif/0710"
+  },
+  {
+    "name": "Standing calf raise",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "25–50 lb total",
+    "cue": "Optional finisher.",
+    "type": "calf",
+    "gifPath": "/api/gif/0417"
+  },
+  {
+    "name": "Chest-supported dumbbell row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "4 x 8–10",
+    "weight": "20–35 lb DBs",
+    "cue": "Squeeze shoulder blades back and down.",
+    "type": "row",
+    "gifPath": "/api/gif/0327"
+  },
+  {
+    "name": "Barbell bent-over row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "4 x 6–8",
+    "weight": "45–75 lb",
+    "cue": "Heavy but controlled. No yanking.",
+    "type": "row",
+    "gifPath": "/api/gif/0027"
+  },
+  {
+    "name": "Dumbbell rear delt fly",
+    "targetAreas": [
+      "shoulders",
+      "back"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 12–20",
+    "weight": "5–12 lb DBs",
+    "cue": "Light and strict.",
+    "type": "armraise",
+    "gifPath": "/api/gif/0383"
+  },
+  {
+    "name": "Dumbbell rear delt row",
+    "targetAreas": [
+      "back",
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 15–25",
+    "weight": "5–15 lb DBs",
+    "cue": "Wide grip, pull to chest height, squeeze shoulder blades.",
+    "type": "row",
+    "gifPath": "/api/gif/0377"
+  },
+  {
+    "name": "Prone Y-raise",
+    "targetAreas": [
+      "shoulders",
+      "back"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "2.5–8 lb DBs",
+    "cue": "Lower traps. Tiny weights are enough.",
+    "type": "armraise",
+    "gifPath": "/api/gif/3541"
+  },
+  {
+    "name": "Close-grip bench press",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "4 x 6–10",
+    "weight": "45–75 lb",
+    "cue": "Back of arms focus.",
+    "type": "press",
+    "gifPath": "/api/gif/0030"
+  },
+  {
+    "name": "Overhead dumbbell triceps extension",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "15–30 lb DB",
+    "cue": "Long head of triceps.",
+    "type": "curl",
+    "gifPath": "/api/gif/0109"
+  },
+  {
+    "name": "Barbell glute bridge from floor",
+    "targetAreas": [
+      "glutes"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "4 x 8–10",
+    "weight": "95–145 lb",
+    "cue": "Go heavy, but keep low back quiet.",
+    "type": "bridge",
+    "gifPath": "/api/gif/1409"
+  },
+  {
+    "name": "Kickstand RDL",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10/side",
+    "weight": "20–40 lb DBs",
+    "cue": "Stable single-leg-ish hinge.",
+    "type": "hinge",
+    "gifPath": "/api/gif/1459"
+  },
+  {
+    "name": "Dumbbell hamstring curl",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "10–25 lb DB",
+    "cue": "Hold DB between feet or use sliders.",
+    "type": "legcurl",
+    "gifPath": "/api/gif/0586"
+  },
+  {
+    "name": "Dumbbell sumo pull-through",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "4 x 12–20",
+    "weight": "25–40 lb DB",
+    "cue": "Hip snap, not a squat — swing the DB back through your legs.",
+    "type": "hinge",
+    "gifPath": "/api/gif/2808"
+  },
+  {
+    "name": "B-stance hip thrust",
+    "targetAreas": [
+      "glutes"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "65–115 lb",
+    "cue": "One glute works harder without knee stress.",
+    "type": "bridge",
+    "gifPath": "/api/gif/0130"
+  },
+  {
+    "name": "Side plank / Copenhagen plank",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "2–3 x 20–40 sec",
+    "weight": "Bodyweight",
+    "cue": "Optional hip/core stability.",
+    "type": "plank",
+    "gifPath": "/api/gif/3544"
+  },
+  {
+    "name": "Single-arm dumbbell row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "4 x 8–12/side",
+    "weight": "25–45 lb DB",
+    "cue": "Pull elbow toward hip.",
+    "type": "row",
+    "gifPath": "/api/gif/0064"
+  },
+  {
+    "name": "Dumbbell pullover",
+    "targetAreas": [
+      "back",
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "20–35 lb DB",
+    "cue": "Lats + rib control.",
+    "type": "press",
+    "gifPath": "/api/gif/0375"
+  },
+  {
+    "name": "Scapular push-up",
+    "targetAreas": [
+      "shoulders",
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "Bodyweight",
+    "cue": "Serratus for shoulder position.",
+    "type": "press",
+    "gifPath": "/api/gif/3011"
+  },
+  {
+    "name": "Wall slides / floor angels",
+    "targetAreas": [
+      "shoulders",
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 8–12",
+    "weight": "Bodyweight",
+    "cue": "Slow and controlled.",
+    "type": "armraise",
+    "gifPath": null
+  },
+  {
+    "name": "Dumbbell skull crushers",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 8–12",
+    "weight": "8–15 lb DBs",
+    "cue": "Keep elbows steady.",
+    "type": "curl",
+    "gifPath": "/api/gif/0351"
+  },
+  {
+    "name": "Triceps kickbacks",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "2–3 x 12–20",
+    "weight": "5–12 lb DBs",
+    "cue": "Light, strict, squeeze.",
+    "type": "curl",
+    "gifPath": "/api/gif/0333"
+  },
+  {
+    "name": "Glute bridge march",
+    "targetAreas": [
+      "glutes",
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12/side",
+    "weight": "Bodyweight",
+    "cue": "March one leg up at a time, keep hips level and glutes squeezed.",
+    "type": "bridge",
+    "gifPath": "/api/gif/3561"
+  },
+  {
+    "name": "Side bridge hip abduction",
+    "targetAreas": [
+      "glutes",
+      "hips"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "4 x 20–30/side",
+    "weight": "Bodyweight",
+    "cue": "Side-glute burnout, top leg lifts and lowers.",
+    "type": "legraise",
+    "gifPath": "/api/gif/1774"
+  },
+  {
+    "name": "Frog pumps",
+    "targetAreas": [
+      "glutes"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30",
+    "weight": "Bodyweight to 25 lb DB",
+    "cue": "Finisher.",
+    "type": "bridge",
+    "gifPath": "/api/gif/3013"
+  },
+  {
+    "name": "Dumbbell Romanian deadlift",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "40–60 lb",
+    "cue": "Hips back, soft knees, moderate weight.",
+    "type": "hinge",
+    "gifPath": "/api/gif/0085"
+  },
+  {
+    "name": "Weighted front plank",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30–45 sec",
+    "weight": "Light plate on back, or bodyweight",
+    "cue": "Quick core finisher.",
+    "type": "plank",
+    "gifPath": "/api/gif/2135"
+  },
+  {
+    "name": "Barbell bench press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "4 x 6–8",
+    "weight": "95–135 lb",
+    "cue": "Elbows at 45°, drive feet into the floor, touch chest lightly.",
+    "type": "press",
+    "gifPath": "/api/gif/0025"
+  },
+  {
+    "name": "Standing overhead barbell press",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "4 x 6–8",
+    "weight": "65–95 lb",
+    "cue": "Brace core, press straight up, avoid leaning back.",
+    "type": "armraise",
+    "gifPath": "/api/gif/1456"
+  },
+  {
+    "name": "Incline dumbbell press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 8–10",
+    "weight": "30–50 lb DBs",
+    "cue": "30–45° incline, control the descent.",
+    "type": "press",
+    "gifPath": "/api/gif/0314"
+  },
+  {
+    "name": "Lateral raise",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "4 x 12–15",
+    "weight": "10–20 lb DBs",
+    "cue": "Lead with elbows, stop at shoulder height.",
+    "type": "armraise",
+    "gifPath": "/api/gif/0334"
+  },
+  {
+    "name": "Skull crushers",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12",
+    "weight": "30–45 lb",
+    "cue": "Elbows stay fixed, lower to forehead.",
+    "type": "curl",
+    "gifPath": "/api/gif/0060"
+  },
+  {
+    "name": "Barbell deadlift",
+    "targetAreas": [
+      "back",
+      "glutes",
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "4 x 5–6",
+    "weight": "135–185 lb",
+    "cue": "Neutral spine, push the floor away, bar stays close.",
+    "type": "hinge",
+    "gifPath": "/api/gif/0032"
+  },
+  {
+    "name": "Barbell bicep curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "beginner",
+    "dose": "3 x 8–12",
+    "weight": "30–50 lb",
+    "cue": "Elbows locked at your sides, no swinging.",
+    "type": "curl",
+    "gifPath": "/api/gif/0031"
+  },
+  {
+    "name": "Hammer curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "20–30 lb DBs",
+    "cue": "Neutral grip, controlled tempo.",
+    "type": "curl",
+    "gifPath": "/api/gif/0313"
+  },
+  {
+    "name": "Barbell front squat",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "5 x 5–8",
+    "weight": "95–135 lb",
+    "cue": "Elbows high, bar rests on front delts, stay upright.",
+    "type": "squat",
+    "gifPath": "/api/gif/0042"
+  },
+  {
+    "name": "Walking lunges",
+    "targetAreas": [
+      "legs",
+      "glutes"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "20–35 lb DBs",
+    "cue": "Long stride, back knee kisses the floor.",
+    "type": "squat",
+    "gifPath": "/api/gif/1460"
+  },
+  {
+    "name": "Bulgarian split squat",
+    "targetAreas": [
+      "legs",
+      "glutes"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10/side",
+    "weight": "20–30 lb DBs",
+    "cue": "Front shin vertical, most weight on front leg.",
+    "type": "squat",
+    "gifPath": "/api/gif/0410"
+  },
+  {
+    "name": "Dumbbell goblet squat",
+    "targetAreas": [
+      "legs",
+      "glutes"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "4 x 10–12",
+    "weight": "40–60 lb DB",
+    "cue": "Hold DB at chest, squat between your knees, drive through the heels.",
+    "type": "squat",
+    "gifPath": "/api/gif/1760"
+  },
+  {
+    "name": "Leg press, glute-biased",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Moderate-heavy stack",
+    "cue": "Feet high and wide on the platform to bias glutes.",
+    "type": "squat",
+    "gifPath": "/api/gif/0739"
+  },
+  {
+    "name": "Hip abduction machine",
+    "targetAreas": [
+      "glutes",
+      "hips"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Moderate machine weight",
+    "cue": "Slow and controlled, squeeze at the outer range.",
+    "type": "legraise",
+    "gifPath": "/api/gif/0597"
+  },
+  {
+    "name": "Cable kneeling crunch",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Light-moderate cable",
+    "cue": "Round through the spine, exhale as you crunch.",
+    "type": "legraise",
+    "gifPath": "/api/gif/0175"
+  },
+  {
+    "name": "Russian twist",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 20–30",
+    "weight": "Bodyweight or light plate",
+    "cue": "Rotate from your core, not your arms.",
+    "type": "plank",
+    "gifPath": "/api/gif/0687"
+  },
+  {
+    "name": "Cable triceps pushdown",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Light-moderate cable",
+    "cue": "Keep elbows pinned to your sides, full extension.",
+    "type": "curl",
+    "gifPath": "/api/gif/0241"
+  },
+  {
+    "name": "Hanging leg raise",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 10–15",
+    "weight": "Bodyweight",
+    "cue": "Control the descent, don’t swing.",
+    "type": "legraise",
+    "gifPath": "/api/gif/0472"
+  },
+  {
+    "name": "Cable standing hip extension",
+    "targetAreas": [
+      "glutes"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15/side",
+    "weight": "Light-moderate cable",
+    "cue": "Kick back and squeeze the glute at the top.",
+    "type": "bridge",
+    "gifPath": "/api/gif/0228"
+  },
+  {
+    "name": "Seated leg curl",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Moderate machine",
+    "cue": "Control the release, don’t let the weight drop.",
+    "type": "legcurl",
+    "gifPath": "/api/gif/0599"
+  },
+  {
+    "name": "Kettlebell swing",
+    "targetAreas": [
+      "glutes",
+      "back"
+    ],
+    "equipment": "kettlebell",
+    "difficulty": "intermediate",
+    "dose": "4 x 15–20",
+    "weight": "25–35 lb",
+    "cue": "Hip snap, not a squat.",
+    "type": "hinge",
+    "gifPath": "/api/gif/0549"
+  },
+  {
+    "name": "Cable hip adduction",
+    "targetAreas": [
+      "hips"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20/side",
+    "weight": "Light-moderate cable",
+    "cue": "Slow and controlled, squeeze the inner thigh.",
+    "type": "legraise",
+    "gifPath": "/api/gif/0168"
+  },
+  {
+    "name": "Cable reverse crunch",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Light-moderate cable",
+    "cue": "Curl your hips up and in, not just your legs.",
+    "type": "legraise",
+    "gifPath": "/api/gif/0873"
+  },
+  {
+    "name": "Cable standing crunch",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Light-moderate cable",
+    "cue": "Crunch down and in, exhale fully.",
+    "type": "legraise",
+    "gifPath": "/api/gif/0226"
+  },
+  {
+    "name": "Cable pull-through",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "4 x 12–15",
+    "weight": "Light-moderate cable",
+    "cue": "Hip hinge, squeeze glutes at the top.",
+    "type": "hinge",
+    "gifPath": "/api/gif/0196"
+  },
+  {
+    "name": "Cable lateral raise",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Light-moderate cable",
+    "cue": "Constant tension, don’t rest at the bottom.",
+    "type": "armraise",
+    "gifPath": "/api/gif/0178"
+  },
+  {
+    "name": "Bench dips",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "Bodyweight, feet elevated to add difficulty",
+    "cue": "Hands on bench edge, lower until elbows hit ~90°.",
+    "type": "press",
+    "gifPath": "/api/gif/0129"
+  },
+  {
+    "name": "Dumbbell chest fly",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "10–20 lb DBs",
+    "cue": "Slight elbow bend, squeeze at the top.",
+    "type": "armraise",
+    "gifPath": "/api/gif/0308"
+  },
+  {
+    "name": "Seated dumbbell shoulder press",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 8–10",
+    "weight": "25–40 lb DBs",
+    "cue": "Controlled descent to ear level.",
+    "type": "armraise",
+    "gifPath": "/api/gif/0405"
+  },
+  {
     "name": "Around the World",
-    "targetAreas": ["shoulders"],
+    "targetAreas": [
+      "shoulders"
+    ],
     "equipment": "dumbbell",
     "difficulty": "beginner",
     "dose": "3 x 8–12",
@@ -12,7 +806,9 @@
   },
   {
     "name": "Shoulder Tap",
-    "targetAreas": ["abs"],
+    "targetAreas": [
+      "abs"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "dose": "3 x 10–15/side",
@@ -23,7 +819,9 @@
   },
   {
     "name": "Front Plank",
-    "targetAreas": ["abs"],
+    "targetAreas": [
+      "abs"
+    ],
     "equipment": "bodyweight",
     "difficulty": "beginner",
     "dose": "3 x 30–45 sec",

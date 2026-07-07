@@ -1110,8 +1110,8 @@
     }
 
     async function fetchOrInitProfile(){
-      const { data } = await sb.from('profiles').select('display_name, plan_key, connect_code, questionnaire').eq('user_id', currentUser.id).maybeSingle();
-      myProfile = data ? { displayName: data.display_name, planKey: data.plan_key, connectCode: data.connect_code, questionnaire: data.questionnaire } : null;
+      const { data } = await sb.from('profiles').select('display_name, plan_key, connect_code, questionnaire, plan').eq('user_id', currentUser.id).maybeSingle();
+      myProfile = data ? { displayName: data.display_name, planKey: data.plan_key, connectCode: data.connect_code, questionnaire: data.questionnaire, plan: data.plan } : null;
     }
 
     async function routeAfterLogin(){
@@ -1120,16 +1120,16 @@
         setScreenState('setup');
         return;
       }
-      if(!myProfile.planKey && !myProfile.questionnaire){
+      if(!myProfile.planKey && !myProfile.plan && !myProfile.questionnaire){
         setScreenState('questionnaire');
         return;
       }
-      if(!myProfile.planKey){
+      if(!myProfile.planKey && !myProfile.plan){
         document.getElementById('noPlanCode').textContent = myProfile.connectCode || '';
         setScreenState('noplan');
         return;
       }
-      plan = planFor(myProfile.planKey);
+      plan = myProfile.planKey ? planFor(myProfile.planKey) : myProfile.plan;
       await applyPlanAdditions();
       await applyExerciseSwaps();
       await loadPartner();
@@ -1225,6 +1225,23 @@
       btn.disabled = true;
       statusEl.textContent = 'Saving...';
       await sb.from('profiles').upsert({ user_id: currentUser.id, questionnaire, updated_at: new Date().toISOString() });
+
+      statusEl.textContent = 'Building your plan… this can take a few seconds';
+      try{
+        const res = await fetch('/api/plan/generate', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ questionnaire })
+        });
+        const body = await res.json();
+        if(res.ok && Array.isArray(body.plan) && body.plan.length){
+          await sb.from('profiles').upsert({ user_id: currentUser.id, plan: body.plan, updated_at: new Date().toISOString() });
+        }
+      }catch(err){
+        // Swallow — routeAfterLogin below falls back to the "not set up yet" screen
+        // when no plan was saved, so the user is never left stuck on an error.
+      }
+
       btn.disabled = false;
       statusEl.textContent = '';
       await routeAfterLogin();
