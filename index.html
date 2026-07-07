@@ -619,45 +619,29 @@
     ];
 
     const CHRISTOPHER_PLAN = [
-      {title:'Day 1', subtitle:'Chest + Triceps', exercises:[
+      {title:'Day 1', subtitle:'Push: Chest + Shoulders + Triceps', exercises:[
         ['Barbell bench press','4 x 6–8','95–135 lb','Elbows at 45°, drive feet into the floor, touch chest lightly.','press','/api/gif/0025'],
+        ['Standing overhead barbell press','4 x 6–8','65–95 lb','Brace core, press straight up, avoid leaning back.','armraise','/api/gif/1456'],
         ['Incline dumbbell press','3 x 8–10','30–50 lb DBs','30–45° incline, control the descent.','press','/api/gif/0314'],
-        ['Bench dips','3 x 10–15','Bodyweight, feet elevated to add difficulty','Hands on bench edge, lower until elbows hit ~90°.','press','/api/gif/0129'],
-        ['Dumbbell chest fly','3 x 10–15','15–25 lb DBs','Slight elbow bend, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Lateral raise','4 x 12–15','10–20 lb DBs','Lead with elbows, stop at shoulder height.','armraise','/api/gif/0334'],
         ['Overhead triceps extension','3 x 10–15','20–35 lb DB','Elbows tucked in, full stretch at bottom.','curl','/api/gif/0109'],
-        ['Dumbbell triceps kickback','3 x 12–15','10–20 lb DBs','Keep elbows pinned to your sides, squeeze at full extension.','curl','/api/gif/0333']
+        ['Skull crushers','3 x 8–12','30–45 lb','Elbows stay fixed, lower to forehead.','curl','/api/gif/0060']
       ]},
-      {title:'Day 2', subtitle:'Back + Biceps', exercises:[
+      {title:'Day 2', subtitle:'Pull: Back + Biceps + Rear Delts', exercises:[
         ['Barbell deadlift','4 x 5–6','135–185 lb','Neutral spine, push the floor away, bar stays close.','hinge','/api/gif/0032'],
-        ['Dumbbell pullover','4 x 8–12','35–55 lb DB','Lie on the bench, arc the DB back behind your head, pull over with the lats.','row','/api/gif/0375'],
         ['Barbell bent-over row','4 x 8–10','65–95 lb','Flat back, pull to the belly button.','row','/api/gif/0027'],
-        ['Single-arm dumbbell row','3 x 10–12/side','30–45 lb DB','Full stretch at the bottom, no torso twist.','row','/api/gif/0064'],
+        ['Chest-supported row','3 x 10–12','30–45 lb DBs','Squeeze shoulder blades together and down.','row','/api/gif/0327'],
+        ['Rear delt fly','3 x 12–15','10–15 lb DBs','Slight bend in elbows, squeeze shoulder blades.','armraise','/api/gif/0383'],
         ['Barbell bicep curl','3 x 8–12','30–50 lb','Elbows locked at your sides, no swinging.','curl','/api/gif/0031'],
         ['Hammer curl','3 x 10–15','20–30 lb DBs','Neutral grip, controlled tempo.','curl','/api/gif/0313']
       ]},
-      {title:'Day 3', subtitle:'Thighs, Quad Focus', exercises:[
+      {title:'Day 3', subtitle:'Legs: Quads + Hamstrings + Calves', exercises:[
         ['Barbell front squat','5 x 5–8','95–135 lb','Elbows high, bar rests on front delts, stay upright.','squat','/api/gif/0042'],
-        ['Dumbbell goblet squat','4 x 10–12','40–60 lb DB','Hold DB at chest, squat between your knees, drive through the heels.','squat','/api/gif/1760'],
+        ['Romanian deadlift','3 x 8–10','95–135 lb','Hips back, soft knees, feel the hamstring stretch.','hinge','/api/gif/0085'],
         ['Walking lunges','3 x 10–12/side','20–35 lb DBs','Long stride, back knee kisses the floor.','squat','/api/gif/1460'],
         ['Bulgarian split squat','3 x 8–10/side','20–30 lb DBs','Front shin vertical, most weight on front leg.','squat','/api/gif/0410'],
-        ['Romanian deadlift','3 x 8–10','95–135 lb','Hips back, soft knees, feel the hamstring stretch.','hinge','/api/gif/0085'],
+        ['Dumbbell goblet squat','4 x 10–12','40–60 lb DB','Hold DB at chest, squat between your knees, drive through the heels.','squat','/api/gif/1760'],
         ['Standing calf raise','4 x 12–15','Bodyweight to 25 lb DBs','Full stretch at bottom, pause at the top.','calf','/api/gif/0417']
-      ]},
-      {title:'Day 4', subtitle:'Shoulders + Arms', exercises:[
-        ['Standing overhead barbell press','4 x 6–8','65–95 lb','Brace core, press straight up, avoid leaning back.','armraise','/api/gif/1456'],
-        ['Seated dumbbell shoulder press','3 x 8–10','25–40 lb DBs','Controlled descent to ear level.','armraise','/api/gif/0405'],
-        ['Lateral raise','4 x 12–15','10–20 lb DBs','Lead with elbows, stop at shoulder height.','armraise','/api/gif/0334'],
-        ['Rear delt fly','3 x 12–15','10–15 lb DBs','Slight bend in elbows, squeeze shoulder blades.','armraise','/api/gif/0383'],
-        ['Barbell curl','3 x 8–12','40–60 lb','Full range, no momentum, elbows locked at your sides.','curl','/api/gif/0031'],
-        ['Skull crushers','3 x 8–12','30–45 lb','Elbows stay fixed, lower to forehead.','curl','/api/gif/0060']
-      ]},
-      {title:'Day 5', subtitle:'Upper Pump + Thighs', exercises:[
-        ['Front squat or goblet squat','4 x 8–10','65–95 lb barbell or 40–60 lb DB','Upright torso, elbows high.','squat','/api/gif/1760'],
-        ['Barbell split squat','3 x 12–15/side','45–65 lb','Front foot planted, back knee taps down, drive through the front heel.','squat','/api/gif/2810'],
-        ['Incline machine or DB press','3 x 10–12','30–45 lb DBs','Squeeze upper chest at the top.','press','/api/gif/0314'],
-        ['Chest-supported row','3 x 10–12','30–45 lb DBs','Squeeze shoulder blades together and down.','row','/api/gif/0327'],
-        ['Dumbbell lateral raise, drop set','3 x 15–20','10–20 lb DBs, drop weight on the last set','Lead with elbows, stop at shoulder height, chase the burn.','armraise','/api/gif/0334'],
-        ['Standing calf raise','3 x 15–20','Bodyweight to 25 lb DBs','Fast, full-range pump reps.','calf','/api/gif/0417']
       ]}
     ];
 
