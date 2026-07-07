@@ -972,10 +972,6 @@
       document.getElementById('tabbar').style.display = state === 'app' ? 'flex' : 'none';
     }
 
-    function applyUserTheme(color){
-      document.documentElement.style.setProperty('--spark-color', color);
-    }
-
     function renderGuideTips(){
       const el = document.getElementById('guideTips');
       const planKey = myProfile && myProfile.planKey;
@@ -1104,7 +1100,6 @@
       plan = planFor(myProfile.planKey);
       await applyPlanAdditions();
       await applyExerciseSwaps();
-      applyUserTheme(colorForId(currentUser.id));
       await loadPartner();
       setScreenState('app');
       renderDashboard();
@@ -1621,7 +1616,6 @@
       document.getElementById('heroBig').textContent = `${done}/${total}`;
       const heroYouNameEl = document.getElementById('heroYouName');
       heroYouNameEl.textContent = (myProfile && myProfile.displayName) || 'You';
-      heroYouNameEl.style.color = youColor;
 
       document.getElementById('bigRing').innerHTML = ringSvg(pct, 176, 16);
       document.getElementById('bigPct').textContent = `${pct}%`;
@@ -1712,7 +1706,6 @@
       heroPartnerFillEl.style.background = partnerColor;
       const partnerNameEl = document.getElementById('heroPartnerName');
       partnerNameEl.textContent = partnerName;
-      partnerNameEl.style.color = partnerColor;
       document.getElementById('heroPartnerBig').textContent = `${done}/${total}`;
     }
 
