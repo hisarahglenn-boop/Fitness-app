@@ -120,7 +120,8 @@
     .ex-head{padding:15px 15px 8px;display:flex;flex-direction:column;gap:8px}
     .ex-name{font-family:var(--font-display);font-weight:900;font-size:15.5px;letter-spacing:0}
     .ex-dose{font-size:11.5px;color:var(--muted);font-weight:800;background:transparent;border:none;padding:0;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;flex:none}
-    .fig-box{background:#fff;border:1px solid var(--border);border-radius:0;margin:2px 24px 20px;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;height:266px}
+    .fig-box{position:relative;background:#fff;border:1px solid var(--border);border-radius:0;margin:2px 24px 20px;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;height:266px}
+    .fig-box .swap-btn{position:absolute;bottom:12px;right:12px;background:rgba(255,255,255,.92);box-shadow:0 2px 8px rgba(20,20,18,.15)}
     .fig-box img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
     .fig-box.loading{background-image:linear-gradient(110deg, var(--surface-2) 8%, var(--surface-3) 18%, var(--surface-2) 33%);background-size:200% 100%;animation:img-shimmer-sweep 1.6s linear infinite}
     .fig-missing{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);padding:20px 0}
@@ -142,23 +143,25 @@
     .setdot.done{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
 
     /* ---- session (single-exercise) screen ---- */
-    .session-header{display:flex;align-items:center;gap:12px;margin-bottom:2px}
-    .backbtn{width:32px;height:32px;border-radius:0;background:transparent;border:none;box-shadow:none;display:flex;align-items:center;justify-content:center;flex:none;transition:transform .12s var(--ease)}
-    .backbtn:active{transform:scale(.88)}
-    .backbtn svg{width:17px;height:17px;stroke:var(--text);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
-    .session-title{flex:1;min-width:0}
-    .session-title b{display:block;font-size:14px;font-weight:900;letter-spacing:-.01em}
-    .session-title span{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .topbar-exit{width:32px;height:32px;border-radius:50%;background:transparent;border:1.5px solid var(--border);display:flex;align-items:center;justify-content:center;flex:none;transition:transform .12s var(--ease)}
+    .topbar-exit:active{transform:scale(.88)}
+    .topbar-exit svg{width:15px;height:15px;stroke:var(--text);fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
-    .pips{display:flex;gap:8px;padding:16px 2px 12px}
+    .breadcrumb-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;width:100%;padding:16px 2px 12px}
+    .breadcrumb-info{display:flex;flex-direction:column;gap:10px}
+    .pips{display:flex;gap:8px}
     .pip{flex:none;width:6px;height:6px;border-radius:50%;background:var(--border);transition:background .2s}
     .pip.done{background:var(--text)}
     .pip.active{background:var(--accent-cyan)}
+    .session-breadcrumb{margin:0;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+    .reset-icon-btn{width:28px;height:28px;border-radius:50%;background:transparent;border:none;display:flex;align-items:center;justify-content:center;flex:none;color:var(--muted);transition:transform .12s var(--ease)}
+    .reset-icon-btn:active{transform:scale(.88)}
+    .reset-icon-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
     .session-exercise{box-shadow:none;padding-bottom:190px}
     .session-exercise .ex-head{padding:24px 24px 10px}
     .session-exercise .ex-name{font-size:34px;line-height:1.1}
-    .session-exercise .ex-dose{font-size:13px}
+    .session-exercise .ex-dose{font-size:18px;font-weight:700;letter-spacing:.04em}
     .session-exercise .cue-divider{margin:0 24px 12px}
     .session-exercise .cue{margin:0 24px 20px;font-size:13px}
     .session-exercise .weight-box{margin:0 24px 8px}
@@ -166,7 +169,7 @@
     .session-exercise .sets{padding:0 0 16px;justify-content:center}
     .session-exercise .setdot{width:46px;height:46px;font-size:15px}
 
-    .session-footer{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;background:var(--bg);box-shadow:0 -4px 16px rgba(20,20,18,.06)}
+    .session-footer{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;background:var(--bg);border-top:1px solid var(--border)}
     .session-footer-inner{max-width:520px;width:100%;padding:14px 20px calc(14px + env(safe-area-inset-bottom))}
     .session-nav{display:flex;gap:12px;margin-top:0;align-items:stretch}
     .session-nav button{flex:1;border-radius:14px;padding:13px;font-weight:800;font-size:13.5px;text-transform:uppercase;letter-spacing:.03em;transition:transform .12s var(--ease)}
@@ -412,7 +415,12 @@
   <div class="app" id="app" hidden>
     <header class="topbar">
       <div class="topbar-inner">
-        <span class="wordmark" style="font-size:26px">gle<span class="bullet">•</span>mo</span>
+        <div style="display:flex;align-items:center;gap:14px">
+          <button class="topbar-exit" id="topbarExit" aria-label="Back to dashboard" hidden>
+            <svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18"/></svg>
+          </button>
+          <span class="wordmark" style="font-size:26px">gle<span class="bullet">•</span>mo</span>
+        </div>
         <div class="week-chip" id="weekChip">0% this week</div>
       </div>
     </header>
@@ -447,19 +455,15 @@
 
     <!-- SESSION (single day / single exercise flow) -->
     <main class="screen" id="screen-session" hidden>
-      <div class="session-header">
-        <button class="backbtn" id="sessionBack" aria-label="Back to dashboard">
-          <svg viewBox="0 0 24 24"><path d="M15 6l-6 6 6 6"/></svg>
-        </button>
-        <div class="session-title">
-          <b id="sessionDayTitle"></b>
-          <span id="sessionDaySub"></span>
+      <div class="breadcrumb-row">
+        <div class="breadcrumb-info">
+          <div class="pips" id="pips"></div>
+          <p class="session-breadcrumb" id="sessionBreadcrumb"></p>
         </div>
-        <button class="backbtn" id="resetDayBtn" aria-label="Reset this day">
+        <button class="reset-icon-btn" id="resetDayBtn" aria-label="Reset this day">
           <svg viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 1 1-3-6.7"/><path d="M21 4v5h-5"/></svg>
         </button>
       </div>
-      <div class="pips" id="pips"></div>
       <div id="sessionBody"></div>
     </main>
 
@@ -1371,6 +1375,7 @@
       sessionDay = dayIndex;
       sessionExercise = firstIncompleteExercise(dayIndex);
       document.getElementById('tabbar').style.display = 'none';
+      document.getElementById('topbarExit').hidden = false;
       document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-session');
       window.scrollTo({top:0, behavior:'smooth'});
       renderSession();
@@ -1379,6 +1384,7 @@
     function closeSession(){
       sessionDay = null;
       document.getElementById('tabbar').style.display = 'flex';
+      document.getElementById('topbarExit').hidden = true;
       switchScreen('dashboard');
     }
 
@@ -1474,8 +1480,7 @@
 
     function renderSession(){
       const day = plan[sessionDay];
-      document.getElementById('sessionDayTitle').textContent = day.title;
-      document.getElementById('sessionDaySub').textContent = day.subtitle;
+      document.getElementById('sessionBreadcrumb').textContent = `${day.title} / ${day.subtitle}`;
       document.getElementById('pips').innerHTML = pipsHtml(sessionDay, sessionExercise);
 
       const body = document.getElementById('sessionBody');
@@ -1512,8 +1517,10 @@
             <div class="ex-name">${ex[0]}</div>
             <div class="ex-dose">${ex[1]}</div>
           </div>
-          ${hasSwapCandidates ? `<div style="padding:0 20px 8px"><button id="swapBtn" class="swap-btn"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>Swap exercise</button></div>` : ''}
-          <div class="fig-box${gifPath ? ' loading' : ''}">${figHtml}</div>
+          <div class="fig-box${gifPath ? ' loading' : ''}">
+            ${figHtml}
+            ${hasSwapCandidates ? `<button id="swapBtn" class="swap-btn"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>Swap exercise</button>` : ''}
+          </div>
           <div class="cue-divider"></div>
           <p class="cue">${ex[3]}</p>
           <div class="weight-box">
@@ -1585,7 +1592,7 @@
       };
     }
 
-    document.getElementById('sessionBack').onclick = closeSession;
+    document.getElementById('topbarExit').onclick = closeSession;
 
     document.getElementById('resetDayBtn').onclick = async ()=>{
       if(sessionDay === null) return;
