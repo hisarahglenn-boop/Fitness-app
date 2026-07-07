@@ -1906,15 +1906,47 @@
         const fetchData = await fetchRes.json();
         if(!fetchRes.ok){ statusEl.textContent = fetchData.error || 'Could not read that post.'; return; }
 
-        statusEl.textContent = 'Structuring exercises...';
-        const structRes = await fetch('/api/import/structure', {
-          method: 'POST', headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ caption: fetchData.caption, title: fetchData.title })
-        });
-        const structData = await structRes.json();
-        if(!structRes.ok){ statusEl.textContent = structData.error || 'Could not structure that post.'; return; }
+        // Try to resolve and analyze the actual video first — this gives real
+        // movement-based exercise detection instead of just guessing from the
+        // caption text. Falls back to caption-only structuring below if the
+        // post has no video, or if Instagram's page structure has shifted
+        // (this extraction isn't an official API and can break without notice).
+        let exercises = null;
+        statusEl.textContent = 'Looking for video...';
+        try {
+          const resolveRes = await fetch('/api/import/resolve-video', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ url })
+          });
+          const resolveData = await resolveRes.json();
+          if(resolveRes.ok && resolveData.videoUrl){
+            statusEl.textContent = 'Downloading video...';
+            const videoBlob = await (await fetch(resolveData.videoUrl)).blob();
+            statusEl.textContent = 'Reading video frames...';
+            const frames = await extractVideoFrames(videoBlob, 5);
+            statusEl.textContent = 'Analyzing video...';
+            const analyzeRes = await fetch('/api/import/analyze-video', {
+              method: 'POST', headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({ frames, caption: fetchData.caption, title: fetchData.title })
+            });
+            const analyzeData = await analyzeRes.json();
+            if(analyzeRes.ok && Array.isArray(analyzeData.exercises)){
+              exercises = analyzeData.exercises;
+            }
+          }
+        } catch { /* fall through to caption-only structuring below */ }
 
-        const exercises = (structData.exercises || []).map(ex => ({
+        if(!exercises){
+          statusEl.textContent = 'Structuring exercises...';
+          const structRes = await fetch('/api/import/structure', {
+            method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ caption: fetchData.caption, title: fetchData.title })
+          });
+          const structData = await structRes.json();
+          if(!structRes.ok){ statusEl.textContent = structData.error || 'Could not structure that post.'; return; }
+          exercises = structData.exercises || [];
+        }
+
+        exercises = exercises.map(ex => ({
           name: ex.name, dose: ex.dose, weight: ex.weight, cue: ex.cue, type: ex.type,
           gifPath: ex.gifPath || null
         }));
