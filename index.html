@@ -89,8 +89,12 @@
       padding:20px;margin-bottom:22px;
     }
     .day-hero h2{font-family:var(--font-display);font-size:34px;font-weight:900;letter-spacing:0;margin:0 0 18px;line-height:1.1;color:#fff}
-    .day-hero .hero-image{width:100%;display:flex;justify-content:center;margin:0 0 18px}
+    .day-hero .hero-image{width:100%;min-height:230px;display:flex;align-items:center;justify-content:center;margin:0 0 18px}
     .day-hero .hero-image img{max-width:70%;max-height:260px;object-fit:contain;filter:drop-shadow(0 10px 24px rgba(0,0,0,.5))}
+    .day-hero .hero-image.loading{background-image:linear-gradient(110deg, rgba(255,255,255,.06) 8%, rgba(255,255,255,.16) 18%, rgba(255,255,255,.06) 33%);background-size:200% 100%;animation:img-shimmer-sweep 1.6s linear infinite}
+    .hero-image.loading img, .fig-box.loading img{opacity:0}
+    .hero-image img, .fig-box img{transition:opacity .25s ease}
+    @keyframes img-shimmer-sweep{0%{background-position:200% 0}100%{background-position:-200% 0}}
     .day-hero .meta-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
     .day-hero .meta-row .meta-exercises{margin:0;color:#bebebe;font-size:14px;font-weight:500;white-space:nowrap}
     .day-hero .meta-row .meta-frac{margin:0;color:#fff;font-size:14px;font-weight:900;white-space:nowrap}
@@ -116,8 +120,9 @@
     .ex-head{padding:15px 15px 8px;display:flex;flex-direction:column;gap:8px}
     .ex-name{font-family:var(--font-display);font-weight:900;font-size:15.5px;letter-spacing:0}
     .ex-dose{font-size:11.5px;color:var(--muted);font-weight:800;background:transparent;border:none;padding:0;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;flex:none}
-    .fig-box{background:#fff;border:1px solid var(--border);border-radius:0;margin:2px 24px 20px;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:140px}
+    .fig-box{background:#fff;border:1px solid var(--border);border-radius:0;margin:2px 24px 20px;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;height:266px}
     .fig-box img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
+    .fig-box.loading{background-image:linear-gradient(110deg, var(--surface-2) 8%, var(--surface-3) 18%, var(--surface-2) 33%);background-size:200% 100%;animation:img-shimmer-sweep 1.6s linear infinite}
     .fig-missing{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);padding:20px 0}
     .fig-missing svg{width:34px;height:34px}
     .fig-missing span{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
@@ -1327,7 +1332,7 @@
       heroEl.innerHTML = `
         ${bigStats.pct===100 ? '<div class="badge-done">✓ Done</div>' : ''}
         <h2>${bigDay.title}: ${bigDay.subtitle}</h2>
-        ${heroImg ? `<div class="hero-image"><img src="${heroImg}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
+        ${heroImg ? `<div class="hero-image loading"><img src="${heroImg}" alt=""></div>` : ''}
         <div class="meta-row">
           <p class="meta-exercises">${bigDay.exercises.length} exercises · ${bigStats.total} sets</p>
           <p class="meta-frac">${bigStats.done}/${bigStats.total}</p>
@@ -1336,6 +1341,15 @@
         <button class="cta${bigStats.pct===100?' done':''}">${ctaLabel} →</button>
       `;
       heroEl.onclick = ()=>openSession(bigIndex);
+
+      const heroImgEl = heroEl.querySelector('.hero-image img');
+      if(heroImgEl){
+        const heroImgBoxEl = heroImgEl.closest('.hero-image');
+        const clearHeroLoading = ()=>heroImgBoxEl.classList.remove('loading');
+        if(heroImgEl.complete) clearHeroLoading();
+        heroImgEl.onload = clearHeroLoading;
+        heroImgEl.onerror = ()=>heroImgBoxEl.remove();
+      }
 
       const list = document.getElementById('otherDays');
       list.innerHTML = '';
@@ -1499,7 +1513,7 @@
             <div class="ex-dose">${ex[1]}</div>
           </div>
           ${hasSwapCandidates ? `<div style="padding:0 20px 8px"><button id="swapBtn" class="swap-btn"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>Swap exercise</button></div>` : ''}
-          <div class="fig-box">${figHtml}</div>
+          <div class="fig-box${gifPath ? ' loading' : ''}">${figHtml}</div>
           <div class="cue-divider"></div>
           <p class="cue">${ex[3]}</p>
           <div class="weight-box">
@@ -1527,7 +1541,13 @@
       if(swapBtnEl) swapBtnEl.onclick = ()=>openSwapPicker(sessionDay, exi);
 
       const imgEl = body.querySelector('.fig-box img');
-      if(imgEl) imgEl.onerror = ()=>{ imgEl.closest('.fig-box').innerHTML = missingImageHtml; };
+      if(imgEl){
+        const figBoxEl = imgEl.closest('.fig-box');
+        const clearFigLoading = ()=>figBoxEl.classList.remove('loading');
+        if(imgEl.complete) clearFigLoading();
+        imgEl.onload = clearFigLoading;
+        imgEl.onerror = ()=>{ clearFigLoading(); figBoxEl.innerHTML = missingImageHtml; };
+      }
 
       body.querySelectorAll('.setdot').forEach(dot=>{
         dot.onclick = ()=>{
