@@ -5,19 +5,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>gleamo</title>
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@900&family=Inter:wght@400;500;600;800;900&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#EEECE7;
+      --bg:#FAFAF8;
       --surface:#FFFFFF;
-      --surface-2:#F3F1EC;
-      --surface-3:#E6E2DA;
-      --border:#DEDAD1;
+      --surface-2:#F5F5F3;
+      --surface-3:#ECECEA;
+      --border:#E5E5E5;
       --text:#141412;
-      --muted:#6E6B65;
-      --muted-2:#9C988F;
+      --muted:#707070;
+      --muted-2:#9A9A96;
       --accent:#131311;
       --accent-dim:#000000;
       --accent-ink:#FFFFFF;
+      --accent-cyan:#00E0FF;
+      --nav-border:#752B2B;
+      --font-display:'Big Shoulders Display',sans-serif;
       --gold:#C9A227;
       --shadow:0 1px 2px rgba(20,18,15,.05), 0 14px 30px rgba(20,18,15,.08);
       --radius-xl:28px;
@@ -38,7 +44,7 @@
       --space-28:28px;
     }
     *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-    html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",ui-sans-serif,system-ui,sans-serif;}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:'Inter',-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",ui-sans-serif,system-ui,sans-serif;}
     body{padding-bottom:calc(96px + env(safe-area-inset-bottom));min-height:100vh}
     button{font:inherit;color:inherit}
     .app{max-width:520px;margin:0 auto}
@@ -46,85 +52,83 @@
     /* ---- top bar ---- */
     header.topbar{
       position:sticky;top:0;z-index:30;
-      background:rgba(238,236,231,.85);backdrop-filter:blur(20px) saturate(140%);
+      background:var(--bg);
       border-bottom:1px solid var(--border);
-      padding:calc(14px + env(safe-area-inset-top)) 18px 12px;
+      padding:calc(20px + env(safe-area-inset-top)) 18px 20px;
     }
     .topbar-inner{max-width:520px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:10px}
-    .week-chip{background:var(--surface-2);border:1px solid var(--border);color:var(--text);font-weight:800;font-size:12px;padding:8px 12px;border-radius:var(--radius-pill);white-space:nowrap}
+    .week-chip{color:var(--text);font-weight:800;font-size:12px;letter-spacing:.04em;text-transform:uppercase;white-space:nowrap}
 
     /* ---- wordmark (logo) ---- */
-    .wordmark{font-family:'Helvetica Neue',Helvetica,Arial,sans-serif;font-weight:500;color:var(--text);position:relative;display:inline-block;line-height:1}
-    .wordmark .spark{position:relative;display:inline-block}
-    .wordmark .spark svg{position:absolute;fill:var(--spark-color,#ff2fa0)}
+    .wordmark{font-family:var(--font-display);font-weight:900;color:var(--text);position:relative;display:inline-block;line-height:1;letter-spacing:0}
+    .wordmark .bullet{margin:0 .05em}
 
     /* ---- screens ---- */
     .screen{padding:16px 16px 8px;max-width:520px;margin:0 auto}
     .screen[hidden]{display:none}
 
-    /* ---- weekly hero / ring card ---- */
+    /* ---- weekly hero (per-person progress bars) ---- */
     .hero{
-      background:var(--surface);
-      border:1px solid var(--border);border-radius:var(--radius-xl);
-      padding:16px 18px;display:flex;flex-direction:column;gap:10px;margin-bottom:18px;
+      display:flex;flex-direction:column;gap:12px;margin-bottom:24px;
     }
-    .hero-label{font-size:11px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0}
-    .hero-people{display:flex;align-items:stretch;gap:14px}
-    .hero-person{flex:1;min-width:0;display:flex;align-items:center;gap:12px}
+    .hero-label{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:0}
+    .hero-people{display:flex;align-items:flex-start;gap:32px}
+    .hero-person{flex:1;min-width:0;display:flex;flex-direction:column;gap:6px}
     .hero-person[hidden]{display:none}
-    .ring{flex:none}
-    .hero-divider{width:1px;align-self:stretch;background:var(--border);margin:2px 0}
-    .hero-divider[hidden]{display:none}
-    .hp-info{min-width:0}
-    .hp-info b{display:block;font-size:13px;font-weight:900;margin:0 0 2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-    .hp-info span{font-size:18px;font-weight:900;letter-spacing:-.03em;color:var(--text)}
+    .hp-track{height:4px;border-radius:2px;background:var(--border);overflow:hidden;width:100%}
+    .hp-track .hp-fill{height:100%;background:var(--accent-cyan);transition:width .4s var(--ease)}
+    .hp-info{min-width:0;display:flex;align-items:baseline;justify-content:space-between;gap:8px;width:100%}
+    .hp-info b{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .hp-info span{font-size:14px;font-weight:900;color:var(--text);white-space:nowrap}
 
     /* ---- big "current day" card (inverted black card) ---- */
     .day-hero{
       position:relative;overflow:hidden;
       background:var(--accent);
-      border-radius:var(--radius-xl);
-      padding:22px 20px;margin-bottom:22px;box-shadow:var(--shadow);
+      border-radius:0;
+      padding:20px;margin-bottom:22px;
     }
-    .day-hero .eyebrow{font-size:11px;font-weight:800;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.09em;margin:0 0 8px}
-    .day-hero h2{font-size:23px;font-weight:900;letter-spacing:-.035em;margin:0 0 4px;line-height:1.15;color:#fff}
-    .day-hero p.sub{margin:0 0 18px;color:rgba(255,255,255,.6);font-size:13px}
-    .day-hero .progress-line{display:flex;align-items:center;gap:10px;margin-bottom:18px}
-    .day-hero .bar{flex:1;height:8px;background:rgba(255,255,255,.16);border-radius:var(--radius-pill);overflow:hidden}
-    .day-hero .bar > div{height:100%;background:#fff;border-radius:var(--radius-pill);transition:width .4s var(--ease)}
-    .day-hero .frac{font-size:12.5px;font-weight:800;color:rgba(255,255,255,.65);white-space:nowrap}
-    .day-hero .cta{width:100%;background:#fff;color:var(--accent);font-weight:900;font-size:15px;padding:15px;border-radius:16px;transition:transform .12s var(--ease)}
-    .day-hero .cta:active{transform:scale(.97)}
-    .day-hero .cta.done{background:rgba(255,255,255,.14);color:#fff}
-    .day-hero .badge-done{position:absolute;top:20px;right:20px;background:#fff;color:var(--accent);font-size:11px;font-weight:900;padding:6px 10px;border-radius:var(--radius-pill)}
+    .day-hero h2{font-family:var(--font-display);font-size:34px;font-weight:900;letter-spacing:0;margin:0 0 18px;line-height:1.1;color:#fff}
+    .day-hero .hero-image{width:100%;display:flex;justify-content:center;margin:0 0 18px}
+    .day-hero .hero-image img{max-width:70%;max-height:260px;object-fit:contain;filter:drop-shadow(0 10px 24px rgba(0,0,0,.5))}
+    .day-hero .meta-row{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .day-hero .meta-row .meta-exercises{margin:0;color:#bebebe;font-size:14px;font-weight:500;white-space:nowrap}
+    .day-hero .meta-row .meta-frac{margin:0;color:#fff;font-size:14px;font-weight:900;white-space:nowrap}
+    .day-hero .bar{height:4px;background:rgba(255,255,255,.16);border-radius:2px;overflow:hidden;margin-bottom:18px}
+    .day-hero .bar > div{height:100%;background:#fff;border-radius:2px;transition:width .4s var(--ease)}
+    .day-hero .cta{width:100%;background:transparent;border:none;color:#fff;font-weight:900;font-size:18px;text-transform:uppercase;text-decoration:underline;padding:0;text-align:left;transition:opacity .12s var(--ease)}
+    .day-hero .cta:active{opacity:.6}
+    .day-hero .cta.done{color:rgba(255,255,255,.7)}
+    .day-hero .badge-done{position:absolute;top:20px;right:20px;background:#fff;color:var(--accent);font-size:11px;font-weight:900;padding:6px 10px;border-radius:0}
 
-    /* ---- other-day small cards ---- */
-    .section-label{font-size:12px;font-weight:800;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:4px 4px 10px}
-    .day-card-small{display:flex;align-items:center;gap:12px;background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:13px 14px;margin-bottom:8px;transition:transform .12s var(--ease)}
-    .day-card-small:active{transform:scale(.97)}
-    .dcs-index{width:34px;height:34px;border-radius:50%;background:var(--surface);border:1.5px solid var(--text);display:flex;align-items:center;justify-content:center;font-weight:900;font-size:13px;color:var(--text);flex:none}
-    .dcs-index.done{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
-    .dcs-info{flex:1;min-width:0}
-    .dcs-info b{display:block;font-size:14px;font-weight:850}
-    .dcs-info span{font-size:12px;color:var(--muted)}
-    .dcs-status{font-size:12px;font-weight:800;color:var(--muted);flex:none}
+    /* ---- schedule list rows ---- */
+    .section-label{font-size:11px;font-weight:900;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin:4px 4px 16px}
+    .day-card-small{display:flex;align-items:center;gap:12px;border-bottom:1px solid var(--border);padding:14px 0;transition:opacity .12s var(--ease)}
+    .day-card-small:active{opacity:.6}
+    .dcs-info{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+    .dcs-info b{font-size:14px;font-weight:900;color:var(--text)}
+    .dcs-info span{font-size:16px;color:var(--text);font-weight:600}
+    .dcs-status{font-size:13px;font-weight:500;color:var(--muted);flex:none}
     .dcs-status.done{color:var(--text)}
 
     /* ---- exercise card (reused by session view) ---- */
-    .exercise{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);margin:0 0 12px;overflow:hidden}
-    .ex-head{padding:15px 15px 8px;display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
-    .ex-name{font-weight:850;font-size:15.5px;letter-spacing:-.02em}
-    .ex-dose{font-size:11.5px;color:var(--text);font-weight:850;background:transparent;border:1.5px solid var(--text);padding:5px 10px;border-radius:var(--radius-pill);white-space:nowrap;flex:none}
-    .fig-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);margin:2px 20px 14px;padding:6px;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:140px}
-    .fig-box img{width:100%;max-width:280px;height:140px;object-fit:contain;display:block;border-radius:calc(var(--radius-sm) - 4px)}
+    .exercise{background:transparent;border:none;border-radius:0;margin:0;overflow:visible}
+    .ex-head{padding:15px 15px 8px;display:flex;flex-direction:column;gap:8px}
+    .ex-name{font-family:var(--font-display);font-weight:900;font-size:15.5px;letter-spacing:0}
+    .ex-dose{font-size:11.5px;color:var(--muted);font-weight:800;background:transparent;border:none;padding:0;text-transform:uppercase;letter-spacing:.04em;white-space:nowrap;flex:none}
+    .fig-box{background:#fff;border:1px solid var(--border);border-radius:0;margin:2px 24px 20px;padding:0;display:flex;align-items:center;justify-content:center;overflow:hidden;min-height:140px}
+    .fig-box img{width:100%;height:100%;object-fit:cover;display:block;border-radius:0}
     .fig-missing{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:var(--muted);padding:20px 0}
     .fig-missing svg{width:34px;height:34px}
     .fig-missing span{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em}
-    .cue{color:var(--muted);font-size:13px;line-height:1.4;margin:0 15px 12px}
-    .weight-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:0 15px 14px}
-    .weight-box{background:var(--surface-2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px}
-    .weight-box label{display:block;font-size:10px;color:var(--muted-2);font-weight:800;text-transform:uppercase;letter-spacing:.07em;margin-bottom:5px}
-    .suggest{font-size:14.5px;font-weight:800;color:var(--text)}
+    .cue-divider{height:1px;background:var(--border);margin:0 24px 12px}
+    .cue{color:var(--text);font-size:13px;line-height:1.4;margin:0 24px 20px;font-weight:400}
+    .weight-box{background:none;border:none;border-radius:0;padding:0;margin:0 24px 8px}
+    .weight-box-divider{height:1px;background:var(--border);margin:0 24px 20px}
+    .weight-box .weight-label-row{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:5px}
+    .weight-box .weight-label-row label{font-size:10px;color:var(--muted-2);font-weight:800;text-transform:uppercase;letter-spacing:.07em}
+    .weight-box .suggest-inline{font-size:10.5px;color:var(--muted-2);font-weight:700;white-space:nowrap;transition:color .2s var(--ease)}
+    .weight-box .suggest-inline.saved{color:var(--text)}
     input[type="text"]{width:100%;border:0;background:transparent;padding:0;font-size:15px;font-weight:800;color:var(--text);outline:none}
     input[type="text"]::placeholder{color:var(--muted-2);font-weight:600}
     .sets{display:flex;gap:8px;flex-wrap:wrap;padding:2px 15px 16px}
@@ -134,29 +138,36 @@
 
     /* ---- session (single-exercise) screen ---- */
     .session-header{display:flex;align-items:center;gap:12px;margin-bottom:2px}
-    .backbtn{width:36px;height:36px;border-radius:50%;background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow);display:flex;align-items:center;justify-content:center;flex:none;transition:transform .12s var(--ease)}
+    .backbtn{width:32px;height:32px;border-radius:0;background:transparent;border:none;box-shadow:none;display:flex;align-items:center;justify-content:center;flex:none;transition:transform .12s var(--ease)}
     .backbtn:active{transform:scale(.88)}
     .backbtn svg{width:17px;height:17px;stroke:var(--text);fill:none;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
     .session-title{flex:1;min-width:0}
-    .session-title b{display:block;font-size:15px;font-weight:900;letter-spacing:-.02em}
-    .session-title span{font-size:11.5px;color:var(--muted);font-weight:700}
+    .session-title b{display:block;font-size:14px;font-weight:900;letter-spacing:-.01em}
+    .session-title span{display:block;font-size:11px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
 
-    .pips{display:flex;gap:6px;padding:16px 2px 20px}
-    .pip{flex:1;min-width:12px;height:5px;border-radius:var(--radius-pill);background:var(--surface-3);transition:background .2s}
-    .pip.done{background:var(--accent)}
-    .pip.active{background:var(--muted-2)}
+    .pips{display:flex;gap:8px;padding:16px 2px 12px}
+    .pip{flex:none;width:6px;height:6px;border-radius:50%;background:var(--border);transition:background .2s}
+    .pip.done{background:var(--text)}
+    .pip.active{background:var(--accent-cyan)}
 
-    .session-exercise{box-shadow:none}
-    .session-exercise .ex-head{padding:20px 20px 10px}
-    .session-exercise .ex-name{font-size:21px}
-    .session-exercise .ex-dose{font-size:12.5px;padding:6px 12px}
-    .session-exercise .cue{margin:0 20px 16px;font-size:14px}
-    .session-exercise .weight-row{padding:0 20px 18px}
-    .session-exercise .sets{padding:4px 20px 24px;justify-content:center}
+    .session-exercise{box-shadow:none;padding-bottom:190px}
+    .session-exercise .ex-head{padding:24px 24px 10px}
+    .session-exercise .ex-name{font-size:34px;line-height:1.1}
+    .session-exercise .ex-dose{font-size:13px}
+    .session-exercise .cue-divider{margin:0 24px 12px}
+    .session-exercise .cue{margin:0 24px 20px;font-size:13px}
+    .session-exercise .weight-box{margin:0 24px 8px}
+    .session-exercise .weight-box-divider{margin:0 24px 20px}
+    .session-exercise .sets{padding:0 0 16px;justify-content:center}
     .session-exercise .setdot{width:46px;height:46px;font-size:15px}
 
-    .session-nav{display:flex;gap:10px;margin-top:16px}
-    .session-nav button{flex:1;background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:13px;font-weight:850;color:var(--muted);transition:transform .12s var(--ease)}
+    .session-footer{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;background:var(--bg);box-shadow:0 -4px 16px rgba(20,20,18,.06)}
+    .session-footer-inner{max-width:520px;width:100%;padding:14px 20px calc(14px + env(safe-area-inset-bottom))}
+    .session-nav{display:flex;gap:12px;margin-top:0;align-items:stretch}
+    .session-nav button{flex:1;border-radius:14px;padding:13px;font-weight:800;font-size:13.5px;text-transform:uppercase;letter-spacing:.03em;transition:transform .12s var(--ease)}
+    .session-nav #sessPrev{background:transparent;border:1.5px solid var(--border);color:var(--muted)}
+    .session-nav button.primary{background:var(--accent);color:var(--accent-ink);border:1.5px solid var(--accent)}
+    .session-nav button.primary:active{transform:scale(.98)}
 
     /* ---- exercise swap ---- */
     .swap-btn{display:flex;align-items:center;gap:4px;background:var(--surface-2);border:1px solid var(--border);color:var(--muted);font-weight:800;font-size:11.5px;padding:6px 10px;border-radius:var(--radius-pill);flex:none;white-space:nowrap}
@@ -179,7 +190,6 @@
     .swap-decision-card .secondary-choice{background:var(--surface-2);color:var(--text);border:1.5px solid var(--border)}
     .session-nav button:active{transform:scale(.96)}
     .session-nav button:disabled{opacity:.35}
-    .session-nav button.primary{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
 
     .day-complete{display:flex;flex-direction:column;align-items:center;text-align:center;padding:70px 20px}
     .day-complete .check{width:84px;height:84px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;margin-bottom:22px}
@@ -241,14 +251,16 @@
     }
     .tabbar .inner{
       pointer-events:auto;
-      max-width:420px;width:100%;display:flex;gap:2px;
-      background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-pill);
-      box-shadow:var(--shadow);padding:6px;
+      max-width:420px;width:100%;display:flex;
+      background:rgba(250,250,248,.75);backdrop-filter:blur(14px) saturate(140%);
+      border:.5px solid var(--nav-border);border-radius:var(--radius-pill);
+      padding:14px 8px;
     }
-    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:var(--radius-pill);color:var(--muted-2);font-size:10.5px;font-weight:800;transition:color .15s,background .15s,transform .12s var(--ease)}
+    .tabbtn{flex:1;background:transparent;border:0;display:flex;flex-direction:column;align-items:center;gap:6px;padding:0;color:var(--muted);font-size:10.5px;font-weight:900;text-transform:uppercase;letter-spacing:.03em;transition:color .15s,transform .12s var(--ease)}
     .tabbtn:active{transform:scale(.92)}
-    .tabbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-    .tabbtn.active{color:var(--text);background:var(--surface-2)}
+    .tabbtn .tab-dot{width:4px;height:4px;border-radius:50%;background:transparent}
+    .tabbtn.active{color:var(--text)}
+    .tabbtn.active .tab-dot{background:var(--text)}
 
     /* ---- auth screen ---- */
     .authscreen{position:fixed;inset:0;z-index:100;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px}
@@ -299,7 +311,7 @@
 <body>
   <div class="authscreen" id="authScreen">
     <div class="authcard">
-      <span class="wordmark">gle<span class="spark">a<svg viewBox="0 0 14 14" style="width:.5em;height:.5em;top:-.48em;left:.02em"><path d="M7 0l1.3 4.7L13 6l-4.7 1.3L7 12l-1.3-4.7L1 6l4.7-1.3z"/></svg></span>mo</span>
+      <span class="wordmark">gle<span class="bullet">•</span>mo</span>
       <p>Sign in to sync your progress and workout history across devices.</p>
       <button id="googleSignInBtn" class="google-btn">
         <svg viewBox="0 0 20 20" width="18" height="18"><path fill="#4285F4" d="M19.6 10.23c0-.68-.06-1.36-.18-2H10v3.79h5.4a4.6 4.6 0 0 1-2 3.02v2.5h3.23c1.9-1.75 2.97-4.32 2.97-7.31z"/><path fill="#34A853" d="M10 20c2.7 0 4.96-.89 6.62-2.42l-3.23-2.5c-.9.6-2.05.95-3.39.95-2.6 0-4.8-1.76-5.59-4.12H1.06v2.58A10 10 0 0 0 10 20z"/><path fill="#FBBC05" d="M4.41 11.9a6 6 0 0 1 0-3.8V5.51H1.06a10 10 0 0 0 0 8.98z"/><path fill="#EA4335" d="M10 3.98c1.47 0 2.79.5 3.83 1.5l2.87-2.87A9.6 9.6 0 0 0 10 0 10 10 0 0 0 1.06 5.51L4.41 8.1C5.2 5.74 7.4 3.98 10 3.98z"/></svg>
@@ -395,7 +407,7 @@
   <div class="app" id="app" hidden>
     <header class="topbar">
       <div class="topbar-inner">
-        <span class="wordmark" style="font-size:19px">gle<span class="spark">a<svg viewBox="0 0 14 14" style="width:.5em;height:.5em;top:-.48em;left:.02em"><path d="M7 0l1.3 4.7L13 6l-4.7 1.3L7 12l-1.3-4.7L1 6l4.7-1.3z"/></svg></span>mo</span>
+        <span class="wordmark" style="font-size:26px">gle<span class="bullet">•</span>mo</span>
         <div class="week-chip" id="weekChip">0% this week</div>
       </div>
     </header>
@@ -406,26 +418,25 @@
         <p class="hero-label">This week</p>
         <div class="hero-people">
           <div class="hero-person" id="heroPersonYou">
-            <div class="ring" id="heroRing"></div>
             <div class="hp-info">
               <b id="heroYouName">You</b>
-              <span id="heroBig">0/0 sets</span>
+              <span id="heroBig">0/0</span>
             </div>
+            <div class="hp-track"><div class="hp-fill" id="heroYouFill" style="width:0%"></div></div>
           </div>
-          <div class="hero-divider" id="heroDivider" hidden></div>
           <div class="hero-person" id="heroPersonPartner" hidden>
-            <div class="ring" id="heroPartnerRing"></div>
             <div class="hp-info">
               <b id="heroPartnerName">Partner</b>
-              <span id="heroPartnerBig">0/0 sets</span>
+              <span id="heroPartnerBig">0/0</span>
             </div>
+            <div class="hp-track"><div class="hp-fill" id="heroPartnerFill" style="width:0%"></div></div>
           </div>
         </div>
       </div>
 
       <div class="day-hero" id="dayHero"></div>
 
-      <div class="section-label">Other days</div>
+      <div class="section-label">Schedule</div>
       <div id="otherDays"></div>
     </main>
 
@@ -534,20 +545,20 @@
   <nav class="tabbar" id="tabbar">
     <div class="inner">
       <button class="tabbtn active" data-screen="dashboard">
-        <svg viewBox="0 0 24 24"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg>
-        Dashboard
+        Home
+        <span class="tab-dot"></span>
       </button>
       <button class="tabbtn" data-screen="progress">
-        <svg viewBox="0 0 24 24"><path d="M4 20V11M12 20V4M20 20v-7"/></svg>
         Progress
+        <span class="tab-dot"></span>
       </button>
       <button class="tabbtn" data-screen="guide">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><line x1="12" y1="8" x2="12" y2="8.5"/><line x1="12" y1="11" x2="12" y2="16"/></svg>
         Guide
+        <span class="tab-dot"></span>
       </button>
       <button class="tabbtn" data-screen="imports">
-        <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="3"/><path d="M8 12l3 3 5-6"/></svg>
         Imports
+        <span class="tab-dot"></span>
       </button>
     </div>
   </nav>
@@ -608,45 +619,29 @@
     ];
 
     const CHRISTOPHER_PLAN = [
-      {title:'Day 1', subtitle:'Chest + Triceps', exercises:[
+      {title:'Day 1', subtitle:'Push: Chest + Shoulders + Triceps', exercises:[
         ['Barbell bench press','4 x 6–8','95–135 lb','Elbows at 45°, drive feet into the floor, touch chest lightly.','press','/api/gif/0025'],
+        ['Standing overhead barbell press','4 x 6–8','65–95 lb','Brace core, press straight up, avoid leaning back.','armraise','/api/gif/1456'],
         ['Incline dumbbell press','3 x 8–10','30–50 lb DBs','30–45° incline, control the descent.','press','/api/gif/0314'],
-        ['Bench dips','3 x 10–15','Bodyweight, feet elevated to add difficulty','Hands on bench edge, lower until elbows hit ~90°.','press','/api/gif/0129'],
-        ['Dumbbell chest fly','3 x 10–15','15–25 lb DBs','Slight elbow bend, squeeze at the top.','armraise','/api/gif/0308'],
+        ['Lateral raise','4 x 12–15','10–20 lb DBs','Lead with elbows, stop at shoulder height.','armraise','/api/gif/0334'],
         ['Overhead triceps extension','3 x 10–15','20–35 lb DB','Elbows tucked in, full stretch at bottom.','curl','/api/gif/0109'],
-        ['Dumbbell triceps kickback','3 x 12–15','10–20 lb DBs','Keep elbows pinned to your sides, squeeze at full extension.','curl','/api/gif/0333']
+        ['Skull crushers','3 x 8–12','30–45 lb','Elbows stay fixed, lower to forehead.','curl','/api/gif/0060']
       ]},
-      {title:'Day 2', subtitle:'Back + Biceps', exercises:[
+      {title:'Day 2', subtitle:'Pull: Back + Biceps + Rear Delts', exercises:[
         ['Barbell deadlift','4 x 5–6','135–185 lb','Neutral spine, push the floor away, bar stays close.','hinge','/api/gif/0032'],
-        ['Dumbbell pullover','4 x 8–12','35–55 lb DB','Lie on the bench, arc the DB back behind your head, pull over with the lats.','row','/api/gif/0375'],
         ['Barbell bent-over row','4 x 8–10','65–95 lb','Flat back, pull to the belly button.','row','/api/gif/0027'],
-        ['Single-arm dumbbell row','3 x 10–12/side','30–45 lb DB','Full stretch at the bottom, no torso twist.','row','/api/gif/0064'],
+        ['Chest-supported row','3 x 10–12','30–45 lb DBs','Squeeze shoulder blades together and down.','row','/api/gif/0327'],
+        ['Rear delt fly','3 x 12–15','10–15 lb DBs','Slight bend in elbows, squeeze shoulder blades.','armraise','/api/gif/0383'],
         ['Barbell bicep curl','3 x 8–12','30–50 lb','Elbows locked at your sides, no swinging.','curl','/api/gif/0031'],
         ['Hammer curl','3 x 10–15','20–30 lb DBs','Neutral grip, controlled tempo.','curl','/api/gif/0313']
       ]},
-      {title:'Day 3', subtitle:'Thighs, Quad Focus', exercises:[
+      {title:'Day 3', subtitle:'Legs: Quads + Hamstrings + Calves', exercises:[
         ['Barbell front squat','5 x 5–8','95–135 lb','Elbows high, bar rests on front delts, stay upright.','squat','/api/gif/0042'],
-        ['Dumbbell goblet squat','4 x 10–12','40–60 lb DB','Hold DB at chest, squat between your knees, drive through the heels.','squat','/api/gif/1760'],
+        ['Romanian deadlift','3 x 8–10','95–135 lb','Hips back, soft knees, feel the hamstring stretch.','hinge','/api/gif/0085'],
         ['Walking lunges','3 x 10–12/side','20–35 lb DBs','Long stride, back knee kisses the floor.','squat','/api/gif/1460'],
         ['Bulgarian split squat','3 x 8–10/side','20–30 lb DBs','Front shin vertical, most weight on front leg.','squat','/api/gif/0410'],
-        ['Romanian deadlift','3 x 8–10','95–135 lb','Hips back, soft knees, feel the hamstring stretch.','hinge','/api/gif/0085'],
+        ['Dumbbell goblet squat','4 x 10–12','40–60 lb DB','Hold DB at chest, squat between your knees, drive through the heels.','squat','/api/gif/1760'],
         ['Standing calf raise','4 x 12–15','Bodyweight to 25 lb DBs','Full stretch at bottom, pause at the top.','calf','/api/gif/0417']
-      ]},
-      {title:'Day 4', subtitle:'Shoulders + Arms', exercises:[
-        ['Standing overhead barbell press','4 x 6–8','65–95 lb','Brace core, press straight up, avoid leaning back.','armraise','/api/gif/1456'],
-        ['Seated dumbbell shoulder press','3 x 8–10','25–40 lb DBs','Controlled descent to ear level.','armraise','/api/gif/0405'],
-        ['Lateral raise','4 x 12–15','10–20 lb DBs','Lead with elbows, stop at shoulder height.','armraise','/api/gif/0334'],
-        ['Rear delt fly','3 x 12–15','10–15 lb DBs','Slight bend in elbows, squeeze shoulder blades.','armraise','/api/gif/0383'],
-        ['Barbell curl','3 x 8–12','40–60 lb','Full range, no momentum, elbows locked at your sides.','curl','/api/gif/0031'],
-        ['Skull crushers','3 x 8–12','30–45 lb','Elbows stay fixed, lower to forehead.','curl','/api/gif/0060']
-      ]},
-      {title:'Day 5', subtitle:'Upper Pump + Thighs', exercises:[
-        ['Front squat or goblet squat','4 x 8–10','65–95 lb barbell or 40–60 lb DB','Upright torso, elbows high.','squat','/api/gif/1760'],
-        ['Barbell split squat','3 x 12–15/side','45–65 lb','Front foot planted, back knee taps down, drive through the front heel.','squat','/api/gif/2810'],
-        ['Incline machine or DB press','3 x 10–12','30–45 lb DBs','Squeeze upper chest at the top.','press','/api/gif/0314'],
-        ['Chest-supported row','3 x 10–12','30–45 lb DBs','Squeeze shoulder blades together and down.','row','/api/gif/0327'],
-        ['Dumbbell lateral raise, drop set','3 x 15–20','10–20 lb DBs, drop weight on the last set','Lead with elbows, stop at shoulder height, chase the burn.','armraise','/api/gif/0334'],
-        ['Standing calf raise','3 x 15–20','Bodyweight to 25 lb DBs','Fast, full-range pump reps.','calf','/api/gif/0417']
       ]}
     ];
 
@@ -1309,24 +1304,36 @@
       return {done, total, pct: total ? Math.round(done/total*100) : 0};
     }
 
+    // ---------- muscle hero images (dashboard hero card) ----------
+    const MUSCLE_IMAGE_BASE = 'https://sqplklzjpougwdlinrhz.supabase.co/storage/v1/object/public/muscle-hero-images';
+    function muscleImageFor(subtitle){
+      const s = (subtitle || '').toLowerCase();
+      if(s.includes('glute')) return `${MUSCLE_IMAGE_BASE}/glutes.png`;
+      if(s.includes('ab')) return `${MUSCLE_IMAGE_BASE}/abs.png`;
+      if(s.includes('leg') || s.includes('quad') || s.includes('thigh')) return `${MUSCLE_IMAGE_BASE}/quads.png`;
+      if(s.includes('arm') || s.includes('bicep') || s.includes('tricep') || s.includes('shoulder')) return `${MUSCLE_IMAGE_BASE}/biceps.png`;
+      return null;
+    }
+
     // ---------- DASHBOARD ----------
     function renderDashboard(){
       const bigIndex = dashboardCurrentDay();
       const bigStats = dayStats(bigIndex);
       const bigDay = plan[bigIndex];
-      const allDone = plan.every((_,i)=>dayStats(i).pct===100);
 
       const heroEl = document.getElementById('dayHero');
+      const ctaLabel = bigStats.pct===100 ? 'Review day' : (bigStats.done>0 ? 'Continue workout' : 'Start workout');
+      const heroImg = muscleImageFor(bigDay.subtitle);
       heroEl.innerHTML = `
         ${bigStats.pct===100 ? '<div class="badge-done">✓ Done</div>' : ''}
-        <p class="eyebrow">${allDone ? 'Plan complete' : 'Up next'}</p>
         <h2>${bigDay.title}: ${bigDay.subtitle}</h2>
-        <p class="sub">${bigDay.exercises.length} exercises · ${bigStats.total} sets</p>
-        <div class="progress-line">
-          <div class="bar"><div style="width:${bigStats.pct}%"></div></div>
-          <div class="frac">${bigStats.done}/${bigStats.total}</div>
+        ${heroImg ? `<div class="hero-image"><img src="${heroImg}" alt="" onerror="this.parentElement.remove()"></div>` : ''}
+        <div class="meta-row">
+          <p class="meta-exercises">${bigDay.exercises.length} exercises · ${bigStats.total} sets</p>
+          <p class="meta-frac">${bigStats.done}/${bigStats.total}</p>
         </div>
-        <button class="cta${bigStats.pct===100?' done':''}">${bigStats.pct===100 ? 'Review day' : (bigStats.done>0 ? 'Continue workout' : 'Start workout')}</button>
+        <div class="bar"><div style="width:${bigStats.pct}%"></div></div>
+        <button class="cta${bigStats.pct===100?' done':''}">${ctaLabel} →</button>
       `;
       heroEl.onclick = ()=>openSession(bigIndex);
 
@@ -1338,7 +1345,6 @@
         const row = document.createElement('div');
         row.className = 'day-card-small';
         row.innerHTML = `
-          <div class="dcs-index${s.pct===100?' done':''}">${s.pct===100?'✓':i+1}</div>
           <div class="dcs-info"><b>${d.title}</b><span>${d.subtitle}</span></div>
           <div class="dcs-status${s.pct===100?' done':''}">${s.pct===100?'Completed':`${s.done}/${s.total}`}</div>`;
         row.onclick = ()=>openSession(i);
@@ -1494,16 +1500,25 @@
           </div>
           ${hasSwapCandidates ? `<div style="padding:0 20px 8px"><button id="swapBtn" class="swap-btn"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>Swap exercise</button></div>` : ''}
           <div class="fig-box">${figHtml}</div>
+          <div class="cue-divider"></div>
           <p class="cue">${ex[3]}</p>
-          <div class="weight-row">
-            <div class="weight-box"><label>Start with</label><div class="suggest">${ex[2]}</div></div>
-            <div class="weight-box"><label>Your weight</label><input type="text" inputmode="decimal" placeholder="ex: 115 lb" value="${savedWeight}" data-weight="${weightKey(sessionDay, exi)}"></div>
+          <div class="weight-box">
+            <div class="weight-label-row">
+              <label>Weight</label>
+              <span class="suggest-inline" data-suggest="${ex[2]}">Suggested ${ex[2]}</span>
+            </div>
+            <input type="text" inputmode="decimal" placeholder="ex: 115 lb" value="${savedWeight}" data-weight="${weightKey(sessionDay, exi)}">
           </div>
-          <div class="sets">${dots}</div>
+          <div class="weight-box-divider"></div>
         </article>
-        <div class="session-nav">
-          <button id="sessPrev" ${exi===0?'disabled':''}>Back</button>
-          <button id="sessNext" class="primary">${exi===day.exercises.length-1 ? 'Finish day' : 'Skip exercise'}</button>
+        <div class="session-footer">
+          <div class="session-footer-inner">
+            <div class="sets">${dots}</div>
+            <div class="session-nav">
+              <button id="sessPrev" ${exi===0?'disabled':''}>Back</button>
+              <button id="sessNext" class="primary">${exi===day.exercises.length-1 ? 'Finish day' : 'Skip exercise'}</button>
+            </div>
+          </div>
         </div>`;
 
       document.getElementById('sessPrev').onclick = ()=>{ sessionExercise = Math.max(0, sessionExercise-1); renderSession(); };
@@ -1528,9 +1543,25 @@
           }
         };
       });
-      body.querySelector('input[data-weight]').oninput = e=>{
+      const weightInputEl = body.querySelector('input[data-weight]');
+      const suggestInlineEl = body.querySelector('.suggest-inline');
+      let lastSavedWeight = weightInputEl.value;
+      let savedFlashTimer = null;
+      weightInputEl.oninput = e=>{
         weightCache[weightKey(sessionDay, exi)] = e.target.value;
         persistWeight(sessionDay, exi, e.target.value);
+      };
+      weightInputEl.onblur = e=>{
+        const val = e.target.value;
+        if(!val || val === lastSavedWeight) return;
+        lastSavedWeight = val;
+        suggestInlineEl.textContent = 'Saved for next week';
+        suggestInlineEl.classList.add('saved');
+        clearTimeout(savedFlashTimer);
+        savedFlashTimer = setTimeout(()=>{
+          suggestInlineEl.textContent = 'Suggested ' + suggestInlineEl.dataset.suggest;
+          suggestInlineEl.classList.remove('saved');
+        }, 1700);
       };
     }
 
@@ -1557,8 +1588,10 @@
       const {done, total, pct} = overallStats();
       const youColor = colorForId(currentUser.id);
       document.getElementById('weekChip').textContent = `${pct}% this week`;
-      document.getElementById('heroRing').innerHTML = ringSvg(pct, 60, 7, youColor);
-      document.getElementById('heroBig').textContent = `${done}/${total} sets`;
+      const heroYouFillEl = document.getElementById('heroYouFill');
+      heroYouFillEl.style.width = `${pct}%`;
+      heroYouFillEl.style.background = youColor;
+      document.getElementById('heroBig').textContent = `${done}/${total}`;
       const heroYouNameEl = document.getElementById('heroYouName');
       heroYouNameEl.textContent = (myProfile && myProfile.displayName) || 'You';
       heroYouNameEl.style.color = youColor;
@@ -1623,12 +1656,10 @@
       const titleEl = document.getElementById('partnerSectionTitle');
       const cardEl = document.getElementById('partnerCard');
       const heroPersonPartner = document.getElementById('heroPersonPartner');
-      const heroDivider = document.getElementById('heroDivider');
       if(!partnerId || !partnerProfile || !partnerProfile.planKey){
         titleEl.hidden = true;
         cardEl.innerHTML = '';
         heroPersonPartner.hidden = true;
-        heroDivider.hidden = true;
         return;
       }
       const { data: rows } = await sb.from('progress').select('day_idx,exercise_idx,set_idx,done').eq('user_id', partnerId);
@@ -1649,12 +1680,13 @@
         </div>`;
 
       heroPersonPartner.hidden = false;
-      heroDivider.hidden = false;
-      document.getElementById('heroPartnerRing').innerHTML = ringSvg(pct, 60, 7, partnerColor);
+      const heroPartnerFillEl = document.getElementById('heroPartnerFill');
+      heroPartnerFillEl.style.width = `${pct}%`;
+      heroPartnerFillEl.style.background = partnerColor;
       const partnerNameEl = document.getElementById('heroPartnerName');
       partnerNameEl.textContent = partnerName;
       partnerNameEl.style.color = partnerColor;
-      document.getElementById('heroPartnerBig').textContent = `${done}/${total} sets`;
+      document.getElementById('heroPartnerBig').textContent = `${done}/${total}`;
     }
 
     // ---- Imports (paste a link or upload a video, AI structures it into exercises) ----
