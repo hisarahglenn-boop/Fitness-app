@@ -137,12 +137,13 @@
     .weight-box .weight-label-row label{font-size:10px;color:var(--muted-2);font-weight:800;text-transform:uppercase;letter-spacing:.07em}
     .weight-box .suggest-inline{font-size:10.5px;color:var(--muted-2);font-weight:700;white-space:nowrap;transition:color .2s var(--ease)}
     .weight-box .suggest-inline.saved{color:var(--text)}
-    .dose-steppers{display:flex;gap:22px}
-    .stepper{display:flex;align-items:center;gap:8px}
-    .stepper-btn{width:28px;height:28px;flex:none;border-radius:50%;border:1.5px solid var(--text);background:var(--surface);color:var(--text);font-size:16px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s var(--ease)}
-    .stepper-btn:active{transform:scale(.88)}
-    .stepper input[type="text"]{width:32px;flex:none;text-align:center;font-size:16px;font-weight:800}
-    .stepper-caption{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
+    .dose-steppers{display:flex;gap:32px}
+    .stepper{display:flex;flex-direction:column;gap:7px}
+    .stepper-caption{font-size:10px;color:var(--muted-2);font-weight:800;text-transform:uppercase;letter-spacing:.07em}
+    .stepper-controls{display:flex;align-items:center;gap:12px}
+    .stepper-btn{width:32px;height:32px;flex:none;border-radius:50%;border:none;background:#fff;color:var(--text);font-size:15px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 1px 4px rgba(20,20,18,.15);transition:transform .12s var(--ease),box-shadow .15s var(--ease)}
+    .stepper-btn:active{transform:scale(.88);box-shadow:0 1px 2px rgba(20,20,18,.1)}
+    .stepper-controls input[type="text"]{width:26px;flex:none;text-align:center;font-size:19px;font-weight:900;color:var(--text)}
     input[type="text"]{width:100%;border:0;background:transparent;padding:0;font-size:15px;font-weight:800;color:var(--text);outline:none}
     input[type="text"]::placeholder{color:var(--muted-2);font-weight:600}
     .sets{display:flex;gap:8px;flex-wrap:wrap;padding:2px 15px 16px}
@@ -1633,16 +1634,20 @@
             </div>
             <div class="dose-steppers">
               <div class="stepper">
-                <button type="button" class="stepper-btn" data-dose-field="sets" data-dir="-1">−</button>
-                <input type="text" inputmode="numeric" value="${doseParsed.sets}" data-dose-sets>
-                <button type="button" class="stepper-btn" data-dose-field="sets" data-dir="1">+</button>
-                <span class="stepper-caption">sets</span>
+                <span class="stepper-caption">Sets</span>
+                <div class="stepper-controls">
+                  <button type="button" class="stepper-btn" data-dose-field="sets" data-dir="-1">−</button>
+                  <input type="text" inputmode="numeric" value="${doseParsed.sets}" data-dose-sets>
+                  <button type="button" class="stepper-btn" data-dose-field="sets" data-dir="1">+</button>
+                </div>
               </div>
               <div class="stepper">
-                <button type="button" class="stepper-btn" data-dose-field="reps" data-dir="-1">−</button>
-                <input type="text" inputmode="numeric" value="${doseParsed.repsOrSeconds}" data-dose-reps>
-                <button type="button" class="stepper-btn" data-dose-field="reps" data-dir="1">+</button>
-                <span class="stepper-caption">${doseParsed.isTimed ? 'sec' : 'reps'}</span>
+                <span class="stepper-caption">${doseParsed.isTimed ? 'Seconds' : 'Reps'}</span>
+                <div class="stepper-controls">
+                  <button type="button" class="stepper-btn" data-dose-field="reps" data-dir="-1">−</button>
+                  <input type="text" inputmode="numeric" value="${doseParsed.repsOrSeconds}" data-dose-reps>
+                  <button type="button" class="stepper-btn" data-dose-field="reps" data-dir="1">+</button>
+                </div>
               </div>
             </div>
           </div>
