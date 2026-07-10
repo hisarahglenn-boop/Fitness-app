@@ -216,6 +216,67 @@
     .day-complete p{color:var(--muted);font-size:14px;margin:0 0 28px}
     .day-complete button{background:var(--accent);color:var(--accent-ink);font-weight:900;padding:14px 26px;border-radius:16px;font-size:15px}
 
+    /* ---- dark theme (Session + Day Preview screens) ---- */
+    html.theme-dark, html.theme-dark body{background:#000}
+    .theme-dark .topbar{background:#000;border-bottom-color:transparent}
+    .theme-dark .wordmark, .theme-dark .week-chip{color:#fff}
+    .theme-dark .topbar-exit{border-color:#e5e5e5}
+    .theme-dark .topbar-exit svg{stroke:#fff}
+
+    .theme-dark #screen-session .ex-name{color:#fff}
+    .theme-dark #screen-session .ex-dose{color:#9ca3af}
+    .theme-dark #screen-session .cue{color:#cbd5e1}
+    .theme-dark #screen-session .cue-divider{background:transparent}
+    .theme-dark .pip{background:#374151}
+    .theme-dark .pip.done{background:#fff}
+    .theme-dark .reset-icon-btn{color:#e5e5e5}
+
+    .theme-dark .stepper-caption{text-transform:none;color:#9ca3af;font-size:12px}
+    .theme-dark .stepper-btn{background:#111827;border:1px solid #374151;color:#fff;box-shadow:none}
+    .theme-dark .stepper-controls input[type="text"]{color:#f9fafb;font-size:20px}
+
+    .theme-dark .weight-box .weight-label-row label{color:#9ca3af;text-transform:none;font-size:12px}
+    .theme-dark .weight-box .suggest-inline{color:#9ca3af}
+    .theme-dark .weight-box .suggest-inline.saved{color:#fff}
+    .theme-dark input[data-weight]{background:#0b0f14;border:1px solid #374151;border-radius:8px;height:48px;padding:0 16px;color:#9ca3af}
+    .theme-dark input[data-weight]::placeholder{color:#9ca3af}
+    .theme-dark .weight-box-divider{background:transparent}
+
+    .theme-dark .setdot{background:transparent;border-color:#e5e5e5;color:transparent}
+    .theme-dark .setdot.done{border-color:#00e0ff;color:#fff}
+
+    .theme-dark .session-footer{background:#000;border-top-color:#6e6b65}
+    .theme-dark .session-nav button{border-color:#e5e5e5;color:#e5e5e5;background:transparent}
+
+    .theme-dark .day-complete h2{color:#fff}
+    .theme-dark .day-complete .check{background:#fff}
+    .theme-dark .day-complete .check svg{stroke:var(--accent)}
+    .theme-dark .day-complete button{background:#fff;color:#000;box-shadow:0 1px 12px 0 var(--accent-cyan)}
+
+    /* ---- day preview screen ---- */
+    .dp-badge-done{display:inline-block;background:#fff;color:var(--accent);font-size:11px;font-weight:900;padding:6px 10px;border-radius:0;margin-bottom:10px}
+    .dp-title-row{display:flex;align-items:flex-start;gap:6px}
+    .dp-title{flex:1;min-width:0;font-family:var(--font-display);font-weight:900;font-size:34px;line-height:1.1;color:#fff;margin:0}
+    .dp-thumb{flex:none;width:104px;height:113px;box-shadow:0 -1px 30px 0 var(--accent-cyan)}
+    .dp-thumb img{width:100%;height:100%;object-fit:contain}
+    .dp-section-label{font-size:12px;font-weight:800;color:#ebebeb;margin:20px 0 8px}
+    #dayPreviewList .dp-row{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #6e6b65}
+    #dayPreviewList .dp-row:last-child{border-bottom:none}
+    .dp-thumb-sm{flex:none;width:64px;height:64px;border-radius:4px;overflow:hidden;background:#1f2937}
+    .dp-thumb-sm img{width:100%;height:100%;object-fit:cover}
+    .dp-noimg{width:100%;height:100%}
+    .dp-row-content{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+    .dp-row-content b{font-size:15px;font-weight:700;color:#fff}
+    .dp-row-content span{font-size:13px;color:#ebebeb}
+    .dp-bar{height:4px;background:rgba(255,255,255,.16);border-radius:2px;overflow:hidden;margin:4px 0 4px}
+    .dp-bar > div{height:100%;background:#fff;border-radius:2px;transition:width .4s var(--ease)}
+    #dayPreviewMeta{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:4px 0 20px}
+    #dayPreviewMeta .meta-exercises{margin:0;color:#bebebe;font-size:14px;font-weight:500;white-space:nowrap}
+    #dayPreviewMeta .meta-frac{margin:0;color:#fff;font-size:14px;font-weight:900;white-space:nowrap}
+    #dayPreviewCta{width:100%;background:#fff;border:none;color:#000;font-weight:900;font-size:18px;text-transform:uppercase;text-decoration:none;padding:10px;text-align:center;border-radius:5px;box-shadow:0 1px 24px 0 var(--accent-cyan);transition:opacity .12s var(--ease);cursor:pointer}
+    #dayPreviewCta:active{opacity:.6}
+    #dayPreviewCta.done{color:rgba(0,0,0,.6)}
+
     /* ---- history screen (drill-in from Guide) ---- */
     .history-stats-row{display:flex;gap:32px;padding:8px 0 28px}
     .history-stat{display:flex;flex-direction:column;gap:4px}
@@ -491,9 +552,12 @@
 
     <!-- DAY PREVIEW (drill-in from Dashboard, before starting a session) -->
     <main class="screen" id="screen-daypreview" hidden>
-      <div class="day-hero" id="dayPreviewHero"></div>
-      <div class="section-label">Exercises</div>
+      <div class="dp-header" id="dayPreviewHeader"></div>
+      <div class="dp-section-label">Exercises</div>
       <div id="dayPreviewList"></div>
+      <div class="dp-bar" id="dayPreviewBar" hidden><div></div></div>
+      <div class="meta-row" id="dayPreviewMeta"></div>
+      <button class="cta" id="dayPreviewCta"></button>
     </main>
 
     <!-- HISTORY (drill-in from Guide, not a top-level tab) -->
@@ -1478,6 +1542,7 @@
       const topbarExitEl = document.getElementById('topbarExit');
       topbarExitEl.hidden = false;
       topbarExitEl.onclick = closeDayPreview;
+      document.documentElement.classList.add('theme-dark');
       document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-daypreview');
       window.scrollTo({top:0, behavior:'smooth'});
       renderDayPreview();
@@ -1487,28 +1552,49 @@
       previewDay = null;
       document.getElementById('tabbar').style.display = 'flex';
       document.getElementById('topbarExit').hidden = true;
+      document.documentElement.classList.remove('theme-dark');
       switchScreen('dashboard');
     }
 
     function renderDayPreview(){
-      const heroEl = document.getElementById('dayPreviewHero');
-      heroEl.innerHTML = heroCardHtml(previewDay);
-      heroEl.onclick = ()=>openSession(previewDay);
-      bindHeroImageLoading(heroEl);
-
       const day = plan[previewDay];
+      const stats = dayStats(previewDay);
+      const heroImg = muscleImageFor(day.subtitle);
+
+      document.getElementById('dayPreviewHeader').innerHTML = `
+        ${stats.pct===100 ? '<div class="dp-badge-done">✓ Done</div>' : ''}
+        <div class="dp-title-row">
+          <h2 class="dp-title">${day.title}: ${day.subtitle}</h2>
+          ${heroImg ? `<div class="dp-thumb"><img src="${heroImg}" alt=""></div>` : ''}
+        </div>
+      `;
+
       const listEl = document.getElementById('dayPreviewList');
       listEl.innerHTML = day.exercises.map((ex,exi)=>{
         const gifPath = ex[5];
-        const img = gifPath ? `<img src="${gifPath}" alt="">` : `<div class="import-noimg"></div>`;
-        return `<div class="import-exercise-row">
-          ${img}
-          <div class="import-exercise-info">
+        const img = gifPath ? `<img src="${gifPath}" alt="">` : `<div class="dp-noimg"></div>`;
+        return `<div class="dp-row">
+          <div class="dp-thumb-sm">${img}</div>
+          <div class="dp-row-content">
             <b>${ex[0]}</b>
             <span>${effectiveDose(previewDay, exi)}</span>
           </div>
         </div>`;
       }).join('');
+
+      const barEl = document.getElementById('dayPreviewBar');
+      barEl.hidden = stats.done === 0;
+      barEl.querySelector('div').style.width = `${stats.pct}%`;
+
+      document.getElementById('dayPreviewMeta').innerHTML = `
+        <p class="meta-exercises">${day.exercises.length} exercises · ${stats.total} sets</p>
+        <p class="meta-frac">${stats.done}/${stats.total}</p>
+      `;
+
+      const ctaEl = document.getElementById('dayPreviewCta');
+      ctaEl.textContent = stats.pct===100 ? 'Review day' : (stats.done>0 ? 'Resume workout' : 'Start workout');
+      ctaEl.classList.toggle('done', stats.pct===100);
+      ctaEl.onclick = ()=>openSession(previewDay);
     }
 
     // ---------- SESSION ----------
@@ -1519,6 +1605,7 @@
       const topbarExitEl = document.getElementById('topbarExit');
       topbarExitEl.hidden = false;
       topbarExitEl.onclick = closeSession;
+      document.documentElement.classList.add('theme-dark');
       document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-session');
       window.scrollTo({top:0, behavior:'smooth'});
       renderSession();
@@ -1528,6 +1615,7 @@
       sessionDay = null;
       document.getElementById('tabbar').style.display = 'flex';
       document.getElementById('topbarExit').hidden = true;
+      document.documentElement.classList.remove('theme-dark');
       switchScreen('dashboard');
     }
 
