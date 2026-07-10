@@ -608,7 +608,7 @@
       ]},
       {title:'Day 3', subtitle:'Glutes + Hamstrings, Knee-Friendly', exercises:[
         ['Barbell glute bridge from floor','4 x 8–10','95–145 lb','Go heavy, but keep low back quiet.','bridge','/api/gif/1409'],
-        ['Kickstand RDL','3 x 8–10/side','20–40 lb DBs','Stable single-leg-ish hinge.','hinge','/api/gif/1459'],
+        ['Kickstand RDL','3 x 8–10/side','20–40 lb DBs','Stable single-leg-ish hinge.','hinge','/api/gif/1757'],
         ['Dumbbell hamstring curl','3 x 10–15','10–25 lb DB','Hold DB between feet or use sliders.','legcurl','/api/gif/0586'],
         ['Dumbbell sumo pull-through','4 x 12–20','25–40 lb DB','Hip snap, not a squat — swing the DB back through your legs.','hinge','/api/gif/2808'],
         ['B-stance hip thrust','3 x 10–12/side','65–115 lb','One glute works harder without knee stress.','bridge','/api/gif/0130'],
@@ -750,7 +750,7 @@
       ]},
       {title:'Day 2', subtitle:'Single-Leg + Hamstrings', exercises:[
         ['Walking lunges','3 x 8–10/side','Bodyweight or 10–15 lb DBs','Take a long step forward, back knee taps the floor, push through your front foot to stand.','squat','/api/gif/1460'],
-        ['Kickstand RDL','3 x 8–10/side','10–20 lb DBs','One foot slightly behind you for balance, hinge at your hips, feel the stretch in your hamstring.','hinge','/api/gif/1459'],
+        ['Kickstand RDL','3 x 8–10/side','10–20 lb DBs','One foot slightly behind you for balance, hinge at your hips, feel the stretch in your hamstring.','hinge','/api/gif/1757'],
         ['Dumbbell hamstring curl','3 x 10–12','10–15 lb DB','Hold the DB between your feet, curl your heels toward your glutes, lower slowly.','legcurl','/api/gif/0586'],
         ['Standing calf raise','3 x 12–15','Bodyweight to 15 lb DBs','Rise onto your toes, pause, lower slowly.','calf','/api/gif/0417']
       ]},
@@ -830,7 +830,7 @@
       ],
       hinge: [
         ['Barbell Romanian deadlift','4 x 8–10','65–95 lb','Hips back, soft knees, feel the stretch.','hinge','/api/gif/0085'],
-        ['Kickstand RDL','3 x 8–10/side','20–40 lb DBs','Stable single-leg-ish hinge.','hinge','/api/gif/1459'],
+        ['Kickstand RDL','3 x 8–10/side','20–40 lb DBs','Stable single-leg-ish hinge.','hinge','/api/gif/1757'],
         ['Dumbbell sumo pull-through','4 x 12–20','25–40 lb DB','Hip snap, not a squat.','hinge','/api/gif/2808'],
         ['Conventional or sumo deadlift','3 x 3–5','95–135 lb','Heavy clean reps. Sumo may feel better for glutes/knees.','hinge','/api/gif/0032']
       ],
@@ -1879,6 +1879,11 @@
       const statusEl = document.getElementById('importReviewStatus');
       if(selectedImportDay === null){ statusEl.textContent = 'Pick a day first.'; return; }
       if(!currentReviewImport){ return; }
+      const btn = document.getElementById('importAddToDayBtn');
+      // Disable for the duration of the save -- without this, repeated taps
+      // (easy to do with no immediate feedback) each fire their own insert,
+      // creating duplicate plan_additions rows that all get merged in.
+      btn.disabled = true;
       statusEl.textContent = 'Adding...';
       const exercisesToAdd = (currentReviewImport.exercises || []).map(ex => [ex.name, ex.dose, ex.weight, ex.cue, ex.type, ex.gifPath || null]);
       await sb.from('plan_additions').insert({
@@ -1889,9 +1894,12 @@
       });
       await sb.from('imports').update({ status: 'added' }).eq('id', currentReviewImport.id);
       await applyPlanAdditions();
-      document.getElementById('importReviewScreen').hidden = true;
+      statusEl.textContent = 'Added!';
       renderDashboard();
       renderImports();
+      await new Promise(r => setTimeout(r, 600));
+      btn.disabled = false;
+      document.getElementById('importReviewScreen').hidden = true;
     };
 
     document.getElementById('importLinkBtn').onclick = async () => {
