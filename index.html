@@ -137,6 +137,12 @@
     .weight-box .weight-label-row label{font-size:10px;color:var(--muted-2);font-weight:800;text-transform:uppercase;letter-spacing:.07em}
     .weight-box .suggest-inline{font-size:10.5px;color:var(--muted-2);font-weight:700;white-space:nowrap;transition:color .2s var(--ease)}
     .weight-box .suggest-inline.saved{color:var(--text)}
+    .dose-steppers{display:flex;gap:22px}
+    .stepper{display:flex;align-items:center;gap:8px}
+    .stepper-btn{width:28px;height:28px;flex:none;border-radius:50%;border:1.5px solid var(--text);background:var(--surface);color:var(--text);font-size:16px;font-weight:700;line-height:1;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:transform .12s var(--ease)}
+    .stepper-btn:active{transform:scale(.88)}
+    .stepper input[type="text"]{width:32px;flex:none;text-align:center;font-size:16px;font-weight:800}
+    .stepper-caption{font-size:11px;color:var(--muted);font-weight:700;text-transform:uppercase;letter-spacing:.04em}
     input[type="text"]{width:100%;border:0;background:transparent;padding:0;font-size:15px;font-weight:800;color:var(--text);outline:none}
     input[type="text"]::placeholder{color:var(--muted-2);font-weight:600}
     .sets{display:flex;gap:8px;flex-wrap:wrap;padding:2px 15px 16px}
@@ -161,7 +167,7 @@
     .reset-icon-btn:active{transform:scale(.88)}
     .reset-icon-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
-    .session-exercise{box-shadow:none;padding-bottom:220px}
+    .session-exercise{box-shadow:none;padding-bottom:290px}
     .session-exercise .ex-head{padding:24px 0 10px}
     .session-exercise .ex-name{font-size:34px;line-height:1.1}
     .session-exercise .ex-dose{font-size:18px;font-weight:700;letter-spacing:.04em}
@@ -922,6 +928,7 @@
     let myProfile = null;
     let doneCache = {};
     let weightCache = {};
+    let doseCache = {};
 
     const COLOR_PALETTE = ['#ff2fa0','#3fa9e8','#8b5cf6','#10b981','#f59e0b','#ef4444','#06b6d4','#f472b6'];
     function colorForId(id){
@@ -933,21 +940,31 @@
 
     function isDone(day, ex, set){ return doneCache[key(day, ex, set)] === true; }
     function getWeight(day, ex){ return weightCache[weightKey(day, ex)] || ''; }
+    function getDose(day, ex){ return doseCache[weightKey(day, ex)] || ''; }
+    // The dose actually in effect for this exercise slot -- the user's saved
+    // override if they've customized sets/reps, otherwise the plan's own
+    // baseline. Every place that needs to know set count, not just display
+    // text, should read through this rather than the raw plan tuple.
+    function effectiveDose(day, ex){ return getDose(day, ex) || plan[day].exercises[ex][1]; }
 
     async function loadUserData(){
       const [{data: progressRows}, {data: weightRows}] = await Promise.all([
         sb.from('progress').select('day_idx,exercise_idx,set_idx,done').eq('user_id', currentUser.id),
-        sb.from('exercise_weights').select('day_idx,exercise_idx,weight').eq('user_id', currentUser.id)
+        sb.from('exercise_weights').select('day_idx,exercise_idx,weight,dose').eq('user_id', currentUser.id)
       ]);
       doneCache = {};
       weightCache = {};
+      doseCache = {};
       (progressRows || []).forEach(r=>{ if(r.done) doneCache[key(r.day_idx, r.exercise_idx, r.set_idx)] = true; });
-      (weightRows || []).forEach(r=>{ weightCache[weightKey(r.day_idx, r.exercise_idx)] = r.weight; });
+      (weightRows || []).forEach(r=>{
+        weightCache[weightKey(r.day_idx, r.exercise_idx)] = r.weight;
+        if(r.dose) doseCache[weightKey(r.day_idx, r.exercise_idx)] = r.dose;
+      });
     }
 
     async function resetDayProgress(dayIndex){
       plan[dayIndex].exercises.forEach((ex,exi)=>{
-        const count = setCount(ex[1]);
+        const count = setCount(effectiveDose(dayIndex, exi));
         for(let si=0; si<count; si++) delete doneCache[key(dayIndex, exi, si)];
       });
       await sb.from('progress').delete().eq('user_id', currentUser.id).eq('day_idx', dayIndex);
@@ -976,6 +993,31 @@
         user_id: currentUser.id, day_idx: day, exercise_idx: ex,
         weight, updated_at: new Date().toISOString()
       }, { onConflict: 'user_id,day_idx,exercise_idx' });
+    }
+
+    async function persistDose(day, ex, dose){
+      await sb.from('exercise_weights').upsert({
+        user_id: currentUser.id, day_idx: day, exercise_idx: ex,
+        dose, updated_at: new Date().toISOString()
+      }, { onConflict: 'user_id,day_idx,exercise_idx' });
+    }
+
+    // Dose strings vary a lot ("3 x 10–12", "2–3 x 12–20", "3 x 30–45 sec",
+    // "4 x 8–12/side") -- both the set count and the rep/time count can each
+    // independently be a plain number or a range. The stepper UI only edits
+    // a single number per field, so ranges collapse to their lower bound the
+    // first time a user touches the controls; after that it's just whatever
+    // they set.
+    function parseDose(dose){
+      const isTimed = /sec/i.test(dose);
+      const suffix = /\/side/i.test(dose) ? '/side' : '';
+      const m = dose.match(/(\d+)(?:[–-]\d+)?\s*x\s*(\d+)(?:[–-]\d+)?/i);
+      const sets = m ? Number(m[1]) : 3;
+      const repsOrSeconds = m ? Number(m[2]) : (isTimed ? 30 : 10);
+      return { sets, repsOrSeconds, isTimed, suffix };
+    }
+    function formatDose({sets, repsOrSeconds, isTimed, suffix}){
+      return `${sets} x ${repsOrSeconds}${isTimed ? ' sec' : ''}${suffix}`;
     }
 
     function setScreenState(state){ // 'auth' | 'setup' | 'questionnaire' | 'noplan' | 'app'
@@ -1317,14 +1359,14 @@
       const d = plan[i];
       let total=0, done=0;
       d.exercises.forEach((ex,exi)=>{
-        const count=setCount(ex[1]); total+=count;
+        const count=setCount(effectiveDose(i, exi)); total+=count;
         for(let si=0;si<count;si++) if(isDone(i,exi,si)) done++;
       });
       return {done, total, pct: total ? Math.round(done/total*100) : 0};
     }
 
     function exerciseDone(day, exi){
-      const count = setCount(plan[day].exercises[exi][1]);
+      const count = setCount(effectiveDose(day, exi));
       for(let si=0; si<count; si++){
         if(!isDone(day,exi,si)) return false;
       }
@@ -1349,7 +1391,7 @@
     function overallStats(){
       let total=0, done=0;
       plan.forEach((d,i)=>d.exercises.forEach((ex,exi)=>{
-        const count=setCount(ex[1]); total+=count;
+        const count=setCount(effectiveDose(i, exi)); total+=count;
         for(let si=0;si<count;si++) if(isDone(i,exi,si)) done++;
       }));
       return {done, total, pct: total ? Math.round(done/total*100) : 0};
@@ -1559,12 +1601,13 @@
 
       const exi = sessionExercise;
       const ex = day.exercises[exi];
-      const count = setCount(ex[1]);
+      const count = setCount(effectiveDose(sessionDay, exi));
       const dots = Array.from({length:count}, (_,si)=>{
         const done = isDone(sessionDay, exi, si);
         return `<div class="setdot${done?' done':''}" data-si="${si}" data-n="${si+1}">${done?'✓':si+1}</div>`;
       }).join('');
       const savedWeight = getWeight(sessionDay, exi);
+      const doseParsed = parseDose(effectiveDose(sessionDay, exi));
 
       const gifPath = ex[5];
       const figHtml = gifPath ? `<img src="${gifPath}" alt="${ex[0]}" loading="lazy">` : missingImageHtml;
@@ -1575,7 +1618,7 @@
         <article class="exercise session-exercise">
           <div class="ex-head">
             <div class="ex-name">${ex[0]}</div>
-            <div class="ex-dose">${ex[1]}</div>
+            <div class="ex-dose" id="sessExDose">${effectiveDose(sessionDay, exi)}</div>
           </div>
           <div class="fig-box${gifPath ? ' loading' : ''}">
             ${figHtml}
@@ -1583,6 +1626,26 @@
           </div>
           <div class="cue-divider"></div>
           <p class="cue">${ex[3]}</p>
+          <div class="weight-box">
+            <div class="weight-label-row">
+              <label>Sets &amp; ${doseParsed.isTimed ? 'Time' : 'Reps'}</label>
+              <span class="suggest-inline dose-suggest-inline" data-suggest="${ex[1]}">Suggested ${ex[1]}</span>
+            </div>
+            <div class="dose-steppers">
+              <div class="stepper">
+                <button type="button" class="stepper-btn" data-dose-field="sets" data-dir="-1">−</button>
+                <input type="text" inputmode="numeric" value="${doseParsed.sets}" data-dose-sets>
+                <button type="button" class="stepper-btn" data-dose-field="sets" data-dir="1">+</button>
+                <span class="stepper-caption">sets</span>
+              </div>
+              <div class="stepper">
+                <button type="button" class="stepper-btn" data-dose-field="reps" data-dir="-1">−</button>
+                <input type="text" inputmode="numeric" value="${doseParsed.repsOrSeconds}" data-dose-reps>
+                <button type="button" class="stepper-btn" data-dose-field="reps" data-dir="1">+</button>
+                <span class="stepper-caption">${doseParsed.isTimed ? 'sec' : 'reps'}</span>
+              </div>
+            </div>
+          </div>
           <div class="weight-box">
             <div class="weight-label-row">
               <label>Weight</label>
@@ -1616,22 +1679,26 @@
         imgEl.onerror = ()=>{ clearFigLoading(); figBoxEl.innerHTML = missingImageHtml; };
       }
 
-      body.querySelectorAll('.setdot').forEach(dot=>{
-        dot.onclick = ()=>{
-          const si = Number(dot.dataset.si);
-          const nowDone = !isDone(sessionDay, exi, si);
-          doneCache[key(sessionDay, exi, si)] = nowDone;
-          dot.classList.toggle('done', nowDone);
-          dot.textContent = nowDone ? '✓' : dot.dataset.n;
-          updateProgress();
-          persistSetDone(sessionDay, exi, si, nowDone);
-          if(exerciseDone(sessionDay, exi)){
-            setTimeout(()=>{ if(sessionDay!==null && sessionExercise===exi) advanceExercise(); }, 450);
-          }
-        };
-      });
+      function bindSetDots(){
+        body.querySelectorAll('.setdot').forEach(dot=>{
+          dot.onclick = ()=>{
+            const si = Number(dot.dataset.si);
+            const nowDone = !isDone(sessionDay, exi, si);
+            doneCache[key(sessionDay, exi, si)] = nowDone;
+            dot.classList.toggle('done', nowDone);
+            dot.textContent = nowDone ? '✓' : dot.dataset.n;
+            updateProgress();
+            persistSetDone(sessionDay, exi, si, nowDone);
+            if(exerciseDone(sessionDay, exi)){
+              setTimeout(()=>{ if(sessionDay!==null && sessionExercise===exi) advanceExercise(); }, 450);
+            }
+          };
+        });
+      }
+      bindSetDots();
+
       const weightInputEl = body.querySelector('input[data-weight]');
-      const suggestInlineEl = body.querySelector('.suggest-inline');
+      const suggestInlineEl = body.querySelector('.suggest-inline:not(.dose-suggest-inline)');
       let lastSavedWeight = weightInputEl.value;
       let savedFlashTimer = null;
       weightInputEl.oninput = e=>{
@@ -1650,6 +1717,61 @@
           suggestInlineEl.classList.remove('saved');
         }, 1700);
       };
+
+      // ---- sets/reps stepper editing ----
+      const setsInputEl = body.querySelector('input[data-dose-sets]');
+      const repsInputEl = body.querySelector('input[data-dose-reps]');
+      const doseSuggestEl = body.querySelector('.dose-suggest-inline');
+      const exDoseHeaderEl = document.getElementById('sessExDose');
+      let currentDoseParsed = doseParsed;
+      let doseFlashTimer = null;
+
+      function applyDoseChange(){
+        const sets = Math.max(1, Number(setsInputEl.value) || currentDoseParsed.sets);
+        const repsOrSeconds = Math.max(1, Number(repsInputEl.value) || currentDoseParsed.repsOrSeconds);
+        currentDoseParsed = {...currentDoseParsed, sets, repsOrSeconds};
+        const newDose = formatDose(currentDoseParsed);
+        doseCache[weightKey(sessionDay, exi)] = newDose;
+        persistDose(sessionDay, exi, newDose);
+        exDoseHeaderEl.textContent = newDose;
+
+        // Set count may have changed -- redraw the dots (preserving done state
+        // for any set index that still exists) without tearing down the rest
+        // of the screen (steppers keep focus, no jank).
+        const newCount = setCount(newDose);
+        const setsEl = body.querySelector('.sets');
+        setsEl.innerHTML = Array.from({length:newCount}, (_,si)=>{
+          const done = isDone(sessionDay, exi, si);
+          return `<div class="setdot${done?' done':''}" data-si="${si}" data-n="${si+1}">${done?'✓':si+1}</div>`;
+        }).join('');
+        bindSetDots();
+        updateProgress();
+
+        doseSuggestEl.textContent = 'Saved for next week';
+        doseSuggestEl.classList.add('saved');
+        clearTimeout(doseFlashTimer);
+        doseFlashTimer = setTimeout(()=>{
+          doseSuggestEl.textContent = 'Suggested ' + doseSuggestEl.dataset.suggest;
+          doseSuggestEl.classList.remove('saved');
+        }, 1700);
+      }
+
+      setsInputEl.oninput = applyDoseChange;
+      repsInputEl.oninput = applyDoseChange;
+
+      body.querySelectorAll('.stepper-btn').forEach(btn=>{
+        btn.onclick = ()=>{
+          const field = btn.dataset.doseField;
+          const dir = Number(btn.dataset.dir);
+          if(field === 'sets'){
+            setsInputEl.value = Math.max(1, Number(setsInputEl.value) + dir);
+          } else {
+            const step = currentDoseParsed.isTimed ? 5 : 1;
+            repsInputEl.value = Math.max(1, Number(repsInputEl.value) + dir * step);
+          }
+          applyDoseChange();
+        };
+      });
     }
 
     document.getElementById('historyEntryBtn').onclick = openHistory;
