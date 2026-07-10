@@ -169,7 +169,7 @@
     .reset-icon-btn svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:2.2;stroke-linecap:round;stroke-linejoin:round}
 
     .session-exercise{box-shadow:none;padding-bottom:290px}
-    .session-exercise .ex-head{padding:24px 0 10px}
+    .session-exercise .ex-head{padding:0 0 10px}
     .session-exercise .ex-name{font-size:34px;line-height:1.1}
     .session-exercise .ex-dose{font-size:18px;font-weight:700;letter-spacing:.04em}
     .session-exercise .cue-divider{margin:0 0 12px}
@@ -1617,21 +1617,17 @@
 
       body.innerHTML = `
         <article class="exercise session-exercise">
-          <div class="ex-head">
-            <div class="ex-name">${ex[0]}</div>
-            <div class="ex-dose" id="sessExDose">${effectiveDose(sessionDay, exi)}</div>
-          </div>
           <div class="fig-box${gifPath ? ' loading' : ''}">
             ${figHtml}
             ${hasSwapCandidates ? `<button id="swapBtn" class="swap-btn"><svg viewBox="0 0 24 24"><path d="M17 2l4 4-4 4M3 11V9a4 4 0 0 1 4-4h14M7 22l-4-4 4-4M21 13v2a4 4 0 0 1-4 4H3"/></svg>Swap exercise</button>` : ''}
           </div>
+          <div class="ex-head">
+            <div class="ex-name">${ex[0]}</div>
+            <div class="ex-dose" id="sessExDose">${effectiveDose(sessionDay, exi)}</div>
+          </div>
           <div class="cue-divider"></div>
           <p class="cue">${ex[3]}</p>
           <div class="weight-box">
-            <div class="weight-label-row">
-              <label>Sets &amp; ${doseParsed.isTimed ? 'Time' : 'Reps'}</label>
-              <span class="suggest-inline dose-suggest-inline" data-suggest="${ex[1]}">Suggested ${ex[1]}</span>
-            </div>
             <div class="dose-steppers">
               <div class="stepper">
                 <span class="stepper-caption">Sets</span>
@@ -1703,7 +1699,7 @@
       bindSetDots();
 
       const weightInputEl = body.querySelector('input[data-weight]');
-      const suggestInlineEl = body.querySelector('.suggest-inline:not(.dose-suggest-inline)');
+      const suggestInlineEl = body.querySelector('.suggest-inline');
       let lastSavedWeight = weightInputEl.value;
       let savedFlashTimer = null;
       weightInputEl.oninput = e=>{
@@ -1726,10 +1722,8 @@
       // ---- sets/reps stepper editing ----
       const setsInputEl = body.querySelector('input[data-dose-sets]');
       const repsInputEl = body.querySelector('input[data-dose-reps]');
-      const doseSuggestEl = body.querySelector('.dose-suggest-inline');
       const exDoseHeaderEl = document.getElementById('sessExDose');
       let currentDoseParsed = doseParsed;
-      let doseFlashTimer = null;
 
       function applyDoseChange(){
         const sets = Math.max(1, Number(setsInputEl.value) || currentDoseParsed.sets);
@@ -1751,14 +1745,6 @@
         }).join('');
         bindSetDots();
         updateProgress();
-
-        doseSuggestEl.textContent = 'Saved for next week';
-        doseSuggestEl.classList.add('saved');
-        clearTimeout(doseFlashTimer);
-        doseFlashTimer = setTimeout(()=>{
-          doseSuggestEl.textContent = 'Suggested ' + doseSuggestEl.dataset.suggest;
-          doseSuggestEl.classList.remove('saved');
-        }, 1700);
       }
 
       setsInputEl.oninput = applyDoseChange;
