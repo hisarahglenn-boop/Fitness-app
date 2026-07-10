@@ -260,7 +260,7 @@
     .dp-thumb{flex:none;width:104px;height:113px;box-shadow:0 -1px 30px 0 var(--accent-cyan)}
     .dp-thumb img{width:100%;height:100%;object-fit:contain}
     .dp-section-label{font-size:12px;font-weight:800;color:#ebebeb;margin:20px 0 8px}
-    #dayPreviewList .dp-row{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #6e6b65}
+    #dayPreviewList .dp-row{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #6e6b65;opacity:0}
     #dayPreviewList .dp-row:last-child{border-bottom:none}
     .dp-thumb-sm{flex:none;width:64px;height:64px;border-radius:4px;overflow:hidden;background:#1f2937}
     .dp-thumb-sm img{width:100%;height:100%;object-fit:cover}
@@ -1533,27 +1533,166 @@
       });
     }
 
+    // ---------- SCREEN TRANSITIONS ----------
+    // Dashboard <-> Day Preview: the dashboard hero card grows/shrinks into the
+    // full screen (FLIP technique -- animate from the card's old rect to the
+    // screen's natural full-size rect). Day Preview <-> Session: a simple
+    // push/pop, since neither has a shared element to morph from.
+    const TRANSITION_EASE = 'cubic-bezier(.16,1,.3,1)';
+    let screenTransitionBusy = false;
+
+    // Animation.finished isn't reliable to await across every browser/automation
+    // context (observed hanging even once playState reports 'finished'), so
+    // completion is signalled with a plain timer matched to the animation's own
+    // duration rather than the WAAPI promise.
+    function morphCardToScreen(screenEl, fromRect, duration=440){
+      const toRect = screenEl.getBoundingClientRect();
+      if(!fromRect || !toRect.width) return Promise.resolve();
+      const sx = fromRect.width / toRect.width;
+      const sy = fromRect.height / toRect.height;
+      const dx = (fromRect.left + fromRect.width/2) - (toRect.left + toRect.width/2);
+      const dy = (fromRect.top + fromRect.height/2) - (toRect.top + toRect.height/2);
+      const anim = screenEl.animate([
+        { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})` },
+        { transform: 'translate(0, 0) scale(1, 1)' }
+      ], { duration, easing: TRANSITION_EASE, fill: 'both' });
+      return new Promise(resolve=>setTimeout(()=>{ anim.cancel(); resolve(); }, duration));
+    }
+
+    function morphScreenToCard(screenEl, toRect, duration=380){
+      const fromRect = screenEl.getBoundingClientRect();
+      if(!toRect || !fromRect.width) return Promise.resolve();
+      const sx = toRect.width / fromRect.width;
+      const sy = toRect.height / fromRect.height;
+      const dx = (toRect.left + toRect.width/2) - (fromRect.left + fromRect.width/2);
+      const dy = (toRect.top + toRect.height/2) - (fromRect.top + fromRect.height/2);
+      const anim = screenEl.animate([
+        { transform: 'translate(0, 0) scale(1, 1)', opacity: 1 },
+        { transform: `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`, opacity: 0.3 }
+      ], { duration, easing: TRANSITION_EASE, fill: 'both' });
+      return new Promise(resolve=>setTimeout(()=>{ anim.cancel(); resolve(); }, duration));
+    }
+
+    function staggerReveal(container, selector, step=40, duration=340){
+      const items = Array.from(container.querySelectorAll(selector));
+      items.forEach((item,i)=>item.animate(
+        [{ opacity:0, transform:'translateY(10px)' }, { opacity:1, transform:'translateY(0)' }],
+        { duration, delay:i*step, easing:TRANSITION_EASE, fill:'both' }
+      ));
+      const total = duration + Math.max(0, items.length-1)*step;
+      return new Promise(resolve=>setTimeout(()=>{
+        // Explicitly pin the end state via inline style rather than trusting
+        // the animation's own interpolated state -- cancel() alone reverts to
+        // the underlying CSS (opacity:0), and that's the visible end state we
+        // actually want here, unlike the other transition helpers below.
+        items.forEach(item=>{
+          item.getAnimations().forEach(a=>a.cancel());
+          item.style.opacity = '1';
+          item.style.transform = 'none';
+        });
+        resolve();
+      }, total));
+    }
+
+    // Temporarily overlays `enterEl` on top of `exitEl` (both normally sit in
+    // normal document flow) so they can slide past each other, then restores
+    // normal flow once the animation settles.
+    function pushTransition(exitEl, enterEl, duration=380){
+      [exitEl, enterEl].forEach(el=>{ el.style.position='fixed'; el.style.inset='0'; });
+      exitEl.style.zIndex = '25';
+      enterEl.style.zIndex = '26';
+      enterEl.hidden = false;
+      const exitAnim = exitEl.animate(
+        [{ transform:'translateX(0)', opacity:1 }, { transform:'translateX(-18%)', opacity:0.5 }],
+        { duration, easing:TRANSITION_EASE, fill:'forwards' }
+      );
+      const enterAnim = enterEl.animate(
+        [{ transform:'translateX(100%)' }, { transform:'translateX(0)' }],
+        { duration, easing:TRANSITION_EASE, fill:'forwards' }
+      );
+      return new Promise(resolve=>setTimeout(()=>{
+        exitAnim.cancel(); enterAnim.cancel();
+        [exitEl, enterEl].forEach(el=>{ el.style.position=''; el.style.inset=''; el.style.zIndex=''; });
+        exitEl.hidden = true;
+        resolve();
+      }, duration));
+    }
+
     // ---------- DAY PREVIEW ----------
     let previewDay = null;
 
     function openDayPreview(dayIndex){
+      if(screenTransitionBusy) return;
       previewDay = dayIndex;
+      const heroEl = document.getElementById('dayHero');
+      const fromRect = heroEl ? heroEl.getBoundingClientRect() : null;
+
       document.getElementById('tabbar').style.display = 'none';
       const topbarExitEl = document.getElementById('topbarExit');
       topbarExitEl.hidden = false;
       topbarExitEl.onclick = closeDayPreview;
       document.documentElement.classList.add('theme-dark');
-      document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-daypreview');
-      window.scrollTo({top:0, behavior:'smooth'});
+
+      const dashboardEl = document.getElementById('screen-dashboard');
+      const dpEl = document.getElementById('screen-daypreview');
+      document.querySelectorAll('.screen').forEach(s=>{ if(s!==dashboardEl && s!==dpEl) s.hidden = true; });
+      dpEl.hidden = false;
       renderDayPreview();
+      window.scrollTo({top:0, behavior:'instant'});
+
+      const revealList = ()=>staggerReveal(document.getElementById('dayPreviewList'), '.dp-row');
+
+      if(fromRect){
+        screenTransitionBusy = true;
+        dpEl.style.position = 'fixed';
+        dpEl.style.inset = '0';
+        dpEl.style.zIndex = '15';
+        morphCardToScreen(dpEl, fromRect).then(()=>{
+          dashboardEl.hidden = true;
+          dpEl.style.position = ''; dpEl.style.inset = ''; dpEl.style.zIndex = '';
+          screenTransitionBusy = false;
+          revealList();
+        });
+      } else {
+        dashboardEl.hidden = true;
+        revealList();
+      }
     }
 
     function closeDayPreview(){
-      previewDay = null;
+      if(screenTransitionBusy) return;
+      const dpEl = document.getElementById('screen-daypreview');
       document.getElementById('tabbar').style.display = 'flex';
       document.getElementById('topbarExit').hidden = true;
-      document.documentElement.classList.remove('theme-dark');
-      switchScreen('dashboard');
+      document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.screen==='dashboard'));
+
+      const dashboardEl = document.getElementById('screen-dashboard');
+      document.querySelectorAll('.screen').forEach(s=>{ if(s!==dpEl) s.hidden = (s!==dashboardEl); });
+      updateProgress();
+      renderDashboard();
+      window.scrollTo({top:0, behavior:'instant'});
+
+      const heroEl = document.getElementById('dayHero');
+      const toRect = heroEl ? heroEl.getBoundingClientRect() : null;
+      previewDay = null;
+
+      const finish = ()=>{
+        document.documentElement.classList.remove('theme-dark');
+        dpEl.hidden = true;
+        dpEl.style.position=''; dpEl.style.inset=''; dpEl.style.zIndex='';
+        dpEl.style.opacity=''; dpEl.style.transform='';
+        screenTransitionBusy = false;
+      };
+
+      if(toRect){
+        screenTransitionBusy = true;
+        dpEl.style.position = 'fixed';
+        dpEl.style.inset = '0';
+        dpEl.style.zIndex = '15';
+        morphScreenToCard(dpEl, toRect).then(finish);
+      } else {
+        finish();
+      }
     }
 
     function renderDayPreview(){
@@ -1599,6 +1738,7 @@
 
     // ---------- SESSION ----------
     function openSession(dayIndex){
+      if(screenTransitionBusy) return;
       sessionDay = dayIndex;
       sessionExercise = firstIncompleteExercise(dayIndex);
       document.getElementById('tabbar').style.display = 'none';
@@ -1606,17 +1746,57 @@
       topbarExitEl.hidden = false;
       topbarExitEl.onclick = closeSession;
       document.documentElement.classList.add('theme-dark');
-      document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-session');
-      window.scrollTo({top:0, behavior:'smooth'});
+
+      const dpEl = document.getElementById('screen-daypreview');
+      const sessEl = document.getElementById('screen-session');
+      const cameFromPreview = dpEl && !dpEl.hidden;
+      document.querySelectorAll('.screen').forEach(s=>{ if(s!==dpEl && s!==sessEl) s.hidden = true; });
+      sessEl.hidden = true;
       renderSession();
+      window.scrollTo({top:0, behavior:'instant'});
+
+      if(cameFromPreview){
+        screenTransitionBusy = true;
+        pushTransition(dpEl, sessEl).then(()=>{ screenTransitionBusy = false; });
+      } else {
+        sessEl.hidden = false;
+      }
     }
 
     function closeSession(){
+      if(screenTransitionBusy) return;
+      const sessEl = document.getElementById('screen-session');
       sessionDay = null;
       document.getElementById('tabbar').style.display = 'flex';
       document.getElementById('topbarExit').hidden = true;
-      document.documentElement.classList.remove('theme-dark');
-      switchScreen('dashboard');
+      document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.screen==='dashboard'));
+
+      const dashboardEl = document.getElementById('screen-dashboard');
+      document.querySelectorAll('.screen').forEach(s=>{ if(s!==sessEl) s.hidden = (s!==dashboardEl); });
+      updateProgress();
+      renderDashboard();
+      window.scrollTo({top:0, behavior:'instant'});
+
+      const heroEl = document.getElementById('dayHero');
+      const toRect = heroEl ? heroEl.getBoundingClientRect() : null;
+
+      const finish = ()=>{
+        document.documentElement.classList.remove('theme-dark');
+        sessEl.hidden = true;
+        sessEl.style.position=''; sessEl.style.inset=''; sessEl.style.zIndex='';
+        sessEl.style.opacity=''; sessEl.style.transform='';
+        screenTransitionBusy = false;
+      };
+
+      if(toRect){
+        screenTransitionBusy = true;
+        sessEl.style.position = 'fixed';
+        sessEl.style.inset = '0';
+        sessEl.style.zIndex = '15';
+        morphScreenToCard(sessEl, toRect).then(finish);
+      } else {
+        finish();
+      }
     }
 
     function openHistory(){
