@@ -489,6 +489,13 @@
       <div id="sessionBody"></div>
     </main>
 
+    <!-- DAY PREVIEW (drill-in from Dashboard, before starting a session) -->
+    <main class="screen" id="screen-daypreview" hidden>
+      <div class="day-hero" id="dayPreviewHero"></div>
+      <div class="section-label">Exercises</div>
+      <div id="dayPreviewList"></div>
+    </main>
+
     <!-- HISTORY (drill-in from Guide, not a top-level tab) -->
     <main class="screen" id="screen-progress" hidden>
       <div class="history-stats-row">
@@ -1410,35 +1417,42 @@
     }
 
     // ---------- DASHBOARD ----------
-    function renderDashboard(){
-      const bigIndex = dashboardCurrentDay();
-      const bigStats = dayStats(bigIndex);
-      const bigDay = plan[bigIndex];
-
-      const heroEl = document.getElementById('dayHero');
-      const ctaLabel = bigStats.pct===100 ? 'Review day' : (bigStats.done>0 ? 'Resume workout' : 'Start workout');
-      const heroImg = muscleImageFor(bigDay.subtitle);
-      heroEl.innerHTML = `
-        ${bigStats.pct===100 ? '<div class="badge-done">✓ Done</div>' : ''}
-        <h2>${bigDay.title}: ${bigDay.subtitle}</h2>
+    // Shared by the dashboard hero card and the Day Preview screen's hero card.
+    function heroCardHtml(dayIndex){
+      const stats = dayStats(dayIndex);
+      const day = plan[dayIndex];
+      const ctaLabel = stats.pct===100 ? 'Review day' : (stats.done>0 ? 'Resume workout' : 'Start workout');
+      const heroImg = muscleImageFor(day.subtitle);
+      return `
+        ${stats.pct===100 ? '<div class="badge-done">✓ Done</div>' : ''}
+        <h2>${day.title}: ${day.subtitle}</h2>
         ${heroImg ? `<div class="hero-image loading"><img src="${heroImg}" alt=""></div>` : ''}
         <div class="meta-row">
-          <p class="meta-exercises">${bigDay.exercises.length} exercises · ${bigStats.total} sets</p>
-          <p class="meta-frac">${bigStats.done}/${bigStats.total}</p>
+          <p class="meta-exercises">${day.exercises.length} exercises · ${stats.total} sets</p>
+          <p class="meta-frac">${stats.done}/${stats.total}</p>
         </div>
-        ${bigStats.done>0 ? `<div class="bar"><div style="width:${bigStats.pct}%"></div></div>` : ''}
-        <button class="cta${bigStats.pct===100?' done':''}">${ctaLabel}</button>
+        ${stats.done>0 ? `<div class="bar"><div style="width:${stats.pct}%"></div></div>` : ''}
+        <button class="cta${stats.pct===100?' done':''}">${ctaLabel}</button>
       `;
-      heroEl.onclick = ()=>openSession(bigIndex);
+    }
 
+    function bindHeroImageLoading(heroEl){
       const heroImgEl = heroEl.querySelector('.hero-image img');
-      if(heroImgEl){
-        const heroImgBoxEl = heroImgEl.closest('.hero-image');
-        const clearHeroLoading = ()=>heroImgBoxEl.classList.remove('loading');
-        if(heroImgEl.complete) clearHeroLoading();
-        heroImgEl.onload = clearHeroLoading;
-        heroImgEl.onerror = ()=>heroImgBoxEl.remove();
-      }
+      if(!heroImgEl) return;
+      const heroImgBoxEl = heroImgEl.closest('.hero-image');
+      const clearHeroLoading = ()=>heroImgBoxEl.classList.remove('loading');
+      if(heroImgEl.complete) clearHeroLoading();
+      heroImgEl.onload = clearHeroLoading;
+      heroImgEl.onerror = ()=>heroImgBoxEl.remove();
+    }
+
+    function renderDashboard(){
+      const bigIndex = dashboardCurrentDay();
+
+      const heroEl = document.getElementById('dayHero');
+      heroEl.innerHTML = heroCardHtml(bigIndex);
+      heroEl.onclick = ()=>openDayPreview(bigIndex);
+      bindHeroImageLoading(heroEl);
 
       const list = document.getElementById('otherDays');
       list.innerHTML = '';
@@ -1450,9 +1464,51 @@
         row.innerHTML = `
           <div class="dcs-info"><b>${d.title}</b><span>${d.subtitle}</span></div>
           <div class="dcs-status${s.pct===100?' done':''}">${s.pct===100?'Completed':`${s.done}/${s.total}`}</div>`;
-        row.onclick = ()=>openSession(i);
+        row.onclick = ()=>openDayPreview(i);
         list.appendChild(row);
       });
+    }
+
+    // ---------- DAY PREVIEW ----------
+    let previewDay = null;
+
+    function openDayPreview(dayIndex){
+      previewDay = dayIndex;
+      document.getElementById('tabbar').style.display = 'none';
+      const topbarExitEl = document.getElementById('topbarExit');
+      topbarExitEl.hidden = false;
+      topbarExitEl.onclick = closeDayPreview;
+      document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-daypreview');
+      window.scrollTo({top:0, behavior:'smooth'});
+      renderDayPreview();
+    }
+
+    function closeDayPreview(){
+      previewDay = null;
+      document.getElementById('tabbar').style.display = 'flex';
+      document.getElementById('topbarExit').hidden = true;
+      switchScreen('dashboard');
+    }
+
+    function renderDayPreview(){
+      const heroEl = document.getElementById('dayPreviewHero');
+      heroEl.innerHTML = heroCardHtml(previewDay);
+      heroEl.onclick = ()=>openSession(previewDay);
+      bindHeroImageLoading(heroEl);
+
+      const day = plan[previewDay];
+      const listEl = document.getElementById('dayPreviewList');
+      listEl.innerHTML = day.exercises.map((ex,exi)=>{
+        const gifPath = ex[5];
+        const img = gifPath ? `<img src="${gifPath}" alt="">` : `<div class="import-noimg"></div>`;
+        return `<div class="import-exercise-row">
+          ${img}
+          <div class="import-exercise-info">
+            <b>${ex[0]}</b>
+            <span>${effectiveDose(previewDay, exi)}</span>
+          </div>
+        </div>`;
+      }).join('');
     }
 
     // ---------- SESSION ----------
