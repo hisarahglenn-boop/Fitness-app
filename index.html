@@ -268,12 +268,12 @@
     .dp-row-content{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
     .dp-row-content b{font-size:15px;font-weight:700;color:#fff}
     .dp-row-content span{font-size:13px;color:#ebebeb}
-    .dp-bar{height:4px;background:rgba(255,255,255,.16);border-radius:2px;overflow:hidden;margin:4px 0 4px}
+    .dp-bar{height:4px;background:rgba(255,255,255,.16);border-radius:2px;overflow:hidden;margin:0 0 12px}
     .dp-bar > div{height:100%;background:#fff;border-radius:2px;transition:width .4s var(--ease)}
-    #dayPreviewMeta{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:4px 0 20px}
+    #dayPreviewMeta{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 10px}
     #dayPreviewMeta .meta-exercises{margin:0;color:#bebebe;font-size:14px;font-weight:500;white-space:nowrap}
     #dayPreviewMeta .meta-frac{margin:0;color:#fff;font-size:14px;font-weight:900;white-space:nowrap}
-    #screen-daypreview{padding-bottom:40px}
+    #screen-daypreview{padding-bottom:70px}
     .dp-footer{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;background:#000;border-top:1px solid #6e6b65}
     .dp-footer-inner{max-width:520px;width:100%;padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
     #dayPreviewCta{width:100%;background:#fff;border:none;color:#000;font-weight:900;font-size:18px;text-transform:uppercase;text-decoration:none;padding:10px;text-align:center;border-radius:5px;box-shadow:0 1px 24px 0 var(--accent-cyan);transition:opacity .12s var(--ease);cursor:pointer}
@@ -563,10 +563,10 @@
       <div class="dp-header" id="dayPreviewHeader"></div>
       <div class="dp-section-label">Exercises</div>
       <div id="dayPreviewList"></div>
-      <div class="dp-bar" id="dayPreviewBar" hidden><div></div></div>
-      <div class="meta-row" id="dayPreviewMeta"></div>
       <div class="dp-footer">
         <div class="dp-footer-inner">
+          <div class="meta-row" id="dayPreviewMeta"></div>
+          <div class="dp-bar" id="dayPreviewBar" hidden><div></div></div>
           <button class="cta" id="dayPreviewCta"></button>
         </div>
       </div>
@@ -1709,8 +1709,6 @@
         document.getElementById('dayPreviewHeader'),
         screen.querySelector('.dp-section-label'),
         ...screen.querySelectorAll('#dayPreviewList .dp-row'),
-        document.getElementById('dayPreviewBar'),
-        document.getElementById('dayPreviewMeta'),
         screen.querySelector('.dp-footer-inner')
       ].filter(el=>el && !el.hidden);
     }
