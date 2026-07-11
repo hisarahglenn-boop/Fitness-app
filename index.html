@@ -283,7 +283,7 @@
     /* Solo compositor-driven overlay used by the card-expand / collapse
        transitions. Real screens never leave normal document flow -- only this
        layer moves, so nothing can reflow or jump mid-animation. */
-    #morphLayer{position:fixed;inset:0;z-index:90;background:#000;display:none;pointer-events:none;will-change:transform,opacity;transform-origin:center}
+    #morphLayer{position:fixed;inset:0;z-index:90;background:#000;display:none;will-change:transform,opacity;transform-origin:center}
 
     /* ---- history screen (drill-in from Guide) ---- */
     .history-stats-row{display:flex;gap:32px;padding:8px 0 28px}
@@ -1569,12 +1569,18 @@
     document.body.appendChild(morphLayerEl);
 
     // Transform that visually places the full-viewport overlay onto `rect`.
+    // Measured against the layer's own box, not window.innerWidth/Height --
+    // those include classic scrollbars on desktop, which would offset the
+    // morph by the scrollbar width; the layer's rect is scrollbar-exact and
+    // in the same viewport coordinate space getBoundingClientRect uses.
     function morphRectTransform(rect){
-      const vw = window.innerWidth, vh = window.innerHeight;
+      const layerRect = morphLayerEl.getBoundingClientRect();
+      const vw = layerRect.width || window.innerWidth;
+      const vh = layerRect.height || window.innerHeight;
       const sx = Math.max(rect.width / vw, 0.001);
       const sy = Math.max(rect.height / vh, 0.001);
-      const dx = (rect.left + rect.width/2) - vw/2;
-      const dy = (rect.top + rect.height/2) - vh/2;
+      const dx = (rect.left + rect.width/2) - (layerRect.left + vw/2);
+      const dy = (rect.top + rect.height/2) - (layerRect.top + vh/2);
       return `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
     }
 
@@ -1583,17 +1589,25 @@
     // late in a shrink can legitimately start the next expand on this element).
     let morphGen = 0;
 
+    // border-radius is animated as its OWN animation: WebKit only composites
+    // an animation when every property in it is compositor-supported, so
+    // bundling borderRadius with transform/opacity would drag the whole morph
+    // onto the main thread on iOS -- exactly where renderDashboard is busy.
     function morphExpand(fromRect, duration=460){
       const gen = ++morphGen;
       morphLayerEl.style.display = 'block';
       const anim = morphLayerEl.animate([
-        { transform: morphRectTransform(fromRect), opacity: .55, borderRadius: '24px' },
+        { transform: morphRectTransform(fromRect), opacity: .55 },
         { opacity: 1, offset: .3 },
-        { transform: 'none', opacity: 1, borderRadius: '0px' }
+        { transform: 'none', opacity: 1 }
       ], { duration, easing: TRANSITION_EASE, fill: 'both' });
+      const radiusAnim = morphLayerEl.animate(
+        [{ borderRadius: '24px' }, { borderRadius: '0px' }],
+        { duration, easing: TRANSITION_EASE, fill: 'both' }
+      );
       // cancel() reverts to base CSS = untransformed full cover, which is
       // exactly the state the swap happens under -- no pinning needed.
-      return new Promise(res=>setTimeout(()=>{ anim.cancel(); res(); }, duration));
+      return new Promise(res=>setTimeout(()=>{ anim.cancel(); radiusAnim.cancel(); res(); }, duration));
     }
 
     function morphShrink(toRect, duration=460){
@@ -1601,10 +1615,31 @@
       morphLayerEl.style.display = 'block';
       const target = morphRectTransform(toRect);
       const anim = morphLayerEl.animate([
-        { transform: 'none', opacity: 1, borderRadius: '0px' },
-        { transform: target, opacity: 1, borderRadius: '24px', offset: .78 },
-        { transform: target, opacity: 0, borderRadius: '24px' }
+        { transform: 'none', opacity: 1 },
+        { transform: target, opacity: 1, offset: .78 },
+        { transform: target, opacity: 0 }
       ], { duration, easing: TRANSITION_EASE, fill: 'both' });
+      const radiusAnim = morphLayerEl.animate(
+        [{ borderRadius: '0px' }, { borderRadius: '24px' }],
+        { duration, easing: TRANSITION_EASE, fill: 'both' }
+      );
+      return new Promise(res=>setTimeout(()=>{
+        anim.cancel(); radiusAnim.cancel();
+        if(gen === morphGen) morphLayerEl.style.display = 'none';
+        res();
+      }, duration));
+    }
+
+    // Collapse fallback for when the target card/row isn't actually on screen
+    // (the dashboard re-renders scrolled to top, so a far-down schedule row
+    // can sit below the fold -- shrinking toward it would fly off-screen).
+    function morphFadeOut(duration=240){
+      const gen = ++morphGen;
+      morphLayerEl.style.display = 'block';
+      const anim = morphLayerEl.animate(
+        [{ opacity: 1 }, { opacity: 0 }],
+        { duration, easing: 'ease-out', fill: 'both' }
+      );
       return new Promise(res=>setTimeout(()=>{
         anim.cancel();
         if(gen === morphGen) morphLayerEl.style.display = 'none';
@@ -1623,20 +1658,38 @@
       });
     }
 
+    // Cascades are generation-counted like morphs: a cascadeIn's deferred
+    // cleanup must not fire once a newer cascade has claimed the same elements
+    // (it would cancel the newer animations mid-flight and snap content to
+    // full opacity for a few frames).
+    let cascadeGen = 0;
+
     function cascadeIn(parts, {step=40, duration=380, fromY=18}={}){
       if(!MOTION_OK || !parts.length){ clearPartStyles(parts); return Promise.resolve(); }
+      const gen = ++cascadeGen;
       parts.forEach((el,i)=>el.animate(
         [{ opacity:0, transform:`translateY(${fromY}px)` }, { opacity:1, transform:'translateY(0)' }],
         { duration, delay:i*step, easing:TRANSITION_EASE, fill:'both' }
       ));
-      const total = duration + (parts.length-1)*step;
-      return new Promise(res=>setTimeout(()=>{ clearPartStyles(parts); res(); }, total));
+      // Small buffer past the nominal end: WAAPI start times align to the next
+      // rendering opportunity, so a janky first paint (image-heavy screen)
+      // would otherwise make this cleanup fire before the tail finishes.
+      const total = duration + (parts.length-1)*step + 120;
+      return new Promise(res=>setTimeout(()=>{
+        if(gen === cascadeGen) clearPartStyles(parts);
+        res();
+      }, total));
     }
 
     function cascadeOut(parts, {duration=150, toY=-12}={}){
       if(!MOTION_OK || !parts.length) return Promise.resolve();
+      ++cascadeGen; // invalidate any pending cascadeIn cleanup on these elements
       parts.forEach(el=>el.animate(
-        [{ opacity:1, transform:'translateY(0)' }, { opacity:0, transform:`translateY(${toY}px)` }],
+        // Single-keyframe form: the browser fills in the FROM state from the
+        // element's current composited value, so a row that was only halfway
+        // through cascading in fades from where it actually is instead of
+        // flashing to full opacity first.
+        [{ opacity:0, transform:`translateY(${toY}px)` }],
         { duration, easing:EASE_ACCEL, fill:'both' }
       ));
       return new Promise(res=>setTimeout(()=>{
@@ -1681,6 +1734,14 @@
       return el ? el.getBoundingClientRect() : null;
     }
 
+    // Collapse toward the target if it's actually visible, otherwise just fade
+    // the cover out -- shrinking toward a below-the-fold row reads as the
+    // screen flying off into nowhere.
+    function morphCollapseTo(toRect){
+      const onScreen = toRect && toRect.bottom > 40 && toRect.top < window.innerHeight - 40;
+      return onScreen ? morphShrink(toRect) : morphFadeOut();
+    }
+
     // Micro-transition for moving between exercises inside a session (next /
     // back / auto-advance): the old card slips out toward where you came from,
     // the new one slides in from the travel direction. Only the article
@@ -1698,10 +1759,15 @@
       );
       setTimeout(()=>{
         outAnim.cancel();
+        sessionRerenderBusy = false;
+        // The session may have been closed during the out-phase (X is live the
+        // whole time) -- rendering now would read plan[null] and throw.
+        if(sessionDay === null) return;
         renderSession();
         window.scrollTo({top:0, behavior:'instant'});
         const newEl = body.querySelector('.session-exercise, .day-complete');
-        if(!newEl){ sessionRerenderBusy = false; return; }
+        if(!newEl) return;
+        sessionRerenderBusy = true;
         const inAnim = newEl.animate(
           [{ opacity:0, transform:`translateX(${34*dir}px)` }, { opacity:1, transform:'translateX(0)' }],
           { duration:300, easing:TRANSITION_EASE, fill:'both' }
@@ -1774,7 +1840,7 @@
         clearPartStyles(parts);
         const toRect = dashboardRectForDay(closingDay);
         if(!toRect){ morphHide(); screenTransitionBusy = false; return; }
-        morphShrink(toRect);
+        morphCollapseTo(toRect);
         // Unlock once the dashboard is revealed around the collapsing rect --
         // the tail of the shrink is pure decoration and shouldn't eat taps.
         setTimeout(()=>{ screenTransitionBusy = false; }, 300);
@@ -1879,7 +1945,7 @@
         clearPartStyles(parts);
         const toRect = dashboardRectForDay(closingDay);
         if(!toRect){ morphHide(); screenTransitionBusy = false; return; }
-        morphShrink(toRect);
+        morphCollapseTo(toRect);
         // Same early unlock as closeDayPreview -- see comment there.
         setTimeout(()=>{ screenTransitionBusy = false; }, 300);
       });
@@ -1912,6 +1978,10 @@
     }
 
     function advanceExercise(){
+      // No session, or already on the day-complete screen (-1): nothing to
+      // advance -- a double-tapped "Finish day" would otherwise wrap -1 back
+      // around to exercise 0.
+      if(sessionDay === null || sessionExercise === -1) return;
       const exs = plan[sessionDay].exercises;
       if(sessionExercise < exs.length - 1){
         sessionExercise += 1;
@@ -2076,8 +2146,11 @@
           </div>
         </div>`;
 
-      document.getElementById('sessPrev').onclick = ()=>{ sessionExercise = Math.max(0, sessionExercise-1); rerenderSessionAnimated(-1); };
-      document.getElementById('sessNext').onclick = ()=>tryAdvanceExercise();
+      // Session content stays clickable through closeSession's brief fade, so
+      // nav taps landing in that window must not start a rerender of a
+      // session that's on its way out.
+      document.getElementById('sessPrev').onclick = ()=>{ if(screenTransitionBusy) return; sessionExercise = Math.max(0, sessionExercise-1); rerenderSessionAnimated(-1); };
+      document.getElementById('sessNext').onclick = ()=>{ if(screenTransitionBusy) return; tryAdvanceExercise(); };
       const swapBtnEl = document.getElementById('swapBtn');
       if(swapBtnEl) swapBtnEl.onclick = ()=>openSwapPicker(sessionDay, exi);
 
@@ -2101,7 +2174,10 @@
             updateProgress();
             persistSetDone(sessionDay, exi, si, nowDone);
             if(exerciseDone(sessionDay, exi)){
-              setTimeout(()=>{ if(sessionDay!==null && sessionExercise===exi) advanceExercise(); }, 450);
+              // Re-check completion at fire time: within the 450ms grace the
+              // user may have un-tapped a mis-tapped dot, added a set via the
+              // stepper, or started exiting the session entirely.
+              setTimeout(()=>{ if(sessionDay!==null && sessionExercise===exi && !screenTransitionBusy && exerciseDone(sessionDay, exi)) advanceExercise(); }, 450);
             }
           };
         });
@@ -2179,8 +2255,12 @@
 
     document.getElementById('resetDayBtn').onclick = async ()=>{
       if(sessionDay === null) return;
+      const resettingDay = sessionDay;
       if(!confirm('Reset all sets for this day? This can\'t be undone.')) return;
-      await resetDayProgress(sessionDay);
+      await resetDayProgress(resettingDay);
+      // The user may have exited the session while the delete was in flight --
+      // the dashboard already reflects the reset, so nothing left to render.
+      if(sessionDay !== resettingDay) return;
       sessionExercise = firstIncompleteExercise(sessionDay);
       renderSession();
       updateProgress();
@@ -2569,6 +2649,9 @@
     };
 
     function switchScreen(name){
+      // Tab taps mid-transition would swap screens underneath the morph
+      // overlay and get clobbered by the transition's own applyState.
+      if(screenTransitionBusy) return;
       document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== `screen-${name}`);
       document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.screen===name));
       window.scrollTo({top:0, behavior:'smooth'});
