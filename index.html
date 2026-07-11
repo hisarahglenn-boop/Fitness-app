@@ -216,6 +216,75 @@
     .day-complete p{color:var(--muted);font-size:14px;margin:0 0 28px}
     .day-complete button{background:var(--accent);color:var(--accent-ink);font-weight:900;padding:14px 26px;border-radius:16px;font-size:15px}
 
+    /* ---- dark theme (Session + Day Preview screens) ---- */
+    html.theme-dark, html.theme-dark body{background:#000}
+    .theme-dark .topbar{background:#000;border-bottom-color:transparent}
+    .theme-dark .wordmark, .theme-dark .week-chip{color:#fff}
+    .theme-dark .topbar-exit{border-color:#e5e5e5}
+    .theme-dark .topbar-exit svg{stroke:#fff}
+
+    .theme-dark #screen-session .ex-name{color:#fff}
+    .theme-dark #screen-session .ex-dose{color:#9ca3af}
+    .theme-dark #screen-session .cue{color:#cbd5e1}
+    .theme-dark #screen-session .cue-divider{background:transparent}
+    .theme-dark .pip{background:#374151}
+    .theme-dark .pip.done{background:#fff}
+    .theme-dark .reset-icon-btn{color:#e5e5e5}
+
+    .theme-dark .stepper-caption{text-transform:none;color:#9ca3af;font-size:12px}
+    .theme-dark .stepper-btn{background:#111827;border:1px solid #374151;color:#fff;box-shadow:none}
+    .theme-dark .stepper-controls input[type="text"]{color:#f9fafb;font-size:20px}
+
+    .theme-dark .weight-box .weight-label-row label{color:#9ca3af;text-transform:none;font-size:12px}
+    .theme-dark .weight-box .suggest-inline{color:#9ca3af}
+    .theme-dark .weight-box .suggest-inline.saved{color:#fff}
+    .theme-dark input[data-weight]{background:#0b0f14;border:1px solid #374151;border-radius:8px;height:48px;padding:0 16px;color:#9ca3af}
+    .theme-dark input[data-weight]::placeholder{color:#9ca3af}
+    .theme-dark .weight-box-divider{background:transparent}
+
+    .theme-dark .setdot{background:transparent;border-color:#e5e5e5;color:transparent}
+    .theme-dark .setdot.done{border-color:#00e0ff;color:#fff}
+
+    .theme-dark .session-footer{background:#000;border-top-color:#6e6b65}
+    .theme-dark .session-nav button{border-color:#e5e5e5;color:#e5e5e5;background:transparent}
+
+    .theme-dark .day-complete h2{color:#fff}
+    .theme-dark .day-complete .check{background:#fff}
+    .theme-dark .day-complete .check svg{stroke:var(--accent)}
+    .theme-dark .day-complete button{background:#fff;color:#000;box-shadow:0 1px 12px 0 var(--accent-cyan)}
+
+    /* ---- day preview screen ---- */
+    .dp-badge-done{display:inline-block;background:#fff;color:var(--accent);font-size:11px;font-weight:900;padding:6px 10px;border-radius:0;margin-bottom:10px}
+    .dp-title-row{display:flex;align-items:flex-start;gap:6px}
+    .dp-title{flex:1;min-width:0;font-family:var(--font-display);font-weight:900;font-size:34px;line-height:1.1;color:#fff;margin:0}
+    .dp-thumb{flex:none;width:104px;height:113px}
+    .dp-thumb img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 -1px 22px var(--accent-cyan))}
+    .dp-section-label{font-size:12px;font-weight:800;color:#ebebeb;margin:20px 0 8px}
+    #dayPreviewList .dp-row{display:flex;align-items:center;gap:16px;padding:16px 0;border-bottom:1px solid #6e6b65}
+    #dayPreviewList .dp-row:last-child{border-bottom:none}
+    .dp-thumb-sm{flex:none;width:64px;height:64px;border-radius:4px;overflow:hidden;background:#1f2937}
+    .dp-thumb-sm img{width:100%;height:100%;object-fit:cover}
+    .dp-noimg{width:100%;height:100%}
+    .dp-row-content{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+    .dp-row-content b{font-size:15px;font-weight:700;color:#fff}
+    .dp-row-content span{font-size:13px;color:#ebebeb}
+    .dp-bar{height:4px;background:rgba(255,255,255,.16);border-radius:2px;overflow:hidden;margin:0 0 12px}
+    .dp-bar > div{height:100%;background:#fff;border-radius:2px;transition:width .4s var(--ease)}
+    #dayPreviewMeta{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 10px}
+    #dayPreviewMeta .meta-exercises{margin:0;color:#bebebe;font-size:14px;font-weight:500;white-space:nowrap}
+    #dayPreviewMeta .meta-frac{margin:0;color:#fff;font-size:14px;font-weight:900;white-space:nowrap}
+    #screen-daypreview{padding-bottom:70px}
+    .dp-footer{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;background:#000;border-top:1px solid #6e6b65}
+    .dp-footer-inner{max-width:520px;width:100%;padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
+    #dayPreviewCta{width:100%;background:#fff;border:none;color:#000;font-weight:900;font-size:18px;text-transform:uppercase;text-decoration:none;padding:10px;text-align:center;border-radius:5px;box-shadow:0 1px 24px 0 var(--accent-cyan);transition:opacity .12s var(--ease);cursor:pointer}
+    #dayPreviewCta:active{opacity:.6}
+    #dayPreviewCta.done{color:rgba(0,0,0,.6)}
+
+    /* Solo compositor-driven overlay used by the card-expand / collapse
+       transitions. Real screens never leave normal document flow -- only this
+       layer moves, so nothing can reflow or jump mid-animation. */
+    #morphLayer{position:fixed;inset:0;z-index:90;background:#000;display:none;will-change:transform,opacity;transform-origin:center}
+
     /* ---- history screen (drill-in from Guide) ---- */
     .history-stats-row{display:flex;gap:32px;padding:8px 0 28px}
     .history-stat{display:flex;flex-direction:column;gap:4px}
@@ -487,6 +556,20 @@
         </button>
       </div>
       <div id="sessionBody"></div>
+    </main>
+
+    <!-- DAY PREVIEW (drill-in from Dashboard, before starting a session) -->
+    <main class="screen" id="screen-daypreview" hidden>
+      <div class="dp-header" id="dayPreviewHeader"></div>
+      <div class="dp-section-label">Exercises</div>
+      <div id="dayPreviewList"></div>
+      <div class="dp-footer">
+        <div class="dp-footer-inner">
+          <div class="meta-row" id="dayPreviewMeta"></div>
+          <div class="dp-bar" id="dayPreviewBar" hidden><div></div></div>
+          <button class="cta" id="dayPreviewCta"></button>
+        </div>
+      </div>
     </main>
 
     <!-- HISTORY (drill-in from Guide, not a top-level tab) -->
@@ -1410,35 +1493,42 @@
     }
 
     // ---------- DASHBOARD ----------
-    function renderDashboard(){
-      const bigIndex = dashboardCurrentDay();
-      const bigStats = dayStats(bigIndex);
-      const bigDay = plan[bigIndex];
-
-      const heroEl = document.getElementById('dayHero');
-      const ctaLabel = bigStats.pct===100 ? 'Review day' : (bigStats.done>0 ? 'Resume workout' : 'Start workout');
-      const heroImg = muscleImageFor(bigDay.subtitle);
-      heroEl.innerHTML = `
-        ${bigStats.pct===100 ? '<div class="badge-done">✓ Done</div>' : ''}
-        <h2>${bigDay.title}: ${bigDay.subtitle}</h2>
+    // Shared by the dashboard hero card and the Day Preview screen's hero card.
+    function heroCardHtml(dayIndex){
+      const stats = dayStats(dayIndex);
+      const day = plan[dayIndex];
+      const ctaLabel = stats.pct===100 ? 'Review day' : (stats.done>0 ? 'Resume workout' : 'Start workout');
+      const heroImg = muscleImageFor(day.subtitle);
+      return `
+        ${stats.pct===100 ? '<div class="badge-done">✓ Done</div>' : ''}
+        <h2>${day.title}: ${day.subtitle}</h2>
         ${heroImg ? `<div class="hero-image loading"><img src="${heroImg}" alt=""></div>` : ''}
         <div class="meta-row">
-          <p class="meta-exercises">${bigDay.exercises.length} exercises · ${bigStats.total} sets</p>
-          <p class="meta-frac">${bigStats.done}/${bigStats.total}</p>
+          <p class="meta-exercises">${day.exercises.length} exercises · ${stats.total} sets</p>
+          <p class="meta-frac">${stats.done}/${stats.total}</p>
         </div>
-        ${bigStats.done>0 ? `<div class="bar"><div style="width:${bigStats.pct}%"></div></div>` : ''}
-        <button class="cta${bigStats.pct===100?' done':''}">${ctaLabel}</button>
+        ${stats.done>0 ? `<div class="bar"><div style="width:${stats.pct}%"></div></div>` : ''}
+        <button class="cta${stats.pct===100?' done':''}">${ctaLabel}</button>
       `;
-      heroEl.onclick = ()=>openSession(bigIndex);
+    }
 
+    function bindHeroImageLoading(heroEl){
       const heroImgEl = heroEl.querySelector('.hero-image img');
-      if(heroImgEl){
-        const heroImgBoxEl = heroImgEl.closest('.hero-image');
-        const clearHeroLoading = ()=>heroImgBoxEl.classList.remove('loading');
-        if(heroImgEl.complete) clearHeroLoading();
-        heroImgEl.onload = clearHeroLoading;
-        heroImgEl.onerror = ()=>heroImgBoxEl.remove();
-      }
+      if(!heroImgEl) return;
+      const heroImgBoxEl = heroImgEl.closest('.hero-image');
+      const clearHeroLoading = ()=>heroImgBoxEl.classList.remove('loading');
+      if(heroImgEl.complete) clearHeroLoading();
+      heroImgEl.onload = clearHeroLoading;
+      heroImgEl.onerror = ()=>heroImgBoxEl.remove();
+    }
+
+    function renderDashboard(){
+      const bigIndex = dashboardCurrentDay();
+
+      const heroEl = document.getElementById('dayHero');
+      heroEl.innerHTML = heroCardHtml(bigIndex);
+      heroEl.onclick = ()=>openDayPreview(bigIndex, heroEl.getBoundingClientRect());
+      bindHeroImageLoading(heroEl);
 
       const list = document.getElementById('otherDays');
       list.innerHTML = '';
@@ -1450,29 +1540,413 @@
         row.innerHTML = `
           <div class="dcs-info"><b>${d.title}</b><span>${d.subtitle}</span></div>
           <div class="dcs-status${s.pct===100?' done':''}">${s.pct===100?'Completed':`${s.done}/${s.total}`}</div>`;
-        row.onclick = ()=>openSession(i);
+        row.dataset.day = i;
+        row.onclick = ()=>openDayPreview(i, row.getBoundingClientRect());
         list.appendChild(row);
       });
     }
 
+    // ---------- SCREEN TRANSITIONS ----------
+    // Motion design: opening a day grows a dedicated black overlay (#morphLayer)
+    // from the tapped card's exact on-screen rect up to full screen, the real
+    // screens swap underneath while fully covered, then the new screen's
+    // content cascades in. Closing mirrors it: content fades, the overlay
+    // covers, screens swap, and the overlay shrinks back down onto the exact
+    // card/row it came from. Real screens never leave normal document flow --
+    // only the overlay and per-element transforms move, so nothing can reflow
+    // or jump mid-animation.
+    //
+    // Animation.finished isn't reliable to await in every context (observed
+    // hanging even after playState reports 'finished'), so completion is
+    // signalled by plain timers matched to each animation's duration.
+    const TRANSITION_EASE = 'cubic-bezier(.16,1,.3,1)';
+    const EASE_ACCEL = 'cubic-bezier(.4,0,1,1)';
+    const MOTION_OK = !(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
+    let screenTransitionBusy = false;
+
+    const morphLayerEl = document.createElement('div');
+    morphLayerEl.id = 'morphLayer';
+    document.body.appendChild(morphLayerEl);
+
+    // Transform that visually places the full-viewport overlay onto `rect`.
+    // Measured against the layer's own box, not window.innerWidth/Height --
+    // those include classic scrollbars on desktop, which would offset the
+    // morph by the scrollbar width; the layer's rect is scrollbar-exact and
+    // in the same viewport coordinate space getBoundingClientRect uses.
+    function morphRectTransform(rect){
+      const layerRect = morphLayerEl.getBoundingClientRect();
+      const vw = layerRect.width || window.innerWidth;
+      const vh = layerRect.height || window.innerHeight;
+      const sx = Math.max(rect.width / vw, 0.001);
+      const sy = Math.max(rect.height / vh, 0.001);
+      const dx = (rect.left + rect.width/2) - (layerRect.left + vw/2);
+      const dy = (rect.top + rect.height/2) - (layerRect.top + vh/2);
+      return `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
+    }
+
+    // Each morph bumps a generation counter; deferred cleanup only touches the
+    // layer if no newer morph has taken it over in the meantime (a tap landing
+    // late in a shrink can legitimately start the next expand on this element).
+    let morphGen = 0;
+
+    // border-radius is animated as its OWN animation: WebKit only composites
+    // an animation when every property in it is compositor-supported, so
+    // bundling borderRadius with transform/opacity would drag the whole morph
+    // onto the main thread on iOS -- exactly where renderDashboard is busy.
+    function morphExpand(fromRect, duration=460){
+      const gen = ++morphGen;
+      morphLayerEl.style.display = 'block';
+      const anim = morphLayerEl.animate([
+        { transform: morphRectTransform(fromRect), opacity: .55 },
+        { opacity: 1, offset: .3 },
+        { transform: 'none', opacity: 1 }
+      ], { duration, easing: TRANSITION_EASE, fill: 'both' });
+      const radiusAnim = morphLayerEl.animate(
+        [{ borderRadius: '24px' }, { borderRadius: '0px' }],
+        { duration, easing: TRANSITION_EASE, fill: 'both' }
+      );
+      // cancel() reverts to base CSS = untransformed full cover, which is
+      // exactly the state the swap happens under -- no pinning needed.
+      return new Promise(res=>setTimeout(()=>{ anim.cancel(); radiusAnim.cancel(); res(); }, duration));
+    }
+
+    function morphShrink(toRect, duration=460){
+      const gen = ++morphGen;
+      morphLayerEl.style.display = 'block';
+      const target = morphRectTransform(toRect);
+      const anim = morphLayerEl.animate([
+        { transform: 'none', opacity: 1 },
+        { transform: target, opacity: 1, offset: .78 },
+        { transform: target, opacity: 0 }
+      ], { duration, easing: TRANSITION_EASE, fill: 'both' });
+      const radiusAnim = morphLayerEl.animate(
+        [{ borderRadius: '0px' }, { borderRadius: '24px' }],
+        { duration, easing: TRANSITION_EASE, fill: 'both' }
+      );
+      return new Promise(res=>setTimeout(()=>{
+        anim.cancel(); radiusAnim.cancel();
+        if(gen === morphGen) morphLayerEl.style.display = 'none';
+        res();
+      }, duration));
+    }
+
+    // Collapse fallback for when the target card/row isn't actually on screen
+    // (the dashboard re-renders scrolled to top, so a far-down schedule row
+    // can sit below the fold -- shrinking toward it would fly off-screen).
+    function morphFadeOut(duration=240){
+      const gen = ++morphGen;
+      morphLayerEl.style.display = 'block';
+      const anim = morphLayerEl.animate(
+        [{ opacity: 1 }, { opacity: 0 }],
+        { duration, easing: 'ease-out', fill: 'both' }
+      );
+      return new Promise(res=>setTimeout(()=>{
+        anim.cancel();
+        if(gen === morphGen) morphLayerEl.style.display = 'none';
+        res();
+      }, duration));
+    }
+
+    function morphCoverNow(){ morphLayerEl.style.display = 'block'; }
+    function morphHide(){ morphLayerEl.style.display = 'none'; }
+
+    function clearPartStyles(parts){
+      parts.forEach(el=>{
+        el.getAnimations().forEach(a=>a.cancel());
+        el.style.opacity = '';
+        el.style.transform = '';
+      });
+    }
+
+    // Cascades are generation-counted like morphs: a cascadeIn's deferred
+    // cleanup must not fire once a newer cascade has claimed the same elements
+    // (it would cancel the newer animations mid-flight and snap content to
+    // full opacity for a few frames).
+    let cascadeGen = 0;
+
+    function cascadeIn(parts, {step=40, duration=380, fromY=18}={}){
+      if(!MOTION_OK || !parts.length){ clearPartStyles(parts); return Promise.resolve(); }
+      const gen = ++cascadeGen;
+      parts.forEach((el,i)=>el.animate(
+        [{ opacity:0, transform:`translateY(${fromY}px)` }, { opacity:1, transform:'translateY(0)' }],
+        { duration, delay:i*step, easing:TRANSITION_EASE, fill:'both' }
+      ));
+      // Small buffer past the nominal end: WAAPI start times align to the next
+      // rendering opportunity, so a janky first paint (image-heavy screen)
+      // would otherwise make this cleanup fire before the tail finishes.
+      const total = duration + (parts.length-1)*step + 120;
+      return new Promise(res=>setTimeout(()=>{
+        if(gen === cascadeGen) clearPartStyles(parts);
+        res();
+      }, total));
+    }
+
+    function cascadeOut(parts, {duration=150, toY=-12}={}){
+      if(!MOTION_OK || !parts.length) return Promise.resolve();
+      ++cascadeGen; // invalidate any pending cascadeIn cleanup on these elements
+      parts.forEach(el=>el.animate(
+        // Single-keyframe form: the browser fills in the FROM state from the
+        // element's current composited value, so a row that was only halfway
+        // through cascading in fades from where it actually is instead of
+        // flashing to full opacity first.
+        [{ opacity:0, transform:`translateY(${toY}px)` }],
+        { duration, easing:EASE_ACCEL, fill:'both' }
+      ));
+      return new Promise(res=>setTimeout(()=>{
+        // Pin the faded-out state before cancelling so nothing flashes back
+        // for the frame between animation teardown and the screen swap.
+        parts.forEach(el=>{
+          el.getAnimations().forEach(a=>a.cancel());
+          el.style.opacity = '0';
+        });
+        res();
+      }, duration));
+    }
+
+    function dayPreviewParts(){
+      const screen = document.getElementById('screen-daypreview');
+      return [
+        document.getElementById('dayPreviewHeader'),
+        screen.querySelector('.dp-section-label'),
+        ...screen.querySelectorAll('#dayPreviewList .dp-row'),
+        screen.querySelector('.dp-footer-inner')
+      ].filter(el=>el && !el.hidden);
+    }
+
+    function sessionParts(){
+      const screen = document.getElementById('screen-session');
+      const parts = [screen.querySelector('.breadcrumb-row')];
+      const article = screen.querySelector('#sessionBody .session-exercise');
+      if(article) parts.push(...article.children);
+      const complete = screen.querySelector('#sessionBody .day-complete');
+      if(complete) parts.push(complete);
+      parts.push(screen.querySelector('.session-footer-inner'));
+      return parts.filter(Boolean);
+    }
+
+    // The dashboard element a given day visually lives in -- the hero card for
+    // the featured day, its schedule row otherwise. Used as the collapse target.
+    function dashboardRectForDay(dayIndex){
+      const rowEl = document.querySelector(`#otherDays .day-card-small[data-day="${dayIndex}"]`);
+      const el = rowEl || document.getElementById('dayHero');
+      return el ? el.getBoundingClientRect() : null;
+    }
+
+    // Collapse toward the target if it's actually visible, otherwise just fade
+    // the cover out -- shrinking toward a below-the-fold row reads as the
+    // screen flying off into nowhere.
+    function morphCollapseTo(toRect){
+      const onScreen = toRect && toRect.bottom > 40 && toRect.top < window.innerHeight - 40;
+      return onScreen ? morphShrink(toRect) : morphFadeOut();
+    }
+
+    // Micro-transition for moving between exercises inside a session (next /
+    // back / auto-advance): the old card slips out toward where you came from,
+    // the new one slides in from the travel direction. Only the article
+    // animates -- transforming #sessionBody would break the fixed footer's
+    // viewport anchoring (a transformed ancestor becomes its containing block).
+    let sessionRerenderBusy = false;
+    function rerenderSessionAnimated(dir){
+      const body = document.getElementById('sessionBody');
+      const oldEl = body.querySelector('.session-exercise, .day-complete');
+      if(!MOTION_OK || !oldEl || sessionRerenderBusy){ renderSession(); return; }
+      sessionRerenderBusy = true;
+      const outAnim = oldEl.animate(
+        [{ opacity:1, transform:'translateX(0)' }, { opacity:0, transform:`translateX(${-26*dir}px)` }],
+        { duration:130, easing:EASE_ACCEL, fill:'both' }
+      );
+      setTimeout(()=>{
+        outAnim.cancel();
+        sessionRerenderBusy = false;
+        // The session may have been closed during the out-phase (X is live the
+        // whole time) -- rendering now would read plan[null] and throw.
+        if(sessionDay === null) return;
+        renderSession();
+        window.scrollTo({top:0, behavior:'instant'});
+        const newEl = body.querySelector('.session-exercise, .day-complete');
+        if(!newEl) return;
+        sessionRerenderBusy = true;
+        const inAnim = newEl.animate(
+          [{ opacity:0, transform:`translateX(${34*dir}px)` }, { opacity:1, transform:'translateX(0)' }],
+          { duration:300, easing:TRANSITION_EASE, fill:'both' }
+        );
+        setTimeout(()=>{ inAnim.cancel(); sessionRerenderBusy = false; }, 300);
+      }, 130);
+    }
+
+    // ---------- DAY PREVIEW ----------
+    let previewDay = null;
+
+    function openDayPreview(dayIndex, originRect){
+      if(screenTransitionBusy) return;
+      previewDay = dayIndex;
+      const fromRect = (MOTION_OK && originRect) ? originRect : null;
+
+      const applyState = ()=>{
+        document.getElementById('tabbar').style.display = 'none';
+        const topbarExitEl = document.getElementById('topbarExit');
+        topbarExitEl.hidden = false;
+        topbarExitEl.onclick = closeDayPreview;
+        document.documentElement.classList.add('theme-dark');
+        document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-daypreview');
+        renderDayPreview();
+        window.scrollTo({top:0, behavior:'instant'});
+      };
+
+      if(!fromRect){
+        applyState();
+        clearPartStyles(dayPreviewParts());
+        return;
+      }
+
+      screenTransitionBusy = true;
+      morphExpand(fromRect).then(()=>{
+        // Fully covered by the overlay: swap screens invisibly, drop the
+        // cover (black over black -- imperceptible), cascade the content in.
+        applyState();
+        morphHide();
+        // Unlock at the swap, not after the cascade tail -- the screen is
+        // fully interactive while rows are still settling in.
+        screenTransitionBusy = false;
+        cascadeIn(dayPreviewParts());
+      });
+    }
+
+    function closeDayPreview(){
+      if(screenTransitionBusy) return;
+      const closingDay = previewDay;
+
+      const applyState = ()=>{
+        previewDay = null;
+        document.getElementById('tabbar').style.display = 'flex';
+        document.getElementById('topbarExit').hidden = true;
+        document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.screen==='dashboard'));
+        document.documentElement.classList.remove('theme-dark');
+        document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-dashboard');
+        updateProgress();
+        renderDashboard();
+        window.scrollTo({top:0, behavior:'instant'});
+      };
+
+      if(!MOTION_OK){ applyState(); return; }
+
+      screenTransitionBusy = true;
+      const parts = dayPreviewParts();
+      cascadeOut(parts).then(()=>{
+        morphCoverNow();
+        applyState();
+        clearPartStyles(parts);
+        const toRect = dashboardRectForDay(closingDay);
+        if(!toRect){ morphHide(); screenTransitionBusy = false; return; }
+        morphCollapseTo(toRect);
+        // Unlock once the dashboard is revealed around the collapsing rect --
+        // the tail of the shrink is pure decoration and shouldn't eat taps.
+        setTimeout(()=>{ screenTransitionBusy = false; }, 300);
+      });
+    }
+
+    function renderDayPreview(){
+      const day = plan[previewDay];
+      const stats = dayStats(previewDay);
+      const heroImg = muscleImageFor(day.subtitle);
+
+      document.getElementById('dayPreviewHeader').innerHTML = `
+        ${stats.pct===100 ? '<div class="dp-badge-done">✓ Done</div>' : ''}
+        <div class="dp-title-row">
+          <h2 class="dp-title">${day.title}: ${day.subtitle}</h2>
+          ${heroImg ? `<div class="dp-thumb"><img src="${heroImg}" alt=""></div>` : ''}
+        </div>
+      `;
+
+      const listEl = document.getElementById('dayPreviewList');
+      listEl.innerHTML = day.exercises.map((ex,exi)=>{
+        const gifPath = ex[5];
+        const img = gifPath ? `<img src="${gifPath}" alt="">` : `<div class="dp-noimg"></div>`;
+        return `<div class="dp-row">
+          <div class="dp-thumb-sm">${img}</div>
+          <div class="dp-row-content">
+            <b>${ex[0]}</b>
+            <span>${effectiveDose(previewDay, exi)}</span>
+          </div>
+        </div>`;
+      }).join('');
+
+      const barEl = document.getElementById('dayPreviewBar');
+      barEl.hidden = stats.done === 0;
+      barEl.querySelector('div').style.width = `${stats.pct}%`;
+
+      document.getElementById('dayPreviewMeta').innerHTML = `
+        <p class="meta-exercises">${day.exercises.length} exercises · ${stats.total} sets</p>
+        <p class="meta-frac">${stats.done}/${stats.total}</p>
+      `;
+
+      const ctaEl = document.getElementById('dayPreviewCta');
+      ctaEl.textContent = stats.pct===100 ? 'Review day' : (stats.done>0 ? 'Resume workout' : 'Start workout');
+      ctaEl.classList.toggle('done', stats.pct===100);
+      ctaEl.onclick = ()=>openSession(previewDay);
+    }
+
     // ---------- SESSION ----------
     function openSession(dayIndex){
+      if(screenTransitionBusy) return;
       sessionDay = dayIndex;
       sessionExercise = firstIncompleteExercise(dayIndex);
-      document.getElementById('tabbar').style.display = 'none';
-      const topbarExitEl = document.getElementById('topbarExit');
-      topbarExitEl.hidden = false;
-      topbarExitEl.onclick = closeSession;
-      document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-session');
-      window.scrollTo({top:0, behavior:'smooth'});
-      renderSession();
+      const dpEl = document.getElementById('screen-daypreview');
+      const fromPreview = !dpEl.hidden;
+
+      const applyState = ()=>{
+        document.getElementById('tabbar').style.display = 'none';
+        const topbarExitEl = document.getElementById('topbarExit');
+        topbarExitEl.hidden = false;
+        topbarExitEl.onclick = closeSession;
+        document.documentElement.classList.add('theme-dark');
+        document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-session');
+        renderSession();
+        window.scrollTo({top:0, behavior:'instant'});
+      };
+
+      if(!MOTION_OK){ applyState(); return; }
+
+      screenTransitionBusy = true;
+      const previewEls = fromPreview ? dayPreviewParts() : [];
+      cascadeOut(previewEls, {toY:-14}).then(()=>{
+        applyState();
+        clearPartStyles(previewEls);
+        screenTransitionBusy = false;
+        cascadeIn(sessionParts(), {step:36, duration:340, fromY:20});
+      });
     }
 
     function closeSession(){
-      sessionDay = null;
-      document.getElementById('tabbar').style.display = 'flex';
-      document.getElementById('topbarExit').hidden = true;
-      switchScreen('dashboard');
+      if(screenTransitionBusy) return;
+      const closingDay = sessionDay;
+
+      const applyState = ()=>{
+        sessionDay = null;
+        document.getElementById('tabbar').style.display = 'flex';
+        document.getElementById('topbarExit').hidden = true;
+        document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.screen==='dashboard'));
+        document.documentElement.classList.remove('theme-dark');
+        document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== 'screen-dashboard');
+        updateProgress();
+        renderDashboard();
+        window.scrollTo({top:0, behavior:'instant'});
+      };
+
+      if(!MOTION_OK){ applyState(); return; }
+
+      screenTransitionBusy = true;
+      const parts = sessionParts();
+      cascadeOut(parts).then(()=>{
+        morphCoverNow();
+        applyState();
+        clearPartStyles(parts);
+        const toRect = dashboardRectForDay(closingDay);
+        if(!toRect){ morphHide(); screenTransitionBusy = false; return; }
+        morphCollapseTo(toRect);
+        // Same early unlock as closeDayPreview -- see comment there.
+        setTimeout(()=>{ screenTransitionBusy = false; }, 300);
+      });
     }
 
     function openHistory(){
@@ -1502,13 +1976,17 @@
     }
 
     function advanceExercise(){
+      // No session, or already on the day-complete screen (-1): nothing to
+      // advance -- a double-tapped "Finish day" would otherwise wrap -1 back
+      // around to exercise 0.
+      if(sessionDay === null || sessionExercise === -1) return;
       const exs = plan[sessionDay].exercises;
       if(sessionExercise < exs.length - 1){
         sessionExercise += 1;
       } else {
         sessionExercise = -1;
       }
-      renderSession();
+      rerenderSessionAnimated(1);
     }
 
     // Wraps advanceExercise: if the exercise being left has an undecided swap, ask
@@ -1666,8 +2144,11 @@
           </div>
         </div>`;
 
-      document.getElementById('sessPrev').onclick = ()=>{ sessionExercise = Math.max(0, sessionExercise-1); renderSession(); };
-      document.getElementById('sessNext').onclick = ()=>tryAdvanceExercise();
+      // Session content stays clickable through closeSession's brief fade, so
+      // nav taps landing in that window must not start a rerender of a
+      // session that's on its way out.
+      document.getElementById('sessPrev').onclick = ()=>{ if(screenTransitionBusy) return; sessionExercise = Math.max(0, sessionExercise-1); rerenderSessionAnimated(-1); };
+      document.getElementById('sessNext').onclick = ()=>{ if(screenTransitionBusy) return; tryAdvanceExercise(); };
       const swapBtnEl = document.getElementById('swapBtn');
       if(swapBtnEl) swapBtnEl.onclick = ()=>openSwapPicker(sessionDay, exi);
 
@@ -1691,7 +2172,10 @@
             updateProgress();
             persistSetDone(sessionDay, exi, si, nowDone);
             if(exerciseDone(sessionDay, exi)){
-              setTimeout(()=>{ if(sessionDay!==null && sessionExercise===exi) advanceExercise(); }, 450);
+              // Re-check completion at fire time: within the 450ms grace the
+              // user may have un-tapped a mis-tapped dot, added a set via the
+              // stepper, or started exiting the session entirely.
+              setTimeout(()=>{ if(sessionDay!==null && sessionExercise===exi && !screenTransitionBusy && exerciseDone(sessionDay, exi)) advanceExercise(); }, 450);
             }
           };
         });
@@ -1769,8 +2253,12 @@
 
     document.getElementById('resetDayBtn').onclick = async ()=>{
       if(sessionDay === null) return;
+      const resettingDay = sessionDay;
       if(!confirm('Reset all sets for this day? This can\'t be undone.')) return;
-      await resetDayProgress(sessionDay);
+      await resetDayProgress(resettingDay);
+      // The user may have exited the session while the delete was in flight --
+      // the dashboard already reflects the reset, so nothing left to render.
+      if(sessionDay !== resettingDay) return;
       sessionExercise = firstIncompleteExercise(sessionDay);
       renderSession();
       updateProgress();
@@ -2159,6 +2647,9 @@
     };
 
     function switchScreen(name){
+      // Tab taps mid-transition would swap screens underneath the morph
+      // overlay and get clobbered by the transition's own applyState.
+      if(screenTransitionBusy) return;
       document.querySelectorAll('.screen').forEach(s=>s.hidden = s.id !== `screen-${name}`);
       document.querySelectorAll('.tabbtn').forEach(b=>b.classList.toggle('active', b.dataset.screen===name));
       window.scrollTo({top:0, behavior:'smooth'});
