@@ -273,6 +273,9 @@
     #dayPreviewMeta{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:4px 0 20px}
     #dayPreviewMeta .meta-exercises{margin:0;color:#bebebe;font-size:14px;font-weight:500;white-space:nowrap}
     #dayPreviewMeta .meta-frac{margin:0;color:#fff;font-size:14px;font-weight:900;white-space:nowrap}
+    #screen-daypreview{padding-bottom:40px}
+    .dp-footer{position:fixed;left:0;right:0;bottom:0;z-index:50;display:flex;justify-content:center;background:#000;border-top:1px solid #6e6b65}
+    .dp-footer-inner{max-width:520px;width:100%;padding:14px 16px calc(14px + env(safe-area-inset-bottom))}
     #dayPreviewCta{width:100%;background:#fff;border:none;color:#000;font-weight:900;font-size:18px;text-transform:uppercase;text-decoration:none;padding:10px;text-align:center;border-radius:5px;box-shadow:0 1px 24px 0 var(--accent-cyan);transition:opacity .12s var(--ease);cursor:pointer}
     #dayPreviewCta:active{opacity:.6}
     #dayPreviewCta.done{color:rgba(0,0,0,.6)}
@@ -562,7 +565,11 @@
       <div id="dayPreviewList"></div>
       <div class="dp-bar" id="dayPreviewBar" hidden><div></div></div>
       <div class="meta-row" id="dayPreviewMeta"></div>
-      <button class="cta" id="dayPreviewCta"></button>
+      <div class="dp-footer">
+        <div class="dp-footer-inner">
+          <button class="cta" id="dayPreviewCta"></button>
+        </div>
+      </div>
     </main>
 
     <!-- HISTORY (drill-in from Guide, not a top-level tab) -->
@@ -1571,7 +1578,13 @@
       return `translate(${dx}px, ${dy}px) scale(${sx}, ${sy})`;
     }
 
+    // Each morph bumps a generation counter; deferred cleanup only touches the
+    // layer if no newer morph has taken it over in the meantime (a tap landing
+    // late in a shrink can legitimately start the next expand on this element).
+    let morphGen = 0;
+
     function morphExpand(fromRect, duration=460){
+      const gen = ++morphGen;
       morphLayerEl.style.display = 'block';
       const anim = morphLayerEl.animate([
         { transform: morphRectTransform(fromRect), opacity: .55, borderRadius: '24px' },
@@ -1584,6 +1597,7 @@
     }
 
     function morphShrink(toRect, duration=460){
+      const gen = ++morphGen;
       morphLayerEl.style.display = 'block';
       const target = morphRectTransform(toRect);
       const anim = morphLayerEl.animate([
@@ -1591,7 +1605,11 @@
         { transform: target, opacity: 1, borderRadius: '24px', offset: .78 },
         { transform: target, opacity: 0, borderRadius: '24px' }
       ], { duration, easing: TRANSITION_EASE, fill: 'both' });
-      return new Promise(res=>setTimeout(()=>{ morphLayerEl.style.display = 'none'; anim.cancel(); res(); }, duration));
+      return new Promise(res=>setTimeout(()=>{
+        anim.cancel();
+        if(gen === morphGen) morphLayerEl.style.display = 'none';
+        res();
+      }, duration));
     }
 
     function morphCoverNow(){ morphLayerEl.style.display = 'block'; }
@@ -1640,7 +1658,7 @@
         ...screen.querySelectorAll('#dayPreviewList .dp-row'),
         document.getElementById('dayPreviewBar'),
         document.getElementById('dayPreviewMeta'),
-        document.getElementById('dayPreviewCta')
+        screen.querySelector('.dp-footer-inner')
       ].filter(el=>el && !el.hidden);
     }
 
@@ -1756,7 +1774,10 @@
         clearPartStyles(parts);
         const toRect = dashboardRectForDay(closingDay);
         if(!toRect){ morphHide(); screenTransitionBusy = false; return; }
-        morphShrink(toRect).then(()=>{ screenTransitionBusy = false; });
+        morphShrink(toRect);
+        // Unlock once the dashboard is revealed around the collapsing rect --
+        // the tail of the shrink is pure decoration and shouldn't eat taps.
+        setTimeout(()=>{ screenTransitionBusy = false; }, 300);
       });
     }
 
@@ -1858,7 +1879,9 @@
         clearPartStyles(parts);
         const toRect = dashboardRectForDay(closingDay);
         if(!toRect){ morphHide(); screenTransitionBusy = false; return; }
-        morphShrink(toRect).then(()=>{ screenTransitionBusy = false; });
+        morphShrink(toRect);
+        // Same early unlock as closeDayPreview -- see comment there.
+        setTimeout(()=>{ screenTransitionBusy = false; }, 300);
       });
     }
 
