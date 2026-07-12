@@ -1493,8 +1493,8 @@
     function muscleImageFor(subtitle){
       const s = (subtitle || '').toLowerCase();
       if(s.includes('glute')) return `${MUSCLE_IMAGE_BASE}/glutes.png`;
-      if(s.includes('ab')) return `${MUSCLE_IMAGE_BASE}/abs.png`;
-      if(s.includes('leg') || s.includes('quad') || s.includes('thigh')) return `${MUSCLE_IMAGE_BASE}/quads.png`;
+      if(s.includes('ab') || s.includes('core')) return `${MUSCLE_IMAGE_BASE}/abs.png`;
+      if(s.includes('leg') || s.includes('quad') || s.includes('thigh') || s.includes('lower') || s.includes('hamstring') || s.includes('calf')) return `${MUSCLE_IMAGE_BASE}/quads.png`;
       if(s.includes('arm') || s.includes('bicep') || s.includes('tricep') || s.includes('shoulder')) return `${MUSCLE_IMAGE_BASE}/biceps.png`;
       return null;
     }
