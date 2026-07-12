@@ -226,8 +226,12 @@ ${mustInclude.length ? `- The user specifically requested these exercises. Every
 - Each day should have 5-7 exercises.
 - Give each day a short title ("Day 1", "Day 2", etc.) and a subtitle describing its focus (e.g. "Heavy Glutes + Deadlift").
 
+Also explain your choices, written directly to the user ("you"/"your"), grounded in THEIR answers (goals, equipment, experience, injuries, notes):
+- "summary": 2-3 sentences on how you structured their week and why it fits them.
+- Each day gets a "why": ONE sentence on why that day's exercises were picked for them.
+
 Respond with ONLY a JSON object of this exact shape, no other text:
-{"days": [{"title": "Day 1", "subtitle": "...", "exerciseNames": ["Exact Name From Library", "..."]}]}`;
+{"summary": "...", "days": [{"title": "Day 1", "subtitle": "...", "why": "...", "exerciseNames": ["Exact Name From Library", "..."]}]}`;
 
   // Equipment photos ride along as URL image blocks (images first -- vision
   // guidance -- with the text prompt referring back to them). Anthropic
@@ -275,12 +279,24 @@ Respond with ONLY a JSON object of this exact shape, no other text:
 
       dayExercises = topUpDay(dayExercises, usedNames, 5, pool);
 
-      return {
+      const entry = {
         title: day.title || `Day ${i + 1}`,
         subtitle: day.subtitle || 'Workout',
         exercises: dayExercises.map(e => [e.name, e.dose, e.weight, e.cue, e.type, e.gifPath])
       };
+      // Per-day rationale for the native plan-preview screen. Stored with the
+      // plan (extra jsonb key -- both clients' day parsing ignores unknowns).
+      if (typeof day.why === 'string' && day.why.trim()) {
+        entry.why = day.why.trim().slice(0, 300);
+      }
+      return entry;
     }).filter(day => day.exercises.length > 0);
+
+    // Overall rationale shown once on the native preview; transient (not
+    // stored in profiles.plan -- days carry their own "why").
+    const summary = typeof parsed.summary === 'string' && parsed.summary.trim()
+      ? parsed.summary.trim().slice(0, 600)
+      : null;
 
     // "Must include" is a code-level guarantee, not just a prompt rule: any
     // user-requested exercise the model left out gets appended to the day
@@ -311,7 +327,7 @@ Respond with ONLY a JSON object of this exact shape, no other text:
       return;
     }
 
-    res.status(200).json({ plan });
+    res.status(200).json({ plan, summary });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
