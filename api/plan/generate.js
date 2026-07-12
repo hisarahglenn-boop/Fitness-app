@@ -4,7 +4,6 @@ const EQUIPMENT_GUIDANCE = {
   'home-limited': 'They have a home gym with limited equipment: dumbbell, bodyweight, and kettlebell exercises only.',
   'full-gym': 'They have full access to a commercial gym. Any equipment type is fine.',
   'bodyweight': 'They only have their bodyweight to work with. Bodyweight exercises only.',
-  'limited-gym': 'They train in a limited gym (e.g. an apartment-complex or hotel gym). Treat the attached equipment photos and their own description as the source of truth for what is available; only choose exercises performable with that equipment, plus bodyweight exercises.',
   'other': 'They described their equipment as: '
 };
 
@@ -22,13 +21,58 @@ const ALLOWED_EQUIPMENT = {
   'other': null
 };
 
-function equipmentGuidance(equipment, equipmentOther){
+// limited-gym guidance is built from what the user ACTUALLY provided --
+// telling the model that nonexistent photos are "the source of truth" makes
+// it hallucinate constraints, so each sentence is conditional.
+function equipmentGuidance(equipment, equipmentOther, hasPhotos){
   if(equipment === 'other') return EQUIPMENT_GUIDANCE.other + (equipmentOther || 'unspecified') + '. Use your best judgment about which library exercises fit.';
-  const base = EQUIPMENT_GUIDANCE[equipment] || 'No specific equipment constraint given.';
-  if(equipment === 'limited-gym' && equipmentOther){
-    return base + ' They described the equipment as: ' + equipmentOther;
+  if(equipment === 'limited-gym'){
+    let g = 'They train in a limited gym (e.g. an apartment-complex or hotel gym).';
+    if(hasPhotos) g += ' Treat the attached equipment photos as the source of truth for what is available; only choose exercises performable with that equipment, plus bodyweight exercises.';
+    if(equipmentOther) g += ' They described the equipment as: ' + equipmentOther + '.';
+    if(!hasPhotos && !equipmentOther) g += ' Assume a modest mixed setup (some dumbbells, one or two machines, maybe a cable stack) — prefer broadly-available equipment and bodyweight exercises over anything specialized.';
+    return g;
   }
-  return base;
+  return EQUIPMENT_GUIDANCE[equipment] || 'No specific equipment constraint given.';
+}
+
+// Windowed per-user rate limit, enforced with the CALLER's own JWT against
+// the RLS-protected generation_log table (insert/select own rows only, no
+// delete policy -- the caller can't reset their own counter). Fails OPEN on
+// infrastructure errors: a logging blip must never break onboarding, and an
+// attacker can't induce that failure from outside.
+const RATE_LIMIT_HOUR = 5;
+const RATE_LIMIT_DAY = 20;
+
+async function checkAndLogGeneration(authHeader, userId){
+  const restHeaders = {
+    apikey: SUPABASE_ANON_KEY,
+    Authorization: authHeader,
+    'Content-Type': 'application/json'
+  };
+  try {
+    const since = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+    const listRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/generation_log?select=created_at&created_at=gte.${encodeURIComponent(since)}&order=created_at.desc&limit=${RATE_LIMIT_DAY + 1}`,
+      { headers: restHeaders }
+    );
+    if (listRes.ok) {
+      const rows = await listRes.json();
+      if (rows.length >= RATE_LIMIT_DAY) return { allowed: false };
+      const hourAgo = Date.now() - 3600 * 1000;
+      const lastHour = rows.filter(r => new Date(r.created_at).getTime() >= hourAgo).length;
+      if (lastHour >= RATE_LIMIT_HOUR) return { allowed: false };
+    }
+    // Log the attempt (attempts, not successes -- error loops count too).
+    await fetch(`${SUPABASE_URL}/rest/v1/generation_log`, {
+      method: 'POST',
+      headers: restHeaders,
+      body: JSON.stringify({ user_id: userId })
+    });
+  } catch {
+    // fail open
+  }
+  return { allowed: true };
 }
 
 function libraryForEquipment(equipment){
@@ -87,6 +131,13 @@ module.exports = async (req, res) => {
     return;
   }
 
+  const authHeader = req.headers.authorization || req.headers.Authorization;
+  const rate = await checkAndLogGeneration(authHeader, user.id);
+  if (!rate.allowed) {
+    res.status(429).json({ error: 'Too many plan generations — try again in a bit.' });
+    return;
+  }
+
   let body = req.body;
   if (typeof body === 'string') {
     try { body = JSON.parse(body); } catch { body = {}; }
@@ -133,12 +184,17 @@ module.exports = async (req, res) => {
     .filter(n => poolByName.has(n))
     .slice(0, 15);
 
-  // Equipment photos: only public URLs from OUR questionnaire-media bucket --
-  // never fetch arbitrary caller-supplied hosts into the model context.
-  const PHOTO_URL_PREFIX = `${SUPABASE_URL}/storage/v1/object/public/questionnaire-media/`;
-  const photoUrls = (Array.isArray(equipmentPhotoUrls) ? equipmentPhotoUrls : [])
-    .filter(u => typeof u === 'string' && u.startsWith(PHOTO_URL_PREFIX))
-    .slice(0, 20);
+  // Equipment photos: only public URLs from the CALLER's OWN folder in our
+  // questionnaire-media bucket (never arbitrary hosts, never other users'
+  // folders), object name locked to a clean uuid.jpg, de-duplicated so one
+  // URL can't be replayed to inflate model-call cost.
+  const PHOTO_URL_PREFIX = `${SUPABASE_URL}/storage/v1/object/public/questionnaire-media/${String(user.id).toLowerCase()}/`;
+  const photoUrls = Array.from(new Set(
+    (Array.isArray(equipmentPhotoUrls) ? equipmentPhotoUrls : [])
+      .filter(u => typeof u === 'string'
+        && u.startsWith(PHOTO_URL_PREFIX)
+        && /^[a-z0-9-]+\.jpg$/.test(u.slice(PHOTO_URL_PREFIX.length)))
+  )).slice(0, 10);
 
   const prompt = `You are a fitness program designer building a personalized weekly workout plan.
 
@@ -149,7 +205,7 @@ User's questionnaire answers:
 - Experience level: ${experience}
 - Injuries or pain points: ${injuries || 'none mentioned'}
 
-Equipment guidance: ${equipmentGuidance(equipment, equipmentOther)}
+Equipment guidance: ${equipmentGuidance(equipment, equipmentOther, photoUrls.length > 0)}
 ${photoUrls.length ? `
 The images above are photos of the user's actual available equipment. FIRST inventory every piece of training equipment visible in them. Then choose only exercises that the inventoried equipment supports (bodyweight exercises are always allowed). The photos override any assumptions about what "${equipment}" typically includes.
 ` : ''}${notesText ? `
@@ -229,7 +285,11 @@ Respond with ONLY a JSON object of this exact shape, no other text:
     // "Must include" is a code-level guarantee, not just a prompt rule: any
     // user-requested exercise the model left out gets appended to the day
     // whose existing exercises share the most target areas with it.
-    if (plan.length) {
+    // EXCEPTION: when the user stated injuries, the prompt allows the model
+    // to omit a pick that conflicts with them -- forcing it back in would
+    // override the safety judgment, so injury-present omissions stand.
+    const injuriesStated = typeof injuries === 'string' && injuries.trim() && !/^none\.?$/i.test(injuries.trim());
+    if (plan.length && !injuriesStated) {
       for (const name of mustInclude) {
         if (usedNames.has(name)) continue;
         const ex = poolByName.get(name);
