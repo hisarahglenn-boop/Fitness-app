@@ -103,8 +103,15 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { targetAreas, equipment, equipmentOther, daysPerWeek, experience, injuries, notes, requestedExercises, equipmentPhotoUrls } = questionnaire;
+  const { targetAreas, equipment, equipmentOther, daysPerWeek, experience, injuries, notes, requestedExercises, equipmentPhotoUrls, postureFocus } = questionnaire;
   const days = Number(daysPerWeek) || 4;
+
+  // Posture concerns (optional multi-select: forward head, rounded shoulders...).
+  const posture = (Array.isArray(postureFocus) ? postureFocus : [])
+    .filter(p => typeof p === 'string')
+    .map(p => p.trim())
+    .filter(Boolean)
+    .slice(0, 5);
 
   const pool = libraryForEquipment(equipment);
   const libraryForPrompt = pool.map(e => ({
@@ -155,6 +162,9 @@ ${JSON.stringify(libraryForPrompt)}
 Build a ${days}-day weekly workout plan using ONLY exercises from this library, referenced by their EXACT "name" field (case-sensitive, must match exactly — do not invent exercises or rephrase names). Rules:
 - If experience is "new", avoid difficulty "advanced" and prefer "beginner".
 - If injuries/pain points are mentioned, avoid exercises likely to aggravate them (e.g. knee pain -> avoid heavy barbell squats/lunges, prefer hip thrusts, glute bridges, and RDLs instead of squats/lunges).
+- Granular target areas map onto the library's coarser tags — select by exercise name and type: "quads" (squats, lunges, leg press, step-ups), "hamstrings" (RDLs, hamstring curls, good mornings), and "calves" (calf raises) all live under the "legs"/"glutes" tags; "full-body" means broad, balanced coverage of all major muscle groups across the week rather than a single focus.
+${posture.length ? `- Posture concerns: ${posture.join(', ')}. Include posture-corrective work addressing these — rear-delt flies/rows, prone Y-raises, scapular push-ups, wall slides, face pulls, and upper-back rowing — with at least 2-3 such exercises spread across the week.
+` : ''}
 ${mustInclude.length ? `- The user specifically requested these exercises. Every one of them MUST appear in the plan, each on a day where it fits the split (only omit one if it clearly conflicts with their stated injuries): ${mustInclude.join('; ')}.
 ` : ''}- Distribute the chosen target areas sensibly across the week (e.g. a push/pull/legs split, an upper/lower split, or a focus-area rotation) based on daysPerWeek and which target areas were chosen — every chosen target area should get meaningful coverage across the week.
 - Each day should have 5-7 exercises.
