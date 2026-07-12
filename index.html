@@ -1365,9 +1365,16 @@
 
       statusEl.textContent = 'Building your plan… this can take a few seconds';
       try{
+        // Generation is authenticated server-side (it burns a model call) --
+        // pass the signed-in session's token.
+        const { data: sessionData } = await sb.auth.getSession();
+        const accessToken = sessionData && sessionData.session && sessionData.session.access_token;
         const res = await fetch('/api/plan/generate', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+            ...(accessToken ? { 'Authorization': `Bearer ${accessToken}` } : {})
+          },
           body: JSON.stringify({ questionnaire })
         });
         const body = await res.json();

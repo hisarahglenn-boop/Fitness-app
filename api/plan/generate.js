@@ -45,9 +45,37 @@ function topUpDay(dayExercises, usedNames, minCount, pool){
   return dayExercises;
 }
 
+const SUPABASE_URL = 'https://sqplklzjpougwdlinrhz.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_PVZYXtvvLl0wkORvTMx5CA_WhzaYAJf';
+
+// Plan generation costs a real model call, so it requires a signed-in user:
+// the caller passes their Supabase access token and we verify it against
+// GoTrue before doing anything expensive. Both clients (web questionnaire,
+// native onboarding) send the header; anonymous requests get a 401.
+async function verifyUser(req) {
+  const auth = (req.headers && (req.headers.authorization || req.headers.Authorization)) || '';
+  if (!auth.startsWith('Bearer ')) return null;
+  try {
+    const upstream = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
+      headers: { apikey: SUPABASE_ANON_KEY, Authorization: auth }
+    });
+    if (!upstream.ok) return null;
+    const user = await upstream.json();
+    return user && user.id ? user : null;
+  } catch {
+    return null;
+  }
+}
+
 module.exports = async (req, res) => {
   if (req.method !== 'POST') {
     res.status(405).json({ error: 'Method not allowed' });
+    return;
+  }
+
+  const user = await verifyUser(req);
+  if (!user) {
+    res.status(401).json({ error: 'Sign in required' });
     return;
   }
 
