@@ -5,15 +5,29 @@
 // original exercise entries (NO library matching -- that produced wrong and
 // missing exercises) -> ffmpeg cuts a real 8fps motion clip per exercise ->
 // Storage upload -> row update -> APNs push.
-const fs = require('fs');
 const path = require('path');
 
 const supa = require('../_lib/supabase.js');
 const video = require('../_lib/video.js');
 const apns = require('../_lib/apns.js');
 
-const BUCKET = 'import-media';
+// Source videos live in a PRIVATE bucket (no public read while queued); the
+// generated clips/thumbs go in the public bucket the app reads from.
+const SRC_BUCKET = 'import-src';
+const OUT_BUCKET = 'import-media';
 const MAX_EXERCISES = 20;
+
+// The exact shape the client uploads: {uid}/tmp/{uuid}.mp4. A prefix check
+// alone is NOT enough -- "uid/tmp/../../victim/..." starts with the prefix but
+// the WHATWG URL parser normalizes the ".." away, escaping the folder (and the
+// bucket) under the service key. Pin the whole path.
+const UUID_RE = '[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}';
+function isValidVideoPath(videoPath, userId) {
+  if (typeof videoPath !== 'string') return false;
+  if (videoPath.split('/').includes('..')) return false;
+  const re = new RegExp(`^${userId}/tmp/${UUID_RE}\\.mp4$`);
+  return re.test(videoPath);
+}
 
 // The 20-tag vocabulary the swap feature keys on (from exercise-library.json).
 const TYPE_TAGS = ['bridge', 'hinge', 'legraise', 'calf', 'row', 'armraise', 'press', 'curl',
@@ -24,12 +38,24 @@ const TYPE_TAGS = ['bridge', 'hinge', 'legraise', 'calf', 'row', 'armraise', 'pr
 // Compute; the local dev harness has no request context, so fall back to a
 // detached promise (the harness process stays alive anyway).
 function runAfterResponse(promise) {
+  // Always attach the logger (harmless on Vercel); hand the guarded promise to
+  // waitUntil when the package is present. The old try/catch relied on require
+  // throwing, which it never does once the dep is installed -- so on Vercel the
+  // job ran but errors went unlogged.
+  const guarded = promise.catch(err => console.error('background job error:', err));
   try {
     const { waitUntil } = require('@vercel/functions');
-    waitUntil(promise);
-  } catch {
-    promise.catch(err => console.error('background job error:', err));
-  }
+    waitUntil(guarded);
+  } catch {}
+}
+
+// User-facing failure copy: never leak raw ffmpeg/upstream error text to the
+// notification or the imports row. Full detail still goes to console.error.
+function friendlyError(err) {
+  const msg = String((err && err.message) || err || '');
+  if (msg.includes('duration')) return "We couldn't read that video. Try a different clip.";
+  if (msg.toLowerCase().includes('truncated')) return "That workout was too long to analyze. Try a shorter clip.";
+  return "We couldn't process this video. Try importing it again.";
 }
 
 module.exports = async (req, res) => {
@@ -50,10 +76,11 @@ module.exports = async (req, res) => {
       return;
     }
 
-    // The video must live in the caller's own tmp folder -- prevents one user
-    // pointing the job at another user's uploads.
-    if (typeof videoPath !== 'string' || !videoPath.startsWith(`${userId}/tmp/`)) {
-      res.status(400).json({ error: 'videoPath must be under your own tmp folder' });
+    // Strict path validation -- a prefix check is bypassable via ".." (the URL
+    // parser normalizes it away, escaping the folder AND the bucket under the
+    // service key).
+    if (!isValidVideoPath(videoPath, userId)) {
+      res.status(400).json({ error: 'Invalid videoPath' });
       return;
     }
 
@@ -79,10 +106,10 @@ module.exports = async (req, res) => {
 async function processJob({ importId, userId, videoPath, title, caption, hasThumb }) {
   const workdir = video.makeWorkdir();
   try {
-    // 1. Pull the source video out of Storage.
-    const bytes = await supa.downloadStorageObject(BUCKET, videoPath);
+    // 1. Stream the source video out of the private bucket to disk (never
+    // buffer 150MB in RAM; reject an oversized object by content-length).
     const localVideo = path.join(workdir, 'source.mp4');
-    fs.writeFileSync(localVideo, bytes);
+    await supa.downloadStorageObjectToFile(SRC_BUCKET, videoPath, localVideo);
 
     // 2. Analysis frames (~1fps, max 48, first 180s).
     const duration = await video.probeDuration(localVideo);
@@ -104,7 +131,7 @@ async function processJob({ importId, userId, videoPath, title, caption, hasThum
         const tStart = timestamps[a] != null ? Math.max(0, timestamps[a] - 0.5) : 0;
         const tEnd = timestamps[b] != null ? timestamps[b] + 0.5 : tStart + 3;
         const gif = await video.cutClipGif(localVideo, workdir, tStart, tEnd, i);
-        ex.gifPath = await supa.uploadStorageObject(BUCKET, `${userId}/${importId}/${i}.gif`, gif, 'image/gif');
+        ex.gifPath = await supa.uploadStorageObject(OUT_BUCKET, `${userId}/${importId}/${i}.gif`, gif, 'image/gif');
       } catch (err) {
         console.error(`clip ${i} failed:`, err.message);
         ex.gifPath = null;
@@ -120,19 +147,22 @@ async function processJob({ importId, userId, videoPath, title, caption, hasThum
     if (!hasThumb) {
       try {
         const thumb = await video.firstFrameJpeg(localVideo, workdir);
-        patch.thumbnail_url = await supa.uploadStorageObject(BUCKET, `${userId}/${importId}/thumb.jpg`, thumb, 'image/jpeg');
+        patch.thumbnail_url = await supa.uploadStorageObject(OUT_BUCKET, `${userId}/${importId}/thumb.jpg`, thumb, 'image/jpeg');
       } catch {}
     }
 
-    // 6. Persist, clean up, notify.
+    // 6. Persist, clean up, notify. Await the delete so the tmp video is gone
+    // before the waitUntil promise settles (a token-less user's push returns
+    // instantly, which would otherwise let the instance freeze mid-delete).
     await supa.updateImportRow(importId, patch);
-    await supa.deleteStorageObject(BUCKET, videoPath);
+    await supa.deleteStorageObject(SRC_BUCKET, videoPath);
     const n = patch.exercises.length;
     await apns.pushToUser(userId, 'Import ready',
       `${title || 'Your workout'} — ${n} exercise${n === 1 ? '' : 's'} extracted.`, { importId });
   } catch (err) {
     console.error('import job failed:', err);
-    await finishFailed(importId, userId, videoPath, String(err.message || err).slice(0, 500));
+    // Store/push a generic message; the real error is already in the log.
+    await finishFailed(importId, userId, videoPath, friendlyError(err));
   } finally {
     video.cleanupWorkdir(workdir);
   }
@@ -144,7 +174,7 @@ async function finishFailed(importId, userId, videoPath, message) {
   } catch (err) {
     console.error('failed-state update failed:', err);
   }
-  supa.deleteStorageObject(BUCKET, videoPath);
+  await supa.deleteStorageObject(SRC_BUCKET, videoPath); // awaited: see step 6
   try {
     await apns.pushToUser(userId, 'Import failed', message, { importId });
   } catch {}
@@ -174,12 +204,18 @@ async function generateExercises({ frames, timestamps, title, caption }) {
     },
     body: JSON.stringify({
       model: 'claude-sonnet-5',
-      max_tokens: 8000,
+      max_tokens: 16000,
       messages: [{ role: 'user', content }],
     }),
   });
   if (!res.ok) throw new Error(`Analysis call failed: ${res.status} ${await res.text()}`);
   const data = await res.json();
+  // A cut-off response yields a half-written JSON object that the greedy regex
+  // "recovers" into garbage or nothing -- treat truncation as an explicit
+  // (retryable-looking) failure instead of a silent "no exercises".
+  if (data.stop_reason === 'max_tokens') {
+    throw new Error('Analysis response truncated (max_tokens)');
+  }
   const text = (data.content || []).filter(b => b.type === 'text').map(b => b.text).join('');
 
   let parsed = null;

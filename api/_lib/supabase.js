@@ -3,9 +3,22 @@
 // writer in the codebase; everything else goes through the browser/app under
 // RLS. Keep it that way: this module must only ever operate on rows scoped to
 // a user id that came out of verifyToken().
+const fs = require('fs');
+const { pipeline } = require('stream/promises');
+const { Readable } = require('stream');
+
 const SUPABASE_URL = process.env.SUPABASE_URL;
 const ANON_KEY = process.env.SUPABASE_ANON_KEY;
 const SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+
+const MAX_VIDEO_BYTES = 160 * 1024 * 1024; // just above the client's 150MB cap
+
+// Storage object paths are user-influenced -- encode each segment so special
+// characters (and, combined with caller-side validation, traversal) can't
+// reshape the URL. Slashes stay as separators.
+function encodeObjectPath(objectPath) {
+  return String(objectPath).split('/').map(encodeURIComponent).join('/');
+}
 
 function assertEnv() {
   if (!SUPABASE_URL || !ANON_KEY || !SERVICE_KEY) {
@@ -55,27 +68,31 @@ async function updateImportRow(importId, patch) {
   if (!res.ok) throw new Error(`imports update failed: ${res.status} ${await res.text()}`);
 }
 
-async function downloadStorageObject(bucket, objectPath) {
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${objectPath}`, {
+// Streams the object to `destPath` instead of buffering it in RAM (source
+// videos are up to 150MB). Rejects an oversized object by content-length.
+async function downloadStorageObjectToFile(bucket, objectPath, destPath) {
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${encodeObjectPath(objectPath)}`, {
     headers: serviceHeaders(),
   });
   if (!res.ok) throw new Error(`storage download failed: ${res.status}`);
-  return Buffer.from(await res.arrayBuffer());
+  const len = Number(res.headers.get('content-length') || 0);
+  if (len && len > MAX_VIDEO_BYTES) throw new Error('source video too large');
+  await pipeline(Readable.fromWeb(res.body), fs.createWriteStream(destPath));
 }
 
 async function uploadStorageObject(bucket, objectPath, bytes, contentType) {
-  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${objectPath}`, {
+  const res = await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${encodeObjectPath(objectPath)}`, {
     method: 'POST',
     headers: serviceHeaders({ 'Content-Type': contentType, 'x-upsert': 'true' }),
     body: bytes,
   });
   if (!res.ok) throw new Error(`storage upload failed: ${res.status} ${await res.text()}`);
-  return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${objectPath}`;
+  return `${SUPABASE_URL}/storage/v1/object/public/${bucket}/${encodeObjectPath(objectPath)}`;
 }
 
 async function deleteStorageObject(bucket, objectPath) {
   try {
-    await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${objectPath}`, {
+    await fetch(`${SUPABASE_URL}/storage/v1/object/${bucket}/${encodeObjectPath(objectPath)}`, {
       method: 'DELETE',
       headers: serviceHeaders(),
     });
@@ -105,7 +122,7 @@ module.exports = {
   verifyToken,
   insertImportRow,
   updateImportRow,
-  downloadStorageObject,
+  downloadStorageObjectToFile,
   uploadStorageObject,
   deleteStorageObject,
   fetchDeviceTokens,
