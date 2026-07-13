@@ -300,6 +300,10 @@
     .history-track .history-fill{height:100%;border-radius:2px;transition:width .4s var(--ease)}
     .danger-btn{width:100%;background:transparent;border:1.5px solid #d64545;color:#d64545;font-weight:800;font-size:13.5px;padding:13px;border-radius:14px;margin:14px 0 0;transition:transform .12s var(--ease)}
     .danger-btn:active{transform:scale(.97)}
+    /* Neutral on purpose: starting a fresh week deletes nothing -- history,
+       weights, and sets/reps all carry over. Red read as destructive. */
+    .fresh-week-btn{width:100%;background:transparent;border:1.5px solid var(--border);color:var(--text);font-weight:800;font-size:13.5px;padding:13px;border-radius:14px;margin:14px 0 0;transition:transform .12s var(--ease)}
+    .fresh-week-btn:active{transform:scale(.97)}
 
     /* ---- guide screen ---- */
     .panel{background:none;border:none;border-radius:0;padding:0;margin:0 0 32px}
@@ -605,7 +609,7 @@
           <span>History</span>
           <span class="chevron">→</span>
         </button>
-        <button id="resetWeekBtn" class="danger-btn">Reset this week</button>
+        <button id="resetWeekBtn" class="fresh-week-btn">Start a fresh week</button>
       </section>
       <section class="panel" id="partnerPanel">
         <h4>Partner</h4>
@@ -2273,7 +2277,7 @@
     };
 
     document.getElementById('resetWeekBtn').onclick = async ()=>{
-      if(!confirm('Start a fresh week? All set checkmarks clear, but your saved weights and sets & reps are kept.')) return;
+      if(!confirm('Start a fresh week? Last week’s work is already saved to your history. This clears the checkmarks so you can go again — your weights and sets & reps carry over.')) return;
       await resetAllProgress();
       updateProgress();
       renderDashboard();
@@ -2343,6 +2347,8 @@
       const partnerColor = partnerLinked ? colorForId(partnerId) : null;
 
       const listEl = document.getElementById('historyList');
+      // Newest week first ("This week" on top); labels still index into the
+      // oldest-first bucket array, so compute them before reversing the render.
       listEl.innerHTML = myBuckets.map((b, i) => {
         const label = i === myBuckets.length - 1 ? 'This week'
           : i === myBuckets.length - 2 ? 'Last week'
@@ -2357,7 +2363,7 @@
               ${partnerLinked ? `<div class="history-track"><div class="history-fill" style="width:${partnerPct}%;background:${partnerColor}"></div></div>` : ''}
             </div>
           </div>`;
-      }).join('');
+      }).reverse().join('');
     }
 
     let partnerId = null;
