@@ -1496,9 +1496,8 @@
       if(s.includes('ab') || s.includes('core')) return `${MUSCLE_IMAGE_BASE}/abs.png`;
       if(s.includes('leg') || s.includes('quad') || s.includes('thigh') || s.includes('lower') || s.includes('hamstring') || s.includes('calf')) return `${MUSCLE_IMAGE_BASE}/quads.png`;
       if(s.includes('arm') || s.includes('bicep') || s.includes('tricep') || s.includes('shoulder') || s.includes('upper') || s.includes('back') || s.includes('pull') || s.includes('push')) return `${MUSCLE_IMAGE_BASE}/biceps.png`;
-      // 'body' last: 'lower body'/'upper body' already matched above.
-      if(s.includes('full') || s.includes('total') || s.includes('body')) return `${MUSCLE_IMAGE_BASE}/fullbody.png`;
-      return null;
+      // fullbody doubles as the no-match fallback so every day gets a hero.
+      return `${MUSCLE_IMAGE_BASE}/fullbody.png`;
     }
 
     // ---------- DASHBOARD ----------
