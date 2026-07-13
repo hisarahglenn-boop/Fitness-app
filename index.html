@@ -2273,7 +2273,7 @@
     };
 
     document.getElementById('resetWeekBtn').onclick = async ()=>{
-      if(!confirm('Reset all progress for this week? This can\'t be undone.')) return;
+      if(!confirm('Start a fresh week? All set checkmarks clear, but your saved weights and sets & reps are kept.')) return;
       await resetAllProgress();
       updateProgress();
       renderDashboard();
