@@ -154,7 +154,7 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { targetAreas, equipment, equipmentOther, daysPerWeek, experience, injuries, sex, notes, requestedExercises, equipmentPhotoUrls, postureFocus, focusDetails } = questionnaire;
+  const { targetAreas, equipment, equipmentOther, daysPerWeek, experience, injuries, sex, notes, requestedExercises, equipmentPhotoUrls, postureFocus, focusDetails, customExercises } = questionnaire;
   const days = Number(daysPerWeek) || 4;
 
   // Sex (male/female/other) -- informs default loading expectations/emphasis
@@ -196,6 +196,21 @@ module.exports = async (req, res) => {
     .filter(n => poolByName.has(n))
     .slice(0, 15);
 
+  // Custom exercises the user typed that are NOT in the library -- deduped
+  // (case-insensitively) against each other and against library names, capped.
+  // These are force-added to the plan after generation (no gif, default dose).
+  const seenCustom = new Set([...poolByName.keys()].map(n => n.toLowerCase()));
+  const customExts = [];
+  for (const raw of (Array.isArray(customExercises) ? customExercises : [])) {
+    if (typeof raw !== 'string') continue;
+    const name = raw.trim().slice(0, 80);
+    const key = name.toLowerCase();
+    if (!name || seenCustom.has(key)) continue;
+    seenCustom.add(key);
+    customExts.push(name);
+    if (customExts.length >= 10) break;
+  }
+
   // Equipment photos: only public URLs from the CALLER's OWN folder in our
   // questionnaire-media bucket (never arbitrary hosts, never other users'
   // folders), object name locked to a clean uuid.jpg, de-duplicated so one
@@ -236,6 +251,7 @@ ${posture.length ? `- Posture concerns: ${posture.join(', ')}. Include posture-c
 ` : ''}${emphasis.length ? `- Within the chosen target areas the user wants extra emphasis on: ${emphasis.join(', ')}. Bias exercise selection toward these specifics where the library allows, without neglecting the broader areas.
 ` : ''}
 ${mustInclude.length ? `- The user specifically requested these exercises. Every one of them MUST appear in the plan, each on a day where it fits the split (only omit one if it clearly conflicts with their stated injuries): ${mustInclude.join('; ')}.
+` : ''}${customExts.length ? `- Heads up: the user also requested ${customExts.length} custom exercise(s) NOT in the library (${customExts.join('; ')}). Do NOT put them in exerciseNames (they aren't in the library) -- they'll be added to the plan separately. Just leave a little room by choosing ${Math.max(4, 6 - Math.ceil(customExts.length / days))}-6 library exercises per day so the days don't get overloaded once they're added.
 ` : ''}- Distribute the chosen target areas sensibly across the week (e.g. a push/pull/legs split, an upper/lower split, or a focus-area rotation) based on daysPerWeek and which target areas were chosen — every chosen target area should get meaningful coverage across the week.
 - Each day should have 5-7 exercises.
 - Give each day a short title ("Day 1", "Day 2", etc.) and a subtitle describing its focus (e.g. "Heavy Glutes + Deadlift").
@@ -333,6 +349,20 @@ Respond with ONLY a JSON object of this exact shape, no other text:
         });
         plan[bestIdx].exercises.push([ex.name, ex.dose, ex.weight, ex.cue, ex.type, ex.gifPath]);
         usedNames.add(name);
+      }
+    }
+
+    // Force-add the user's custom (non-library) exercises. They have no gif
+    // (null -> the app shows a placeholder) and a neutral default dose the user
+    // can tune per-set in the session. Distributed to the lightest days so no
+    // single day balloons; tuple shape [name, dose, weight, cue, type, gifPath].
+    if (plan.length && customExts.length) {
+      for (const name of customExts) {
+        let lightestIdx = 0;
+        plan.forEach((day, idx) => {
+          if (day.exercises.length < plan[lightestIdx].exercises.length) lightestIdx = idx;
+        });
+        plan[lightestIdx].exercises.push([name, '3 x 10', '', 'Your requested exercise — adjust sets, reps, and weight to fit.', '', null]);
       }
     }
 
