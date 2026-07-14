@@ -41,8 +41,8 @@ function equipmentGuidance(equipment, equipmentOther, hasPhotos){
 // delete policy -- the caller can't reset their own counter). Fails OPEN on
 // infrastructure errors: a logging blip must never break onboarding, and an
 // attacker can't induce that failure from outside.
-const RATE_LIMIT_HOUR = 5;
-const RATE_LIMIT_DAY = 20;
+const RATE_LIMIT_HOUR = 15;
+const RATE_LIMIT_DAY = 60;
 
 async function checkAndLogGeneration(authHeader, userId){
   const restHeaders = {
@@ -271,33 +271,17 @@ Respond with ONLY a JSON object of this exact shape, no other text:
     ? [...photoUrls.map(url => ({ type: 'image', source: { type: 'url', url } })), { type: 'text', text: prompt }]
     : prompt;
 
-  try {
-    const upstream = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-5',
-        max_tokens: 8000,
-        messages: [{ role: 'user', content }]
-      })
-    });
+  // "Must include" is a code-level guarantee, not just a prompt rule: any
+  // user-requested exercise the model left out gets appended to the day whose
+  // existing exercises share the most target areas with it. EXCEPTION: when the
+  // user stated injuries, the prompt may omit a pick that conflicts with them --
+  // forcing it back in would override that safety judgment, so it stands.
+  const injuriesStated = typeof injuries === 'string' && injuries.trim() && !/^none\.?$/i.test(injuries.trim());
 
-    if (!upstream.ok) {
-      const errText = await upstream.text();
-      res.status(upstream.status).json({ error: 'Anthropic API error', detail: errText });
-      return;
-    }
-
-    const data = await upstream.json();
-    const textBlock = (data.content || []).find(b => b.type === 'text');
-    const text = (textBlock && textBlock.text) || '{}';
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { days: [] };
-
+  // Turn one parsed model response into a plan (empty array if none of its
+  // exercise names matched the library). Pure over the request-scoped inputs
+  // (pool, poolByName, mustInclude, customExts) so it can be retried cheaply.
+  function buildPlanFromParsed(parsed) {
     const libraryByName = new Map(pool.map(e => [e.name, e]));
     const usedNames = new Set();
 
@@ -322,19 +306,6 @@ Respond with ONLY a JSON object of this exact shape, no other text:
       return entry;
     }).filter(day => day.exercises.length > 0);
 
-    // Overall rationale shown once on the native preview; transient (not
-    // stored in profiles.plan -- days carry their own "why").
-    const summary = typeof parsed.summary === 'string' && parsed.summary.trim()
-      ? parsed.summary.trim().slice(0, 600)
-      : null;
-
-    // "Must include" is a code-level guarantee, not just a prompt rule: any
-    // user-requested exercise the model left out gets appended to the day
-    // whose existing exercises share the most target areas with it.
-    // EXCEPTION: when the user stated injuries, the prompt allows the model
-    // to omit a pick that conflicts with them -- forcing it back in would
-    // override the safety judgment, so injury-present omissions stand.
-    const injuriesStated = typeof injuries === 'string' && injuries.trim() && !/^none\.?$/i.test(injuries.trim());
     if (plan.length && !injuriesStated) {
       for (const name of mustInclude) {
         if (usedNames.has(name)) continue;
@@ -366,6 +337,74 @@ Respond with ONLY a JSON object of this exact shape, no other text:
       }
     }
 
+    return plan;
+  }
+
+  // A single model call is non-deterministic and occasionally returns a
+  // response whose exercise names match nothing in the library (-> empty plan)
+  // or isn't valid JSON. Rather than fail the user with "That didn't work" (and
+  // burn one of their rate-limit slots on every manual retry), retry internally
+  // up to MAX_ATTEMPTS before giving up. One user action stays one logged
+  // generation regardless of how many internal attempts it takes.
+  const MAX_ATTEMPTS = 2;
+
+  try {
+    let plan = [];
+    let summary = null;
+    let upstreamError = null;
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': key,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-5',
+          max_tokens: 8000,
+          messages: [{ role: 'user', content }]
+        })
+      });
+
+      if (!upstream.ok) {
+        const errText = await upstream.text();
+        // Transient upstream failures (overloaded / rate-limited / 5xx) are
+        // worth another attempt; surface anything else immediately.
+        if (attempt < MAX_ATTEMPTS && (upstream.status === 429 || upstream.status >= 500)) continue;
+        upstreamError = { status: upstream.status, detail: errText };
+        break;
+      }
+
+      const data = await upstream.json();
+      const textBlock = (data.content || []).find(b => b.type === 'text');
+      const text = (textBlock && textBlock.text) || '{}';
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      let parsed;
+      try {
+        parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { days: [] };
+      } catch {
+        parsed = { days: [] }; // malformed JSON: treat as empty so we retry, not 500
+      }
+
+      const built = buildPlanFromParsed(parsed);
+      if (built.length) {
+        plan = built;
+        // Overall rationale shown once on the native preview; transient (not
+        // stored in profiles.plan -- days carry their own "why").
+        summary = typeof parsed.summary === 'string' && parsed.summary.trim()
+          ? parsed.summary.trim().slice(0, 600)
+          : null;
+        break; // usable plan -- done
+      }
+      // Empty plan: loop and try once more (model non-determinism).
+    }
+
+    if (upstreamError) {
+      res.status(upstreamError.status).json({ error: 'Anthropic API error', detail: upstreamError.detail });
+      return;
+    }
     if (!plan.length) {
       res.status(422).json({ error: 'Could not generate a valid plan from the model response' });
       return;
