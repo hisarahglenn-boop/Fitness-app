@@ -3717,5 +3717,2701 @@
     "cue": "Squeeze the handles fully closed, control the release.",
     "type": "curl",
     "gifPath": "/api/gif/2288"
+  },
+  {
+    "name": "Chin-Up",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 6–10",
+    "weight": "Bodyweight",
+    "cue": "Pull chest to the bar, squeeze lats.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/1326"
+  },
+  {
+    "name": "Wide Grip Pull-Up",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 6–10",
+    "weight": "Bodyweight",
+    "cue": "Pull elbows down and back, wide grip.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/1429"
+  },
+  {
+    "name": "Close Grip Chin-Up",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 6–10",
+    "weight": "Bodyweight",
+    "cue": "Keep hands close, drive elbows to hips.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/1327"
+  },
+  {
+    "name": "Neutral Grip Pull-Up",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 6–10",
+    "weight": "Bodyweight",
+    "cue": "Keep palms facing in, pull chin over bar.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0651"
+  },
+  {
+    "name": "Weighted Pull-Up",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 4–6",
+    "weight": "10–25 lb added weight",
+    "cue": "Add weight via belt, pull chin over bar.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0841"
+  },
+  {
+    "name": "Muscle Up",
+    "targetAreas": [
+      "back",
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 3–5",
+    "weight": "Bodyweight",
+    "cue": "Pull explosively then transition over the bar.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0631"
+  },
+  {
+    "name": "Mixed Grip Chin-Up",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 6–10",
+    "weight": "Bodyweight",
+    "cue": "Alternate grip hands, pull chest to bar.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0627"
+  },
+  {
+    "name": "Archer Pull-Up",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 4–6/side",
+    "weight": "Bodyweight",
+    "cue": "Shift weight to one arm, straighten the other.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/3293"
+  },
+  {
+    "name": "One Arm Chin-Up",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 1–3/side",
+    "weight": "Bodyweight",
+    "cue": "Pull with one arm, brace your core hard.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0638"
+  },
+  {
+    "name": "L-Pull-Up",
+    "targetAreas": [
+      "back",
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 5–8",
+    "weight": "Bodyweight",
+    "cue": "Hold legs straight out, pull chin over bar.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/3418"
+  },
+  {
+    "name": "Machine Assisted Chin-Up",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 8–12",
+    "weight": "Moderate machine assistance",
+    "cue": "Set assistance weight, pull chest to handles.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0572"
+  },
+  {
+    "name": "Band Assisted Pull-Up",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 8–12",
+    "weight": "Light–moderate band assistance",
+    "cue": "Loop band under knee, pull chin over bar.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0970"
+  },
+  {
+    "name": "Machine Lat Pulldown",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Pull bar to upper chest, squeeze your lats.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0579"
+  },
+  {
+    "name": "Neutral Grip Lat Pulldown",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Pull handles to chest, keep elbows close.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0818"
+  },
+  {
+    "name": "Rope Lat Pulldown",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Pull rope to chest, spread ends apart.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0177"
+  },
+  {
+    "name": "Single-Arm Cable Pulldown",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "Moderate cable weight",
+    "cue": "Pull handle down to hip, squeeze lat.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/3563"
+  },
+  {
+    "name": "Barbell Pullover",
+    "targetAreas": [
+      "back",
+      "chest"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "40–60 lb",
+    "cue": "Lower bar behind head, keep arms slightly bent.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0073"
+  },
+  {
+    "name": "Machine Pullover",
+    "targetAreas": [
+      "back",
+      "chest"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Pull handles down in an arc, squeeze lats.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/2285"
+  },
+  {
+    "name": "Cable Squat Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Squat back then pull rope to chest.",
+    "type": "row",
+    "gifPath": "/api/gif/1717"
+  },
+  {
+    "name": "Kneeling Lat Stretch",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30–45 sec",
+    "weight": "Bodyweight",
+    "cue": "Sit back on heels, reach arms forward.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1346"
+  },
+  {
+    "name": "Standing Lateral Stretch",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 20–30 sec/side",
+    "weight": "Bodyweight",
+    "cue": "Reach overhead and lean sideways to stretch.",
+    "type": "stretch",
+    "gifPath": "/api/gif/0794"
+  },
+  {
+    "name": "Side Lying Floor Stretch",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 20–30 sec/side",
+    "weight": "Bodyweight",
+    "cue": "Lie on side, rotate reaching across body.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1358"
+  },
+  {
+    "name": "Kettlebell Sumo High Pull",
+    "targetAreas": [
+      "back",
+      "shoulders"
+    ],
+    "equipment": "kettlebell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "25–35 lb KB",
+    "cue": "Explode through hips and pull kettlebell up to chin.",
+    "type": "row",
+    "gifPath": "/api/gif/0548"
+  },
+  {
+    "name": "Kettlebell Alternating Renegade Row",
+    "targetAreas": [
+      "back",
+      "abs"
+    ],
+    "equipment": "kettlebell",
+    "difficulty": "advanced",
+    "dose": "3 x 8–10/side",
+    "weight": "15–25 lb KB",
+    "cue": "Row kettlebell to hip while bracing core in plank.",
+    "type": "row",
+    "gifPath": "/api/gif/0521"
+  },
+  {
+    "name": "Scapular Pull-Up",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "Bodyweight",
+    "cue": "Hang from bar and pull shoulder blades down, elbows straight.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0688"
+  },
+  {
+    "name": "Smith Bent Over Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Moderate machine weight",
+    "cue": "Hinge at hips and row the bar to your lower ribs.",
+    "type": "row",
+    "gifPath": "/api/gif/1359"
+  },
+  {
+    "name": "Cable Kneeling High Row",
+    "targetAreas": [
+      "back",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Kneel tall and drive elbows back to pull handles to chest.",
+    "type": "row",
+    "gifPath": "/api/gif/0167"
+  },
+  {
+    "name": "Upper Back Stretch",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30–45 sec",
+    "weight": "Bodyweight",
+    "cue": "Round upper back and reach arms forward to stretch.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1365"
+  },
+  {
+    "name": "Sphinx Stretch",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30–45 sec",
+    "weight": "Bodyweight",
+    "cue": "Prop onto forearms and gently extend the lower spine.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1362"
+  },
+  {
+    "name": "Rope Climb",
+    "targetAreas": [
+      "back",
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 1–3 climbs",
+    "weight": "Bodyweight",
+    "cue": "Pull yourself up the rope using arms and legs together.",
+    "type": "pulldown",
+    "gifPath": "/api/gif/0680"
+  },
+  {
+    "name": "Dumbbell Decline Shrug",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "20–30 lb DBs",
+    "cue": "Lie face-down on a decline bench and shrug shoulders up.",
+    "type": "row",
+    "gifPath": "/api/gif/0305"
+  },
+  {
+    "name": "Cable Incline Bench Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12",
+    "weight": "Moderate cable weight",
+    "cue": "Press cables up and together from an incline seat.",
+    "type": "press",
+    "gifPath": "/api/gif/0169"
+  },
+  {
+    "name": "Cable Decline Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12",
+    "weight": "Moderate cable weight",
+    "cue": "Press handles down and forward on a decline bench.",
+    "type": "press",
+    "gifPath": "/api/gif/1261"
+  },
+  {
+    "name": "Cable Incline Fly",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–15",
+    "weight": "Moderate cable weight",
+    "cue": "Sweep cables together above your upper chest.",
+    "type": "fly",
+    "gifPath": "/api/gif/0171"
+  },
+  {
+    "name": "Cable Decline Fly",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–15",
+    "weight": "Moderate cable weight",
+    "cue": "Sweep cables up and together on a decline bench.",
+    "type": "fly",
+    "gifPath": "/api/gif/0158"
+  },
+  {
+    "name": "Cable Upper Chest Crossovers",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 12–15",
+    "weight": "Moderate cable weight",
+    "cue": "Pull cables up and across to target upper chest.",
+    "type": "fly",
+    "gifPath": "/api/gif/1270"
+  },
+  {
+    "name": "Weighted Svend Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "10–20 lb plate",
+    "cue": "Squeeze plate between palms and press straight out.",
+    "type": "press",
+    "gifPath": "/api/gif/0856"
+  },
+  {
+    "name": "Resistance Band Seated Chest Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Moderate cable weight",
+    "cue": "Press band handles forward while seated tall.",
+    "type": "press",
+    "gifPath": "/api/gif/3124"
+  },
+  {
+    "name": "Clap Push Up",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 5–8",
+    "weight": "Bodyweight",
+    "cue": "Explode up and clap before landing softly.",
+    "type": "pushup",
+    "gifPath": "/api/gif/1273"
+  },
+  {
+    "name": "Single Arm Push-up",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 4–6/side",
+    "weight": "Bodyweight",
+    "cue": "Keep hips square and push through one arm.",
+    "type": "pushup",
+    "gifPath": "/api/gif/0725"
+  },
+  {
+    "name": "Kneeling Push-up",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "Bodyweight",
+    "cue": "Keep knees down, lower chest to the floor.",
+    "type": "pushup",
+    "gifPath": "/api/gif/3211"
+  },
+  {
+    "name": "Forearm Push-up",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12",
+    "weight": "Bodyweight",
+    "cue": "Push up from forearms keeping your body straight.",
+    "type": "pushup",
+    "gifPath": "/api/gif/5204"
+  },
+  {
+    "name": "Suspended Push-up",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12",
+    "weight": "Bodyweight",
+    "cue": "Push up from suspension straps controlling the sway.",
+    "type": "pushup",
+    "gifPath": "/api/gif/0806"
+  },
+  {
+    "name": "Archer Push Up",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 6–8/side",
+    "weight": "Bodyweight",
+    "cue": "Shift weight onto one arm while the other stays straight.",
+    "type": "pushup",
+    "gifPath": "/api/gif/3294"
+  },
+  {
+    "name": "Barbell Reverse Grip Incline Bench Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 6–10",
+    "weight": "65–115 lb",
+    "cue": "Grip bar underhand and press up on the incline.",
+    "type": "press",
+    "gifPath": "/api/gif/1257"
+  },
+  {
+    "name": "Dumbbell Reverse Bench Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12",
+    "weight": "20–30 lb DBs",
+    "cue": "Press dumbbells up with palms facing your head.",
+    "type": "press",
+    "gifPath": "/api/gif/1624"
+  },
+  {
+    "name": "Dumbbell Fly On Exercise Ball",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–15",
+    "weight": "10–20 lb DBs",
+    "cue": "Lower dumbbells wide while balanced on a stability ball.",
+    "type": "fly",
+    "gifPath": "/api/gif/1277"
+  },
+  {
+    "name": "Dumbbell One Arm Bench Fly",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "10–20 lb DBs",
+    "cue": "Lower one dumbbell wide, squeeze chest to return.",
+    "type": "fly",
+    "gifPath": "/api/gif/1285"
+  },
+  {
+    "name": "Dumbbell Incline Alternate Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12/side",
+    "weight": "20–30 lb DBs",
+    "cue": "Press one dumbbell up while the other stays braced.",
+    "type": "press",
+    "gifPath": "/api/gif/3545"
+  },
+  {
+    "name": "Machine Inner Chest Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Press handles together to squeeze the inner chest.",
+    "type": "press",
+    "gifPath": "/api/gif/1301"
+  },
+  {
+    "name": "Smith Incline Bench Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "65–115 lb",
+    "cue": "Press bar up along the fixed incline path.",
+    "type": "press",
+    "gifPath": "/api/gif/0757"
+  },
+  {
+    "name": "Smith Decline Bench Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "65–115 lb",
+    "cue": "Press bar up along the fixed decline path.",
+    "type": "press",
+    "gifPath": "/api/gif/0753"
+  },
+  {
+    "name": "Lever Standing Chest Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Press handles forward while standing tall and braced.",
+    "type": "press",
+    "gifPath": "/api/gif/3758"
+  },
+  {
+    "name": "Kettlebell Alternating Floor Press",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "kettlebell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10/side",
+    "weight": "25–35 lb KB",
+    "cue": "Press one kettlebell up while lying on the floor.",
+    "type": "press",
+    "gifPath": "/api/gif/0519"
+  },
+  {
+    "name": "Dynamic Chest Stretch",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30–45 sec",
+    "weight": "Bodyweight",
+    "cue": "Swing arms open and closed to stretch the chest.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1167"
+  },
+  {
+    "name": "Wide Hand Push Up",
+    "targetAreas": [
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "Bodyweight",
+    "cue": "Place hands wider than shoulders and lower chest down.",
+    "type": "pushup",
+    "gifPath": "/api/gif/1311"
+  },
+  {
+    "name": "Dumbbell Preacher Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "15–25 lb DBs",
+    "cue": "Rest arm on pad, curl without letting elbow lift.",
+    "type": "curl",
+    "gifPath": "/api/gif/0372"
+  },
+  {
+    "name": "Cable Preacher Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Keep upper arms flat on pad, curl bar up.",
+    "type": "curl",
+    "gifPath": "/api/gif/0195"
+  },
+  {
+    "name": "Barbell Reverse Preacher Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "40–60 lb",
+    "cue": "Grip bar overhand, curl slowly on preacher pad.",
+    "type": "curl",
+    "gifPath": "/api/gif/0081"
+  },
+  {
+    "name": "Lever Preacher Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Sit tall, curl handle up and control the negative.",
+    "type": "curl",
+    "gifPath": "/api/gif/0592"
+  },
+  {
+    "name": "Ez Barbell Spider Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "40–60 lb",
+    "cue": "Lean chest into pad, curl bar toward chin.",
+    "type": "curl",
+    "gifPath": "/api/gif/1628"
+  },
+  {
+    "name": "Dumbbell Zottman Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "15–20 lb DBs",
+    "cue": "Curl up palms up, rotate and lower palms down.",
+    "type": "curl",
+    "gifPath": "/api/gif/0439"
+  },
+  {
+    "name": "Smith Machine Bicep Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Brace body still, curl bar using biceps only.",
+    "type": "curl",
+    "gifPath": "/api/gif/1683"
+  },
+  {
+    "name": "Dumbbell Alternate Biceps Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12/side",
+    "weight": "15–25 lb DBs",
+    "cue": "Curl one arm at a time, keep elbows still.",
+    "type": "curl",
+    "gifPath": "/api/gif/0285"
+  },
+  {
+    "name": "Dumbbell Incline Hammer Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "12–20 lb DBs",
+    "cue": "Sit on incline bench, curl with neutral grip.",
+    "type": "curl",
+    "gifPath": "/api/gif/0320"
+  },
+  {
+    "name": "Cable Overhead Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Curl handle toward head keeping elbow high.",
+    "type": "curl",
+    "gifPath": "/api/gif/1636"
+  },
+  {
+    "name": "Cable Drag Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Moderate cable weight",
+    "cue": "Drag bar up your torso keeping elbows back.",
+    "type": "curl",
+    "gifPath": "/api/gif/1632"
+  },
+  {
+    "name": "Ez Barbell Close-Grip Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "40–60 lb",
+    "cue": "Grip bar narrow, curl focusing on inner biceps.",
+    "type": "curl",
+    "gifPath": "/api/gif/0446"
+  },
+  {
+    "name": "Barbell Seated Close-Grip Concentration Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10/side",
+    "weight": "20–40 lb",
+    "cue": "Brace elbow on thigh, curl bar close grip.",
+    "type": "curl",
+    "gifPath": "/api/gif/0089"
+  },
+  {
+    "name": "Cable One Arm Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12/side",
+    "weight": "Moderate cable weight",
+    "cue": "Curl handle up keeping elbow pinned to side.",
+    "type": "curl",
+    "gifPath": "/api/gif/0190"
+  },
+  {
+    "name": "Cable Reverse Preacher Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Grip bar overhand, curl on preacher pad.",
+    "type": "curl",
+    "gifPath": "/api/gif/0209"
+  },
+  {
+    "name": "Cable Seated Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Sit facing low pulley, curl handle upward.",
+    "type": "curl",
+    "gifPath": "/api/gif/1641"
+  },
+  {
+    "name": "Dumbbell Standing Reverse Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "12–20 lb DBs",
+    "cue": "Grip overhand, curl keeping wrists locked.",
+    "type": "curl",
+    "gifPath": "/api/gif/0429"
+  },
+  {
+    "name": "Ez Barbell Seated Curls",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "30–50 lb",
+    "cue": "Sit upright, curl bar without swinging torso.",
+    "type": "curl",
+    "gifPath": "/api/gif/1458"
+  },
+  {
+    "name": "Dumbbell Waiter Biceps Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "15–25 lb DB",
+    "cue": "Hold dumbbell like a tray, curl straight up.",
+    "type": "curl",
+    "gifPath": "/api/gif/5201"
+  },
+  {
+    "name": "Cable Two Arm Curl On Incline Bench",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Lie back on incline bench, curl both handles up.",
+    "type": "curl",
+    "gifPath": "/api/gif/1645"
+  },
+  {
+    "name": "Dumbbell Seated Hammer Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "15–25 lb DBs",
+    "cue": "Sit tall, curl dumbbells with neutral grip.",
+    "type": "curl",
+    "gifPath": "/api/gif/1678"
+  },
+  {
+    "name": "Dumbbell Seated Bicep Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "15–25 lb DBs",
+    "cue": "Sit upright, curl dumbbells without leaning back.",
+    "type": "curl",
+    "gifPath": "/api/gif/1677"
+  },
+  {
+    "name": "Dumbbell High Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "12–20 lb DBs",
+    "cue": "Raise elbows to shoulder height, curl weights up.",
+    "type": "curl",
+    "gifPath": "/api/gif/1664"
+  },
+  {
+    "name": "Dumbbell One Arm Standing Curl Over Incline Bench",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "12–20 lb DB",
+    "cue": "Brace arm on bench, curl dumbbell with control.",
+    "type": "curl",
+    "gifPath": "/api/gif/0422"
+  },
+  {
+    "name": "Cable Standing Inner Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Keep elbows close, curl handle toward chest center.",
+    "type": "curl",
+    "gifPath": "/api/gif/0229"
+  },
+  {
+    "name": "Triceps Dip",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12",
+    "weight": "Bodyweight",
+    "cue": "Lower until elbows hit 90 degrees, then press up.",
+    "type": "press",
+    "gifPath": "/api/gif/0814"
+  },
+  {
+    "name": "Diamond Push-Up",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–15",
+    "weight": "Bodyweight",
+    "cue": "Keep elbows tucked as you press through diamond hands.",
+    "type": "pushup",
+    "gifPath": "/api/gif/0283"
+  },
+  {
+    "name": "Close-Grip Push-Up",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "Bodyweight",
+    "cue": "Keep hands close and elbows tight to your sides.",
+    "type": "pushup",
+    "gifPath": "/api/gif/0259"
+  },
+  {
+    "name": "Handstand Push-Up",
+    "targetAreas": [
+      "arms",
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 4–8",
+    "weight": "Bodyweight",
+    "cue": "Lower head to floor with control, then press up.",
+    "type": "press",
+    "gifPath": "/api/gif/0471"
+  },
+  {
+    "name": "Ring Dips",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 6–10",
+    "weight": "Bodyweight",
+    "cue": "Control the rings and press to full lockout.",
+    "type": "press",
+    "gifPath": "/api/gif/0677"
+  },
+  {
+    "name": "Reverse Dip",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "Bodyweight",
+    "cue": "Lower hips toward floor, then press back up.",
+    "type": "press",
+    "gifPath": "/api/gif/0672"
+  },
+  {
+    "name": "Barbell JM Bench Press",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 6–10",
+    "weight": "65–95 lb",
+    "cue": "Lower bar to neck, drive elbows forward through press.",
+    "type": "press",
+    "gifPath": "/api/gif/0052"
+  },
+  {
+    "name": "Ez-Bar Close-Grip Bench Press",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "65–95 lb",
+    "cue": "Keep elbows tucked as you press the bar up.",
+    "type": "press",
+    "gifPath": "/api/gif/2432"
+  },
+  {
+    "name": "Barbell Lying Triceps Extension",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12",
+    "weight": "40–65 lb",
+    "cue": "Lower bar behind head, keep upper arms still.",
+    "type": "extension",
+    "gifPath": "/api/gif/0061"
+  },
+  {
+    "name": "Barbell Seated Overhead Triceps Extension",
+    "targetAreas": [
+      "arms",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–12",
+    "weight": "30–50 lb",
+    "cue": "Keep elbows pointed forward as you extend overhead.",
+    "type": "extension",
+    "gifPath": "/api/gif/0092"
+  },
+  {
+    "name": "Barbell Incline Close-Grip Bench Press",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "65–95 lb",
+    "cue": "Press bar with narrow grip on an incline bench.",
+    "type": "press",
+    "gifPath": "/api/gif/1719"
+  },
+  {
+    "name": "Cable Overhead Triceps Extension",
+    "targetAreas": [
+      "arms",
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Extend rope overhead, keep elbows close to head.",
+    "type": "extension",
+    "gifPath": "/api/gif/0194"
+  },
+  {
+    "name": "Cable Reverse-Grip Pushdown",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 10–15",
+    "weight": "Moderate cable weight",
+    "cue": "Push bar down with palms up, elbows fixed.",
+    "type": "extension",
+    "gifPath": "/api/gif/0207"
+  },
+  {
+    "name": "Cable One Arm Triceps Pushdown",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12/side",
+    "weight": "Moderate cable weight",
+    "cue": "Push handle down fully, squeeze triceps at bottom.",
+    "type": "extension",
+    "gifPath": "/api/gif/1723"
+  },
+  {
+    "name": "Cable Kneeling Triceps Extension",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Kneel tall and extend arms overhead from cable.",
+    "type": "extension",
+    "gifPath": "/api/gif/0176"
+  },
+  {
+    "name": "Cable Standing One Arm Triceps Extension",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "Moderate cable weight",
+    "cue": "Extend one arm fully, keep elbow pinned overhead.",
+    "type": "extension",
+    "gifPath": "/api/gif/0231"
+  },
+  {
+    "name": "Dumbbell Standing Triceps Extension",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "15–25 lb DBs",
+    "cue": "Lower dumbbell behind head, keep elbows tight.",
+    "type": "extension",
+    "gifPath": "/api/gif/0430"
+  },
+  {
+    "name": "Dumbbell Seated Triceps Extension",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "15–25 lb DBs",
+    "cue": "Sit tall, extend dumbbell overhead with control.",
+    "type": "extension",
+    "gifPath": "/api/gif/2188"
+  },
+  {
+    "name": "Dumbbell Decline Triceps Extension",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "12–20 lb DBs",
+    "cue": "On decline bench, lower dumbbells to forehead slowly.",
+    "type": "extension",
+    "gifPath": "/api/gif/0306"
+  },
+  {
+    "name": "Dumbbell Tate Press",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "12–20 lb DBs",
+    "cue": "Lower dumbbells to chest with elbows flared out.",
+    "type": "extension",
+    "gifPath": "/api/gif/0436"
+  },
+  {
+    "name": "Dumbbell One Arm Triceps Extension On Bench",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "12–20 lb DB",
+    "cue": "Support with free hand, extend one arm overhead.",
+    "type": "extension",
+    "gifPath": "/api/gif/0362"
+  },
+  {
+    "name": "Smith Close-Grip Bench Press",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Moderate machine weight",
+    "cue": "Grip narrow, press bar straight up with control.",
+    "type": "press",
+    "gifPath": "/api/gif/0751"
+  },
+  {
+    "name": "Lever Triceps Extension",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Extend handles down, squeeze triceps at full extension.",
+    "type": "extension",
+    "gifPath": "/api/gif/0607"
+  },
+  {
+    "name": "Lever Seated Dip",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Press handles down until arms fully extend.",
+    "type": "press",
+    "gifPath": "/api/gif/1451"
+  },
+  {
+    "name": "Assisted Triceps Dip",
+    "targetAreas": [
+      "arms",
+      "chest"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 8–12",
+    "weight": "Moderate machine weight",
+    "cue": "Use assistance to lower and press through full range.",
+    "type": "press",
+    "gifPath": "/api/gif/0019"
+  },
+  {
+    "name": "Triceps Stretch",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 20–30 sec/side",
+    "weight": "Bodyweight",
+    "cue": "Pull elbow gently behind head to stretch triceps.",
+    "type": "stretch",
+    "gifPath": "/api/gif/0817"
+  },
+  {
+    "name": "Lying Quad Stretch",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30–45 sec/side",
+    "weight": "Bodyweight",
+    "cue": "Pull heel toward glute, keep hips stacked and stable.",
+    "type": "stretch",
+    "gifPath": "/api/gif/0613"
+  },
+  {
+    "name": "Sissy Squat",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 8–12",
+    "weight": "Bodyweight",
+    "cue": "Lean back, bend knees deeply while keeping hips extended.",
+    "type": "squat",
+    "gifPath": "/api/gif/1489"
+  },
+  {
+    "name": "Farmer's Walk",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 30–40 sec",
+    "weight": "50–70 lb DBs",
+    "cue": "Walk tall, brace your core, grip the weights hard.",
+    "type": "hinge",
+    "gifPath": "/api/gif/2133"
+  },
+  {
+    "name": "Split Squat",
+    "targetAreas": [
+      "legs",
+      "glutes"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12/side",
+    "weight": "Bodyweight",
+    "cue": "Lower straight down, keep front knee tracking over toes.",
+    "type": "lunge",
+    "gifPath": "/api/gif/2368"
+  },
+  {
+    "name": "Bodyweight Squat",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Bodyweight",
+    "cue": "Sit hips back, chest up, drive through your heels.",
+    "type": "squat",
+    "gifPath": "/api/gif/3533"
+  },
+  {
+    "name": "Side-Lying Hip Adduction",
+    "targetAreas": [
+      "hips"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15/side",
+    "weight": "Bodyweight",
+    "cue": "Lift bottom leg upward, squeeze the inner thigh.",
+    "type": "legraise",
+    "gifPath": "/api/gif/3667"
+  },
+  {
+    "name": "Hamstring Stretch",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 30–45 sec",
+    "weight": "Bodyweight",
+    "cue": "Reach toward your toes keeping the knee slightly bent.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1511"
+  },
+  {
+    "name": "Glute-Ham Raise",
+    "targetAreas": [
+      "legs",
+      "glutes"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 6–10",
+    "weight": "Bodyweight",
+    "cue": "Lower your torso slowly then curl back up with hamstrings.",
+    "type": "legcurl",
+    "gifPath": "/api/gif/3193"
+  },
+  {
+    "name": "Lying Leg Curl Machine",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Curl heels toward glutes without lifting your hips.",
+    "type": "legcurl",
+    "gifPath": "/api/gif/3195"
+  },
+  {
+    "name": "World's Greatest Stretch",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "2 x 5–8/side",
+    "weight": "Bodyweight",
+    "cue": "Rotate your torso open while lunging deep forward.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1604"
+  },
+  {
+    "name": "Runner's Stretch",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30 sec/side",
+    "weight": "Bodyweight",
+    "cue": "Press your heel down while leaning forward from the hips.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1585"
+  },
+  {
+    "name": "Trap Bar Deadlift",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 6–8",
+    "weight": "95–185 lb",
+    "cue": "Push floor away, keep chest tall through lockout.",
+    "type": "hinge",
+    "gifPath": "/api/gif/0811"
+  },
+  {
+    "name": "Curtsey Squat",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "Bodyweight",
+    "cue": "Cross leg behind, sink hips straight down.",
+    "type": "squat",
+    "gifPath": "/api/gif/3769"
+  },
+  {
+    "name": "Monster Walk",
+    "targetAreas": [
+      "glutes",
+      "hips"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20 steps/side",
+    "weight": "Light resistance band",
+    "cue": "Keep band taut, step sideways under control.",
+    "type": "legraise",
+    "gifPath": "/api/gif/0628"
+  },
+  {
+    "name": "Single Leg Bridge With Outstretched Leg",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "Bodyweight",
+    "cue": "Drive through heel, keep hips square and lifted.",
+    "type": "bridge",
+    "gifPath": "/api/gif/3645"
+  },
+  {
+    "name": "Jump Squat",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Bodyweight",
+    "cue": "Explode upward, land soft with bent knees.",
+    "type": "squat",
+    "gifPath": "/api/gif/0514"
+  },
+  {
+    "name": "Single Leg Squat (Pistol)",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 5–8/side",
+    "weight": "Bodyweight",
+    "cue": "Lower slow, keep working heel planted firmly.",
+    "type": "squat",
+    "gifPath": "/api/gif/1759"
+  },
+  {
+    "name": "Barbell Single Leg Deadlift",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 6–8/side",
+    "weight": "45–95 lb",
+    "cue": "Hinge at hips, keep back leg lifted straight.",
+    "type": "hinge",
+    "gifPath": "/api/gif/1756"
+  },
+  {
+    "name": "Reverse Hyper On Flat Bench",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 12–15",
+    "weight": "Bodyweight",
+    "cue": "Squeeze glutes, swing legs up without arching back.",
+    "type": "extension",
+    "gifPath": "/api/gif/1423"
+  },
+  {
+    "name": "Barbell Hack Squat",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 8–10",
+    "weight": "65–115 lb",
+    "cue": "Keep bar close behind legs, drive through heels.",
+    "type": "squat",
+    "gifPath": "/api/gif/0046"
+  },
+  {
+    "name": "Smith Deadlift",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Moderate machine weight",
+    "cue": "Push hips back, keep bar path vertical.",
+    "type": "hinge",
+    "gifPath": "/api/gif/0752"
+  },
+  {
+    "name": "Sled Hack Squat",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Lean back into pad, drive through full foot.",
+    "type": "squat",
+    "gifPath": "/api/gif/0743"
+  },
+  {
+    "name": "Weighted Cossack Squats",
+    "targetAreas": [
+      "glutes",
+      "legs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10/side",
+    "weight": "20–30 lb DB",
+    "cue": "Shift hips side to side, keep chest upright.",
+    "type": "squat",
+    "gifPath": "/api/gif/3643"
+  },
+  {
+    "name": "Barbell Seated Calf Raise",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "4 x 12–15",
+    "weight": "65–95 lb",
+    "cue": "Press through the balls of your feet, pause at top.",
+    "type": "calf",
+    "gifPath": "/api/gif/1371"
+  },
+  {
+    "name": "Smith Standing Calf Raise",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "4 x 12–15",
+    "weight": "Moderate machine weight",
+    "cue": "Rise onto toes fully, lower slow for a deep stretch.",
+    "type": "calf",
+    "gifPath": "/api/gif/0773"
+  },
+  {
+    "name": "Cable Standing Single-Leg Calf Raise",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 12–15/side",
+    "weight": "Moderate cable weight",
+    "cue": "Keep knee soft, drive up through the big toe.",
+    "type": "calf",
+    "gifPath": "/api/gif/1376"
+  },
+  {
+    "name": "Leg Press Calf Press",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "4 x 12–15",
+    "weight": "Moderate machine weight",
+    "cue": "Push through balls of feet, extend ankles fully.",
+    "type": "calf",
+    "gifPath": "/api/gif/1391"
+  },
+  {
+    "name": "Lever Calf Press",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "4 x 12–15",
+    "weight": "Moderate machine weight",
+    "cue": "Press the platform away using only your ankles.",
+    "type": "calf",
+    "gifPath": "/api/gif/2289"
+  },
+  {
+    "name": "Lever Donkey Calf Raise",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "4 x 12–15",
+    "weight": "Moderate machine weight",
+    "cue": "Hinge forward, drive heels up for a deep stretch.",
+    "type": "calf",
+    "gifPath": "/api/gif/1253"
+  },
+  {
+    "name": "Hack Machine Calf Raise",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "4 x 12–15",
+    "weight": "Moderate machine weight",
+    "cue": "Rise onto toes on the hack platform, pause at top.",
+    "type": "calf",
+    "gifPath": "/api/gif/1383"
+  },
+  {
+    "name": "One-Leg Floor Calf Raise",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20/side",
+    "weight": "Bodyweight",
+    "cue": "Balance on one foot, rise fully onto your toes.",
+    "type": "calf",
+    "gifPath": "/api/gif/1387"
+  },
+  {
+    "name": "Dumbbell Seated One-Leg Calf Raise",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 12–15/side",
+    "weight": "15–25 lb DB",
+    "cue": "Rest dumbbell on knee, press through toes fully.",
+    "type": "calf",
+    "gifPath": "/api/gif/0400"
+  },
+  {
+    "name": "Standing Calf Raise On A Step",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Bodyweight",
+    "cue": "Let heels drop below step, then rise onto toes.",
+    "type": "calf",
+    "gifPath": "/api/gif/1490"
+  },
+  {
+    "name": "Smith Toe Raise",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Light machine weight",
+    "cue": "Lift toes toward shins, keep heels planted.",
+    "type": "calf",
+    "gifPath": "/api/gif/1396"
+  },
+  {
+    "name": "Ankle Circles",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 10/side",
+    "weight": "Bodyweight",
+    "cue": "Rotate ankle slowly through full range each direction.",
+    "type": "rotation",
+    "gifPath": "/api/gif/1368"
+  },
+  {
+    "name": "Calf Stretch Against Wall",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30–45 sec/side",
+    "weight": "Bodyweight",
+    "cue": "Press heel down, lean into wall for a stretch.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1377"
+  },
+  {
+    "name": "Seated Calf Stretch",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "2 x 30–45 sec/side",
+    "weight": "Bodyweight",
+    "cue": "Pull toes toward you, feel stretch through calf.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1390"
+  },
+  {
+    "name": "Dumbbell Wrist Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15/side",
+    "weight": "10–20 lb DBs",
+    "cue": "Rest forearm on bench, curl wrist upward slowly.",
+    "type": "curl",
+    "gifPath": "/api/gif/0369"
+  },
+  {
+    "name": "Dumbbell Reverse Wrist Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15/side",
+    "weight": "5–15 lb DBs",
+    "cue": "Palm down, lift knuckles toward ceiling controlled.",
+    "type": "curl",
+    "gifPath": "/api/gif/0368"
+  },
+  {
+    "name": "Cable Reverse Wrist Curl",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Moderate cable weight",
+    "cue": "Keep forearm still, extend wrist against cable tension.",
+    "type": "curl",
+    "gifPath": "/api/gif/0210"
+  },
+  {
+    "name": "Finger Curls",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 15–20",
+    "weight": "20–40 lb",
+    "cue": "Let bar roll into fingers, then curl closed.",
+    "type": "curl",
+    "gifPath": "/api/gif/0455"
+  },
+  {
+    "name": "Wrist Roller",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 1–2 rolls",
+    "weight": "10–20 lb hanging",
+    "cue": "Roll rope up and down with controlled wrist motion.",
+    "type": "curl",
+    "gifPath": "/api/gif/0859"
+  },
+  {
+    "name": "Weighted Standing Hand Squeeze",
+    "targetAreas": [
+      "arms"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "10–20 lb DBs",
+    "cue": "Squeeze grip hard, hold briefly, then release slowly.",
+    "type": "curl",
+    "gifPath": "/api/gif/0854"
+  },
+  {
+    "name": "Barbell One Arm Snatch",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 5/side",
+    "weight": "45–65 lb",
+    "cue": "Explosively pull the bar overhead in one motion.",
+    "type": "press",
+    "gifPath": "/api/gif/0067"
+  },
+  {
+    "name": "Barbell Seated Behind Head Military Press",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 8–10",
+    "weight": "65–115 lb",
+    "cue": "Press the bar overhead from behind your neck, elbows wide.",
+    "type": "press",
+    "gifPath": "/api/gif/0086"
+  },
+  {
+    "name": "Cable Alternate Shoulder Press",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10/side",
+    "weight": "Moderate cable weight",
+    "cue": "Press one handle overhead while the other stays set.",
+    "type": "press",
+    "gifPath": "/api/gif/0148"
+  },
+  {
+    "name": "Cable Rear Delt Row (Stirrups)",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 12–15",
+    "weight": "Moderate cable weight",
+    "cue": "Pull the stirrups back, squeezing your rear delts together.",
+    "type": "row",
+    "gifPath": "/api/gif/0202"
+  },
+  {
+    "name": "Cable Seated Rear Lateral Raise",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 12–15",
+    "weight": "Moderate cable weight",
+    "cue": "Raise the cable out to the side with a forward lean.",
+    "type": "armraise",
+    "gifPath": "/api/gif/0215"
+  },
+  {
+    "name": "Dumbbell One Arm Shoulder Press",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10/side",
+    "weight": "20–30 lb DBs",
+    "cue": "Press one dumbbell overhead while bracing your core.",
+    "type": "press",
+    "gifPath": "/api/gif/0361"
+  },
+  {
+    "name": "Cable Kneeling Rear Delt Row",
+    "targetAreas": [
+      "shoulders"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 12–15",
+    "weight": "Moderate cable weight",
+    "cue": "Kneel tall and pull rope handles toward your face.",
+    "type": "row",
+    "gifPath": "/api/gif/3697"
+  },
+  {
+    "name": "Cable Face Pull",
+    "targetAreas": [
+      "shoulders",
+      "back"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Moderate cable weight",
+    "cue": "Pull rope to your face, driving elbows high and back.",
+    "type": "row",
+    "gifPath": "/api/gif/5203"
+  },
+  {
+    "name": "Curl-Up",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Bodyweight",
+    "cue": "Curl your chest toward your knees, keeping lower back down.",
+    "type": "crunch",
+    "gifPath": "/api/gif/3016"
+  },
+  {
+    "name": "Captain's Chair Straight Leg Raise",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Bodyweight",
+    "cue": "Raise straight legs to hip height without swinging your torso.",
+    "type": "legraise",
+    "gifPath": "/api/gif/2963"
+  },
+  {
+    "name": "Lever Seated Crunch",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "machine",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Moderate machine weight",
+    "cue": "Crunch forward against the pad, squeezing your abs hard.",
+    "type": "crunch",
+    "gifPath": "/api/gif/1452"
+  },
+  {
+    "name": "Band Horizontal Pallof Press",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12/side",
+    "weight": "Moderate cable weight",
+    "cue": "Press band straight out, resist rotation through your core.",
+    "type": "press",
+    "gifPath": "/api/gif/0979"
+  },
+  {
+    "name": "Mountain Climber (Cross-Body)",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 30–40 sec",
+    "weight": "Bodyweight",
+    "cue": "Drive knee across toward opposite elbow, keep hips low.",
+    "type": "plank",
+    "gifPath": "/api/gif/2466"
+  },
+  {
+    "name": "Band V-Up",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate cable weight",
+    "cue": "Lift torso and legs together to form a V shape.",
+    "type": "crunch",
+    "gifPath": "/api/gif/1014"
+  },
+  {
+    "name": "Half Sit-Up",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Bodyweight",
+    "cue": "Sit halfway up, keeping constant tension in your abs.",
+    "type": "crunch",
+    "gifPath": "/api/gif/3202"
+  },
+  {
+    "name": "L-Sit On Floor",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 15–20 sec",
+    "weight": "Bodyweight",
+    "cue": "Support on hands, hold legs extended straight out front.",
+    "type": "plank",
+    "gifPath": "/api/gif/3419"
+  },
+  {
+    "name": "V-Sit On Floor",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 15–20 sec",
+    "weight": "Bodyweight",
+    "cue": "Balance on tailbone, forming a V with torso and legs.",
+    "type": "plank",
+    "gifPath": "/api/gif/3420"
+  },
+  {
+    "name": "Front Lever",
+    "targetAreas": [
+      "abs",
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 10–15 sec",
+    "weight": "Bodyweight",
+    "cue": "Hang from bar, raise body horizontal with arms straight.",
+    "type": "plank",
+    "gifPath": "/api/gif/3296"
+  },
+  {
+    "name": "Pelvic Tilt",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Bodyweight",
+    "cue": "Flatten your lower back by tilting your pelvis upward.",
+    "type": "crunch",
+    "gifPath": "/api/gif/3147"
+  },
+  {
+    "name": "Weighted Decline Sit-Up",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "10–25 lb DB",
+    "cue": "Hold weight to chest and sit up fully on the decline.",
+    "type": "crunch",
+    "gifPath": "/api/gif/3670"
+  },
+  {
+    "name": "Bicycle Crunch",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "cable",
+    "difficulty": "intermediate",
+    "dose": "3 x 15–20/side",
+    "weight": "Light cable weight",
+    "cue": "Rotate elbow to opposite knee in a pedaling motion.",
+    "type": "crunch",
+    "gifPath": "/api/gif/0972"
+  },
+  {
+    "name": "Knee Touch Crunch",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 15–20",
+    "weight": "Bodyweight",
+    "cue": "Crunch up, reaching your hands toward your knees.",
+    "type": "crunch",
+    "gifPath": "/api/gif/3640"
+  },
+  {
+    "name": "Lying Straight Leg Raise",
+    "targetAreas": [
+      "abs"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Light cable weight",
+    "cue": "Keep legs straight, raise them slowly toward the ceiling.",
+    "type": "legraise",
+    "gifPath": "/api/gif/1002"
+  },
+  {
+    "name": "Barbell Bench Squat",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "95–135 lb",
+    "cue": "Sit back onto the bench, then drive up through heels.",
+    "type": "squat",
+    "gifPath": "/api/gif/0026"
+  },
+  {
+    "name": "Barbell Overhead Squat",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 6–8",
+    "weight": "45–75 lb",
+    "cue": "Keep the bar locked overhead while squatting deep.",
+    "type": "squat",
+    "gifPath": "/api/gif/0069"
+  },
+  {
+    "name": "Barbell One Leg Squat",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 6–8 /side",
+    "weight": "45–65 lb",
+    "cue": "Lower on one leg keeping your torso upright throughout.",
+    "type": "squat",
+    "gifPath": "/api/gif/0068"
+  },
+  {
+    "name": "Barbell Clean And Press",
+    "targetAreas": [
+      "legs",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 5–6",
+    "weight": "65–95 lb",
+    "cue": "Explode the bar up, catch it, then press overhead.",
+    "type": "press",
+    "gifPath": "/api/gif/0028"
+  },
+  {
+    "name": "Barbell Side Split Squat",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10 /side",
+    "weight": "45–65 lb",
+    "cue": "Shift your hips sideways into one leg, other straight.",
+    "type": "squat",
+    "gifPath": "/api/gif/0097"
+  },
+  {
+    "name": "Resistance Band Leg Extension",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "cable",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Moderate cable weight",
+    "cue": "Extend your knee against band resistance, squeeze quad hard.",
+    "type": "extension",
+    "gifPath": "/api/gif/3007"
+  },
+  {
+    "name": "Weighted Sissy Squat",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "advanced",
+    "dose": "3 x 8–10",
+    "weight": "10–20 lb DB",
+    "cue": "Lean back on your toes, bend knees, hips extended.",
+    "type": "squat",
+    "gifPath": "/api/gif/0851"
+  },
+  {
+    "name": "Forward Jump",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Bodyweight",
+    "cue": "Explode forward and land softly bending your knees.",
+    "type": "squat",
+    "gifPath": "/api/gif/1472"
+  },
+  {
+    "name": "Backward Jump",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Bodyweight",
+    "cue": "Jump backward explosively, absorb the landing through knees.",
+    "type": "squat",
+    "gifPath": "/api/gif/1473"
+  },
+  {
+    "name": "Squat To Overhead Reach",
+    "targetAreas": [
+      "legs",
+      "shoulders"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Bodyweight",
+    "cue": "Squat down, then reach both arms overhead standing tall.",
+    "type": "squat",
+    "gifPath": "/api/gif/1685"
+  },
+  {
+    "name": "Barbell Squat Jump Step Rear Lunge",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 6–8 /side",
+    "weight": "Empty bar only (~45 lb)",
+    "cue": "Using just the bar, jump from the squat, then step back into a lunge, landing softly.",
+    "type": "lunge",
+    "gifPath": "/api/gif/2798"
+  },
+  {
+    "name": "Squat Jerk",
+    "targetAreas": [
+      "legs",
+      "shoulders"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "3 x 3–5",
+    "weight": "65–95 lb",
+    "cue": "Drive the bar overhead while dropping into a squat catch.",
+    "type": "squat",
+    "gifPath": "/api/gif/0786"
+  },
+  {
+    "name": "Quick Feet V. 2",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 20–30 sec",
+    "weight": "Bodyweight",
+    "cue": "Pump your feet rapidly in place, staying light on toes.",
+    "type": "squat",
+    "gifPath": "/api/gif/3552"
+  },
+  {
+    "name": "Dumbbell Palm Rotational Bent Over Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "dumbbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "20–30 lb DBs",
+    "cue": "Rotate palms up as you pull elbows back.",
+    "type": "row",
+    "gifPath": "/api/gif/1329"
+  },
+  {
+    "name": "Ez Bar Reverse Grip Bent Over Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "barbell",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "65–115 lb",
+    "cue": "Hinge at hips and row bar to lower ribs.",
+    "type": "row",
+    "gifPath": "/api/gif/1344"
+  },
+  {
+    "name": "Lever Reverse T-bar Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12",
+    "weight": "Moderate machine weight",
+    "cue": "Drive elbows back and squeeze shoulder blades together.",
+    "type": "row",
+    "gifPath": "/api/gif/1349"
+  },
+  {
+    "name": "Lever One Arm Lateral High Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12 /side",
+    "weight": "Moderate machine weight",
+    "cue": "Pull handle toward hip while keeping torso stable.",
+    "type": "row",
+    "gifPath": "/api/gif/1356"
+  },
+  {
+    "name": "Smith One Arm Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 10–12 /side",
+    "weight": "Moderate machine weight",
+    "cue": "Row bar to hip while bracing core against rotation.",
+    "type": "row",
+    "gifPath": "/api/gif/1360"
+  },
+  {
+    "name": "Smith Reverse Grip Bent Over Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "machine",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Moderate machine weight",
+    "cue": "Underhand grip, pull bar into lower abdomen.",
+    "type": "row",
+    "gifPath": "/api/gif/1361"
+  },
+  {
+    "name": "Inverted Row On Bench",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 10–12",
+    "weight": "Bodyweight",
+    "cue": "Pull chest up to the bar under you.",
+    "type": "row",
+    "gifPath": "/api/gif/2298"
+  },
+  {
+    "name": "Bodyweight Standing One Arm Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15 /side",
+    "weight": "Bodyweight",
+    "cue": "Grip anchor and pull chest toward your hand.",
+    "type": "row",
+    "gifPath": "/api/gif/3162"
+  },
+  {
+    "name": "Bodyweight Standing Row",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 12–15",
+    "weight": "Bodyweight",
+    "cue": "Lean back and pull chest toward anchored hands.",
+    "type": "row",
+    "gifPath": "/api/gif/3166"
+  },
+  {
+    "name": "Front Lever Reps",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 5–8",
+    "weight": "Bodyweight",
+    "cue": "Keep body horizontal while hanging from the bar.",
+    "type": "plank",
+    "gifPath": "/api/gif/3295"
+  },
+  {
+    "name": "Back Lever",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 10–15 sec",
+    "weight": "Bodyweight",
+    "cue": "Hold body flat facing downward under the bar.",
+    "type": "plank",
+    "gifPath": "/api/gif/3297"
+  },
+  {
+    "name": "Skin The Cat",
+    "targetAreas": [
+      "back"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "advanced",
+    "dose": "3 x 5–6",
+    "weight": "Bodyweight",
+    "cue": "Rotate body through the bar with controlled shoulders.",
+    "type": "rotation",
+    "gifPath": "/api/gif/3304"
+  },
+  {
+    "name": "Power Clean",
+    "targetAreas": [
+      "legs",
+      "back"
+    ],
+    "equipment": "barbell",
+    "difficulty": "advanced",
+    "dose": "4 x 3–5",
+    "weight": "65–115 lb",
+    "cue": "Explosively pull the bar from the floor to your shoulders.",
+    "type": "hinge",
+    "gifPath": "/api/gif/0648"
+  },
+  {
+    "name": "Self-Assisted Inverse Leg Curl (On Floor)",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Bodyweight",
+    "cue": "Kneel and lower your torso slowly, controlling with your hamstrings.",
+    "type": "legcurl",
+    "gifPath": "/api/gif/0696"
+  },
+  {
+    "name": "Leg Up Hamstring Stretch",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 30 sec/side",
+    "weight": "Bodyweight",
+    "cue": "Rest your leg up on a surface and lean forward gently.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1576"
+  },
+  {
+    "name": "Standing Hamstring And Calf Stretch With Strap",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "beginner",
+    "dose": "3 x 30 sec/side",
+    "weight": "Bodyweight",
+    "cue": "Loop the strap around your foot and pull your leg straight up.",
+    "type": "stretch",
+    "gifPath": "/api/gif/1599"
+  },
+  {
+    "name": "Inverse Leg Curl (On Pull-Up Cable Machine)",
+    "targetAreas": [
+      "legs"
+    ],
+    "equipment": "bodyweight",
+    "difficulty": "intermediate",
+    "dose": "3 x 8–10",
+    "weight": "Bodyweight",
+    "cue": "Anchor your feet and lower your torso, pulling back with your hamstrings.",
+    "type": "legcurl",
+    "gifPath": "/api/gif/2400"
   }
 ]
