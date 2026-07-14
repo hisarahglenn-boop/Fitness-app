@@ -41,8 +41,8 @@ function equipmentGuidance(equipment, equipmentOther, hasPhotos){
 // delete policy -- the caller can't reset their own counter). Fails OPEN on
 // infrastructure errors: a logging blip must never break onboarding, and an
 // attacker can't induce that failure from outside.
-const RATE_LIMIT_HOUR = 5;
-const RATE_LIMIT_DAY = 20;
+const RATE_LIMIT_HOUR = 15;
+const RATE_LIMIT_DAY = 60;
 
 async function checkAndLogGeneration(authHeader, userId){
   const restHeaders = {
@@ -154,8 +154,12 @@ module.exports = async (req, res) => {
     return;
   }
 
-  const { targetAreas, equipment, equipmentOther, daysPerWeek, experience, injuries, notes, requestedExercises, equipmentPhotoUrls, postureFocus } = questionnaire;
+  const { targetAreas, equipment, equipmentOther, daysPerWeek, experience, injuries, sex, notes, requestedExercises, equipmentPhotoUrls, postureFocus, focusDetails, customExercises } = questionnaire;
   const days = Number(daysPerWeek) || 4;
+
+  // Sex (male/female/other) -- informs default loading expectations/emphasis
+  // only, never exclusions. Absent for pre-v3 clients.
+  const sexText = ['male', 'female', 'other'].includes(sex) ? sex : '';
 
   // Posture concerns (optional multi-select: forward head, rounded shoulders...).
   const posture = (Array.isArray(postureFocus) ? postureFocus : [])
@@ -163,6 +167,14 @@ module.exports = async (req, res) => {
     .map(p => p.trim())
     .filter(Boolean)
     .slice(0, 5);
+
+  // Granular within-area emphasis slugs from the target-area drill-down
+  // ("glutes.upper", "abs.lower"). Fed to the prompt as general emphasis.
+  const emphasis = (Array.isArray(focusDetails) ? focusDetails : [])
+    .filter(f => typeof f === 'string')
+    .map(f => f.trim())
+    .filter(Boolean)
+    .slice(0, 20);
 
   const pool = libraryForEquipment(equipment);
   const libraryForPrompt = pool.map(e => ({
@@ -184,6 +196,21 @@ module.exports = async (req, res) => {
     .filter(n => poolByName.has(n))
     .slice(0, 15);
 
+  // Custom exercises the user typed that are NOT in the library -- deduped
+  // (case-insensitively) against each other and against library names, capped.
+  // These are force-added to the plan after generation (no gif, default dose).
+  const seenCustom = new Set([...poolByName.keys()].map(n => n.toLowerCase()));
+  const customExts = [];
+  for (const raw of (Array.isArray(customExercises) ? customExercises : [])) {
+    if (typeof raw !== 'string') continue;
+    const name = raw.trim().slice(0, 80);
+    const key = name.toLowerCase();
+    if (!name || seenCustom.has(key)) continue;
+    seenCustom.add(key);
+    customExts.push(name);
+    if (customExts.length >= 10) break;
+  }
+
   // Equipment photos: only public URLs from the CALLER's OWN folder in our
   // questionnaire-media bucket (never arbitrary hosts, never other users'
   // folders), object name locked to a clean uuid.jpg, de-duplicated so one
@@ -203,7 +230,8 @@ User's questionnaire answers:
 - Equipment access: ${equipment}
 - Days per week: ${days}
 - Experience level: ${experience}
-- Injuries or pain points: ${injuries || 'none mentioned'}
+- Injuries or pain points: ${injuries || 'none mentioned'}${sexText ? `
+- Sex: ${sexText}` : ''}
 
 Equipment guidance: ${equipmentGuidance(equipment, equipmentOther, photoUrls.length > 0)}
 ${photoUrls.length ? `
@@ -220,8 +248,10 @@ Build a ${days}-day weekly workout plan using ONLY exercises from this library, 
 - If injuries/pain points are mentioned, avoid exercises likely to aggravate them (e.g. knee pain -> avoid heavy barbell squats/lunges, prefer hip thrusts, glute bridges, and RDLs instead of squats/lunges).
 - Granular target areas map onto the library's coarser tags — select by exercise name and type: "quads" (squats, lunges, leg press, step-ups), "hamstrings" (RDLs, hamstring curls, good mornings), and "calves" (calf raises) all live under the "legs"/"glutes" tags; "full-body" means broad, balanced coverage of all major muscle groups across the week rather than a single focus.
 ${posture.length ? `- Posture concerns: ${posture.join(', ')}. Include posture-corrective work addressing these — rear-delt flies/rows, prone Y-raises, scapular push-ups, wall slides, face pulls, and upper-back rowing — with at least 2-3 such exercises spread across the week.
+` : ''}${emphasis.length ? `- Within the chosen target areas the user wants extra emphasis on: ${emphasis.join(', ')}. Bias exercise selection toward these specifics where the library allows, without neglecting the broader areas.
 ` : ''}
 ${mustInclude.length ? `- The user specifically requested these exercises. Every one of them MUST appear in the plan, each on a day where it fits the split (only omit one if it clearly conflicts with their stated injuries): ${mustInclude.join('; ')}.
+` : ''}${customExts.length ? `- Heads up: the user also requested ${customExts.length} custom exercise(s) NOT in the library (${customExts.join('; ')}). Do NOT put them in exerciseNames (they aren't in the library) -- they'll be added to the plan separately. Just leave a little room by choosing ${Math.max(4, 6 - Math.ceil(customExts.length / days))}-6 library exercises per day so the days don't get overloaded once they're added.
 ` : ''}- Distribute the chosen target areas sensibly across the week (e.g. a push/pull/legs split, an upper/lower split, or a focus-area rotation) based on daysPerWeek and which target areas were chosen — every chosen target area should get meaningful coverage across the week.
 - Each day should have 5-7 exercises.
 - Give each day a short title ("Day 1", "Day 2", etc.) and a subtitle describing its focus (e.g. "Heavy Glutes + Deadlift").
@@ -241,33 +271,17 @@ Respond with ONLY a JSON object of this exact shape, no other text:
     ? [...photoUrls.map(url => ({ type: 'image', source: { type: 'url', url } })), { type: 'text', text: prompt }]
     : prompt;
 
-  try {
-    const upstream = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01'
-      },
-      body: JSON.stringify({
-        model: 'claude-sonnet-5',
-        max_tokens: 8000,
-        messages: [{ role: 'user', content }]
-      })
-    });
+  // "Must include" is a code-level guarantee, not just a prompt rule: any
+  // user-requested exercise the model left out gets appended to the day whose
+  // existing exercises share the most target areas with it. EXCEPTION: when the
+  // user stated injuries, the prompt may omit a pick that conflicts with them --
+  // forcing it back in would override that safety judgment, so it stands.
+  const injuriesStated = typeof injuries === 'string' && injuries.trim() && !/^none\.?$/i.test(injuries.trim());
 
-    if (!upstream.ok) {
-      const errText = await upstream.text();
-      res.status(upstream.status).json({ error: 'Anthropic API error', detail: errText });
-      return;
-    }
-
-    const data = await upstream.json();
-    const textBlock = (data.content || []).find(b => b.type === 'text');
-    const text = (textBlock && textBlock.text) || '{}';
-    const jsonMatch = text.match(/\{[\s\S]*\}/);
-    const parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { days: [] };
-
+  // Turn one parsed model response into a plan (empty array if none of its
+  // exercise names matched the library). Pure over the request-scoped inputs
+  // (pool, poolByName, mustInclude, customExts) so it can be retried cheaply.
+  function buildPlanFromParsed(parsed) {
     const libraryByName = new Map(pool.map(e => [e.name, e]));
     const usedNames = new Set();
 
@@ -292,19 +306,6 @@ Respond with ONLY a JSON object of this exact shape, no other text:
       return entry;
     }).filter(day => day.exercises.length > 0);
 
-    // Overall rationale shown once on the native preview; transient (not
-    // stored in profiles.plan -- days carry their own "why").
-    const summary = typeof parsed.summary === 'string' && parsed.summary.trim()
-      ? parsed.summary.trim().slice(0, 600)
-      : null;
-
-    // "Must include" is a code-level guarantee, not just a prompt rule: any
-    // user-requested exercise the model left out gets appended to the day
-    // whose existing exercises share the most target areas with it.
-    // EXCEPTION: when the user stated injuries, the prompt allows the model
-    // to omit a pick that conflicts with them -- forcing it back in would
-    // override the safety judgment, so injury-present omissions stand.
-    const injuriesStated = typeof injuries === 'string' && injuries.trim() && !/^none\.?$/i.test(injuries.trim());
     if (plan.length && !injuriesStated) {
       for (const name of mustInclude) {
         if (usedNames.has(name)) continue;
@@ -322,6 +323,88 @@ Respond with ONLY a JSON object of this exact shape, no other text:
       }
     }
 
+    // Force-add the user's custom (non-library) exercises. They have no gif
+    // (null -> the app shows a placeholder) and a neutral default dose the user
+    // can tune per-set in the session. Distributed to the lightest days so no
+    // single day balloons; tuple shape [name, dose, weight, cue, type, gifPath].
+    if (plan.length && customExts.length) {
+      for (const name of customExts) {
+        let lightestIdx = 0;
+        plan.forEach((day, idx) => {
+          if (day.exercises.length < plan[lightestIdx].exercises.length) lightestIdx = idx;
+        });
+        plan[lightestIdx].exercises.push([name, '3 x 10', '', 'Your requested exercise — adjust sets, reps, and weight to fit.', '', null]);
+      }
+    }
+
+    return plan;
+  }
+
+  // A single model call is non-deterministic and occasionally returns a
+  // response whose exercise names match nothing in the library (-> empty plan)
+  // or isn't valid JSON. Rather than fail the user with "That didn't work" (and
+  // burn one of their rate-limit slots on every manual retry), retry internally
+  // up to MAX_ATTEMPTS before giving up. One user action stays one logged
+  // generation regardless of how many internal attempts it takes.
+  const MAX_ATTEMPTS = 2;
+
+  try {
+    let plan = [];
+    let summary = null;
+    let upstreamError = null;
+
+    for (let attempt = 1; attempt <= MAX_ATTEMPTS; attempt++) {
+      const upstream = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-api-key': key,
+          'anthropic-version': '2023-06-01'
+        },
+        body: JSON.stringify({
+          model: 'claude-sonnet-5',
+          max_tokens: 8000,
+          messages: [{ role: 'user', content }]
+        })
+      });
+
+      if (!upstream.ok) {
+        const errText = await upstream.text();
+        // Transient upstream failures (overloaded / rate-limited / 5xx) are
+        // worth another attempt; surface anything else immediately.
+        if (attempt < MAX_ATTEMPTS && (upstream.status === 429 || upstream.status >= 500)) continue;
+        upstreamError = { status: upstream.status, detail: errText };
+        break;
+      }
+
+      const data = await upstream.json();
+      const textBlock = (data.content || []).find(b => b.type === 'text');
+      const text = (textBlock && textBlock.text) || '{}';
+      const jsonMatch = text.match(/\{[\s\S]*\}/);
+      let parsed;
+      try {
+        parsed = jsonMatch ? JSON.parse(jsonMatch[0]) : { days: [] };
+      } catch {
+        parsed = { days: [] }; // malformed JSON: treat as empty so we retry, not 500
+      }
+
+      const built = buildPlanFromParsed(parsed);
+      if (built.length) {
+        plan = built;
+        // Overall rationale shown once on the native preview; transient (not
+        // stored in profiles.plan -- days carry their own "why").
+        summary = typeof parsed.summary === 'string' && parsed.summary.trim()
+          ? parsed.summary.trim().slice(0, 600)
+          : null;
+        break; // usable plan -- done
+      }
+      // Empty plan: loop and try once more (model non-determinism).
+    }
+
+    if (upstreamError) {
+      res.status(upstreamError.status).json({ error: 'Anthropic API error', detail: upstreamError.detail });
+      return;
+    }
     if (!plan.length) {
       res.status(422).json({ error: 'Could not generate a valid plan from the model response' });
       return;

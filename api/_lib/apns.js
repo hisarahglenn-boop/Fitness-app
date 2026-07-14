@@ -1,11 +1,13 @@
 // Minimal APNs (Apple Push Notification service) sender: hand-rolled ES256
 // provider JWT + HTTP/2 request, zero dependencies.
 //
-// The #1 silent-failure mode is an environment mismatch: device tokens minted
-// by an Xcode dev build only work against api.sandbox.push.apple.com, and
-// TestFlight/App Store tokens only against api.push.apple.com. A mismatch
-// comes back as 400 BadDeviceToken (handled below by dropping the token, so
-// re-registration on next app launch heals it once APNS_ENV is corrected).
+// Environment mismatch used to be the #1 silent-failure mode: device tokens
+// minted by an Xcode dev build only work against api.sandbox.push.apple.com,
+// and TestFlight/App Store tokens only against api.push.apple.com. Since a
+// single database mixes both (Sarah runs a dev build; testers run TestFlight),
+// APNS_ENV alone can never be right for everyone. So we try the configured
+// gateway FIRST, and on a wrong-environment rejection retry the OTHER gateway
+// before giving up -- a token is only deleted when BOTH gateways reject it.
 const crypto = require('crypto');
 const http2 = require('http2');
 
@@ -42,10 +44,23 @@ function providerJwt() {
   return cachedJwt;
 }
 
-function apnsHost() {
+const PROD_HOST = 'https://api.push.apple.com';
+const SANDBOX_HOST = 'https://api.sandbox.push.apple.com';
+
+// Configured gateway first, the other as fallback. APNS_ENV just decides which
+// one we try first (a small latency optimization for the common case); both
+// are always available so dev and TestFlight tokens both deliver.
+function gatewayOrder() {
   return process.env.APNS_ENV === 'production'
-    ? 'https://api.push.apple.com'
-    : 'https://api.sandbox.push.apple.com';
+    ? [PROD_HOST, SANDBOX_HOST]
+    : [SANDBOX_HOST, PROD_HOST];
+}
+
+// A response that means "this token is not valid on THIS gateway" -- either
+// wrong environment (400 BadDeviceToken) or gone (410 Unregistered). Only a
+// token that draws this from BOTH gateways is truly dead.
+function isTokenRejected(status, reason) {
+  return status === 410 || (status === 400 && reason === 'BadDeviceToken');
 }
 
 // Sends one alert push. Resolves { status, reason } -- never rejects for
@@ -76,8 +91,10 @@ function sendOne(session, token, jwt, payload) {
   });
 }
 
-// Push `title`/`body` to every device the user has registered. Dead tokens
-// (410 Unregistered, 400 BadDeviceToken) are deleted so the table self-heals.
+// Push `title`/`body` to every device the user has registered. A token is
+// deleted only when BOTH gateways reject it, so a dev token never gets nuked
+// by the production gateway (or vice versa) -- the exact bug that killed
+// TestFlight testers' pushes.
 async function pushToUser(userId, title, body, extra = {}) {
   let tokens = [];
   try { tokens = await supa.fetchDeviceTokens(userId); } catch { return; }
@@ -89,20 +106,43 @@ async function pushToUser(userId, title, body, extra = {}) {
     return;
   }
 
-  const session = http2.connect(apnsHost());
-  session.on('error', () => {}); // surfaced per-request instead
+  const [primaryHost, fallbackHost] = gatewayOrder();
+  // Sessions are opened lazily and reused across all tokens. The fallback
+  // connection is only made if some token needs it (the common case never
+  // touches it).
+  const sessions = {};
+  function sessionFor(host) {
+    if (!sessions[host]) {
+      const s = http2.connect(host);
+      s.on('error', () => {}); // surfaced per-request instead
+      sessions[host] = s;
+    }
+    return sessions[host];
+  }
+
   try {
     const payload = { aps: { alert: { title, body }, sound: 'default' }, ...extra };
     for (const token of tokens) {
-      const { status, reason } = await sendOne(session, token, jwt, payload);
-      if (status === 410 || (status === 400 && reason === 'BadDeviceToken')) {
-        await supa.deleteDeviceToken(token);
-      } else if (status !== 200) {
-        console.error(`apns send to …${token.slice(-8)}: ${status} ${reason || ''}`);
+      const primary = await sendOne(sessionFor(primaryHost), token, jwt, payload);
+      if (primary.status === 200) continue;
+
+      if (isTokenRejected(primary.status, primary.reason)) {
+        // Might just be the other environment -- try the fallback gateway
+        // before deleting.
+        const fallback = await sendOne(sessionFor(fallbackHost), token, jwt, payload);
+        if (fallback.status === 200) continue;
+        if (isTokenRejected(fallback.status, fallback.reason)) {
+          await supa.deleteDeviceToken(token); // dead on both -> truly gone
+        } else {
+          console.error(`apns fallback to …${token.slice(-8)}: ${fallback.status} ${fallback.reason || ''}`);
+        }
+      } else {
+        // Transient (timeout, 429, 5xx) -- leave the token alone, retry next push.
+        console.error(`apns send to …${token.slice(-8)}: ${primary.status} ${primary.reason || ''}`);
       }
     }
   } finally {
-    session.close();
+    for (const s of Object.values(sessions)) s.close();
   }
 }
 
