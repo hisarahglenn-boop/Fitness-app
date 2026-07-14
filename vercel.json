@@ -3,6 +3,9 @@
     "api/import/submit.js": {
       "maxDuration": 300,
       "includeFiles": "node_modules/ffmpeg-static/ffmpeg"
+    },
+    "api/plan/generate.js": {
+      "maxDuration": 60
     }
   }
 }
