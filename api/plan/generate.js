@@ -314,10 +314,12 @@ ${JSON.stringify(libraryForPrompt)}
 The user ALREADY trains these exercises across their current week:
 ${existingNames.length ? existingNames.join(', ') : '(not provided)'}
 
-Generate exactly ${bonusCount} DISTINCT optional bonus day(s) using ONLY exercises from the library, referenced by their EXACT "name" field (case-sensitive). Each bonus day must:
-- COMPLEMENT the current week: round out areas that look under-trained relative to their target areas, or reinforce their main focus — do NOT simply repeat what they already do (avoid reusing the names listed above where reasonable).
+Generate exactly ${bonusCount} DISTINCT optional bonus day(s) using ONLY exercises from the library, referenced by their EXACT "name" field (case-sensitive):
+- Make ONE of them a well-rounded FULL-BODY day — broad, balanced coverage of all the major muscle groups in a single session, a solid standalone extra day.
+- Make the other ${Math.max(0, bonusCount - 1)} COMPLEMENT their current week: round out areas that look under-trained relative to their target areas, or reinforce their main focus — do NOT simply repeat what they already do (avoid reusing the names listed above where reasonable).
+Every bonus day must also:
 - Fit their goals, equipment, experience, and injuries (if injuries are mentioned, avoid aggravating movements — e.g. knee pain -> hip thrusts/bridges/RDLs over heavy squats/lunges).
-- Have a clear theme: a short title and a subtitle describing its focus (e.g. "Glute Pump + Core"). Make the ${bonusCount} days meaningfully different from each other. Do NOT title them "Day 1/2/3".
+- Have a clear theme: a short title and a subtitle describing its focus (e.g. "Full-Body Reset", "Glute Pump + Core"). Make the ${bonusCount} days meaningfully different from each other. Do NOT title them "Day 1/2/3".
 - Contain 5-7 exercises.
 - Include a "why": ONE sentence, written to the user ("you"/"your"), on why this bonus day pairs well with their week.
 
