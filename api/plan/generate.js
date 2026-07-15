@@ -426,7 +426,9 @@ Respond with ONLY a JSON object of this exact shape, no other text:
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-5',
+          // Bonus days are optional add-ons -- run them on the faster Haiku so
+          // the chooser fills quickly; the main weekly plan stays on Sonnet.
+          model: isBonus ? 'claude-haiku-4-5-20251001' : 'claude-sonnet-5',
           max_tokens: 8000,
           messages: [{ role: 'user', content }]
         })
