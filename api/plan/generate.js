@@ -33,6 +33,18 @@ function equipmentGuidance(equipment, equipmentOther, hasPhotos){
     if(!hasPhotos && !equipmentOther) g += ' Assume a modest mixed setup (some dumbbells, one or two machines, maybe a cable stack) — prefer broadly-available equipment and bodyweight exercises over anything specialized.';
     return g;
   }
+  // Home gym / bodyweight: when the user detailed their real equipment (photos
+  // or a write-in), build around THAT instead of the conservative category
+  // default -- e.g. a home gym with a barbell shouldn't be stripped of barbell
+  // work. Without any detail, fall through to the category default below.
+  if((equipment === 'home-limited' || equipment === 'bodyweight') && (hasPhotos || equipmentOther)){
+    let g = equipment === 'bodyweight'
+      ? 'They train mainly with bodyweight, plus the equipment noted here.'
+      : 'They have a home gym with the equipment noted here.';
+    if(hasPhotos) g += ' Treat the attached equipment photos as the source of truth for what is available; only choose exercises performable with that equipment, plus bodyweight exercises.';
+    if(equipmentOther) g += ' They described the equipment as: ' + equipmentOther + '.';
+    return g;
+  }
   return EQUIPMENT_GUIDANCE[equipment] || 'No specific equipment constraint given.';
 }
 
@@ -75,9 +87,13 @@ async function checkAndLogGeneration(authHeader, userId){
   return { allowed: true };
 }
 
-function libraryForEquipment(equipment){
+function libraryForEquipment(equipment, hasDetail){
   const allowed = ALLOWED_EQUIPMENT[equipment];
   if(!allowed) return exerciseLibrary;
+  // A home-gym / bodyweight user who detailed their real equipment isn't bound
+  // by the category default -- let their description/photos (via the prompt)
+  // decide, so barbell/machine work they actually have isn't hard-filtered out.
+  if(hasDetail && (equipment === 'home-limited' || equipment === 'bodyweight')) return exerciseLibrary;
   return exerciseLibrary.filter(e => allowed.has(e.equipment));
 }
 
@@ -187,7 +203,12 @@ module.exports = async (req, res) => {
     .filter(Boolean)
     .slice(0, 20);
 
-  const pool = libraryForEquipment(equipment);
+  // Did the user detail their real equipment (write-in or photos)? If so, a
+  // home-gym/bodyweight answer is built around that instead of the category
+  // default (see libraryForEquipment / equipmentGuidance).
+  const hasEquipmentDetail = (typeof equipmentOther === 'string' && equipmentOther.trim().length > 0)
+    || (Array.isArray(equipmentPhotoUrls) && equipmentPhotoUrls.length > 0);
+  const pool = libraryForEquipment(equipment, hasEquipmentDetail);
   const libraryForPrompt = pool.map(e => ({
     name: e.name, targetAreas: e.targetAreas, equipment: e.equipment, difficulty: e.difficulty
   }));
@@ -293,10 +314,12 @@ ${JSON.stringify(libraryForPrompt)}
 The user ALREADY trains these exercises across their current week:
 ${existingNames.length ? existingNames.join(', ') : '(not provided)'}
 
-Generate exactly ${bonusCount} DISTINCT optional bonus day(s) using ONLY exercises from the library, referenced by their EXACT "name" field (case-sensitive). Each bonus day must:
-- COMPLEMENT the current week: round out areas that look under-trained relative to their target areas, or reinforce their main focus — do NOT simply repeat what they already do (avoid reusing the names listed above where reasonable).
+Generate exactly ${bonusCount} DISTINCT optional bonus day(s) using ONLY exercises from the library, referenced by their EXACT "name" field (case-sensitive):
+- Make ONE of them a well-rounded FULL-BODY day — broad, balanced coverage of all the major muscle groups in a single session, a solid standalone extra day.
+- Make the other ${Math.max(0, bonusCount - 1)} COMPLEMENT their current week: round out areas that look under-trained relative to their target areas, or reinforce their main focus — do NOT simply repeat what they already do (avoid reusing the names listed above where reasonable).
+Every bonus day must also:
 - Fit their goals, equipment, experience, and injuries (if injuries are mentioned, avoid aggravating movements — e.g. knee pain -> hip thrusts/bridges/RDLs over heavy squats/lunges).
-- Have a clear theme: a short title and a subtitle describing its focus (e.g. "Glute Pump + Core"). Make the ${bonusCount} days meaningfully different from each other. Do NOT title them "Day 1/2/3".
+- Have a clear theme: a short title and a subtitle describing its focus (e.g. "Full-Body Reset", "Glute Pump + Core"). Make the ${bonusCount} days meaningfully different from each other. Do NOT title them "Day 1/2/3".
 - Contain 5-7 exercises.
 - Include a "why": ONE sentence, written to the user ("you"/"your"), on why this bonus day pairs well with their week.
 
@@ -403,7 +426,9 @@ Respond with ONLY a JSON object of this exact shape, no other text:
           'anthropic-version': '2023-06-01'
         },
         body: JSON.stringify({
-          model: 'claude-sonnet-5',
+          // Bonus days are optional add-ons -- run them on the faster Haiku so
+          // the chooser fills quickly; the main weekly plan stays on Sonnet.
+          model: isBonus ? 'claude-haiku-4-5-20251001' : 'claude-sonnet-5',
           max_tokens: 8000,
           messages: [{ role: 'user', content }]
         })
