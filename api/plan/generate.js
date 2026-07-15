@@ -157,6 +157,17 @@ module.exports = async (req, res) => {
   const { targetAreas, equipment, equipmentOther, daysPerWeek, experience, injuries, sex, notes, requestedExercises, equipmentPhotoUrls, postureFocus, focusDetails, customExercises } = questionnaire;
   const days = Number(daysPerWeek) || 4;
 
+  // Bonus mode: instead of a full week, generate a few DISTINCT optional add-on
+  // days that complement the exercises the user already does. Reuses the whole
+  // pipeline below (equipment-filtered pool, library map, retry loop) with a
+  // different prompt and a { bonusDays } response shape.
+  const bonusReq = (body && body.bonusRequest) || null;
+  const isBonus = !!bonusReq;
+  const bonusCount = isBonus ? Math.min(5, Math.max(1, Number(bonusReq.count) || 3)) : 0;
+  const existingNames = isBonus && Array.isArray(bonusReq.existingExerciseNames)
+    ? bonusReq.existingExerciseNames.filter(n => typeof n === 'string').map(n => n.trim()).filter(Boolean).slice(0, 150)
+    : [];
+
   // Sex (male/female/other) -- informs default loading expectations/emphasis
   // only, never exclusions. Absent for pre-v3 clients.
   const sexText = ['male', 'female', 'other'].includes(sex) ? sex : '';
@@ -263,13 +274,43 @@ Also explain your choices, written directly to the user ("you"/"your"), grounded
 Respond with ONLY a JSON object of this exact shape, no other text:
 {"summary": "...", "days": [{"title": "Day 1", "subtitle": "...", "why": "...", "exerciseNames": ["Exact Name From Library", "..."]}]}`;
 
+  // Bonus-day prompt: same library + user context, but asks for a few DISTINCT
+  // optional add-on days that COMPLEMENT (don't repeat) the current week.
+  const bonusPrompt = !isBonus ? '' : `You are a fitness program designer creating OPTIONAL bonus workout days a user can add on top of their existing weekly plan.
+
+User's questionnaire answers:
+- Target areas: ${targetAreas.join(', ')}
+- Equipment access: ${equipment}
+- Experience level: ${experience}
+- Injuries or pain points: ${injuries || 'none mentioned'}${sexText ? `
+- Sex: ${sexText}` : ''}
+
+Equipment guidance: ${equipmentGuidance(equipment, equipmentOther, false)}
+${notesText ? `Additional preferences written by the user (respect them): """${notesText}"""
+` : ''}Here is the ONLY library of exercises you may use, each with its exact name, target areas, equipment type, and difficulty:
+${JSON.stringify(libraryForPrompt)}
+
+The user ALREADY trains these exercises across their current week:
+${existingNames.length ? existingNames.join(', ') : '(not provided)'}
+
+Generate exactly ${bonusCount} DISTINCT optional bonus day(s) using ONLY exercises from the library, referenced by their EXACT "name" field (case-sensitive). Each bonus day must:
+- COMPLEMENT the current week: round out areas that look under-trained relative to their target areas, or reinforce their main focus — do NOT simply repeat what they already do (avoid reusing the names listed above where reasonable).
+- Fit their goals, equipment, experience, and injuries (if injuries are mentioned, avoid aggravating movements — e.g. knee pain -> hip thrusts/bridges/RDLs over heavy squats/lunges).
+- Have a clear theme: a short title and a subtitle describing its focus (e.g. "Glute Pump + Core"). Make the ${bonusCount} days meaningfully different from each other. Do NOT title them "Day 1/2/3".
+- Contain 5-7 exercises.
+- Include a "why": ONE sentence, written to the user ("you"/"your"), on why this bonus day pairs well with their week.
+
+Respond with ONLY a JSON object of this exact shape, no other text:
+{"bonusDays": [{"title": "...", "subtitle": "...", "why": "...", "exerciseNames": ["Exact Name From Library", "..."]}]}`;
+
   // Equipment photos ride along as URL image blocks (images first -- vision
   // guidance -- with the text prompt referring back to them). Anthropic
   // fetches the public bucket URLs directly, so unlimited client photos never
   // touch this function's request-body limits.
-  const content = photoUrls.length
+  const activePrompt = isBonus ? bonusPrompt : prompt;
+  const content = (!isBonus && photoUrls.length)
     ? [...photoUrls.map(url => ({ type: 'image', source: { type: 'url', url } })), { type: 'text', text: prompt }]
-    : prompt;
+    : activePrompt;
 
   // "Must include" is a code-level guarantee, not just a prompt rule: any
   // user-requested exercise the model left out gets appended to the day whose
@@ -306,7 +347,7 @@ Respond with ONLY a JSON object of this exact shape, no other text:
       return entry;
     }).filter(day => day.exercises.length > 0);
 
-    if (plan.length && !injuriesStated) {
+    if (!isBonus && plan.length && !injuriesStated) {
       for (const name of mustInclude) {
         if (usedNames.has(name)) continue;
         const ex = poolByName.get(name);
@@ -327,7 +368,7 @@ Respond with ONLY a JSON object of this exact shape, no other text:
     // (null -> the app shows a placeholder) and a neutral default dose the user
     // can tune per-set in the session. Distributed to the lightest days so no
     // single day balloons; tuple shape [name, dose, weight, cue, type, gifPath].
-    if (plan.length && customExts.length) {
+    if (!isBonus && plan.length && customExts.length) {
       for (const name of customExts) {
         let lightestIdx = 0;
         plan.forEach((day, idx) => {
@@ -388,7 +429,9 @@ Respond with ONLY a JSON object of this exact shape, no other text:
         parsed = { days: [] }; // malformed JSON: treat as empty so we retry, not 500
       }
 
-      const built = buildPlanFromParsed(parsed);
+      // Bonus responses use { bonusDays: [...] }; map onto the { days } shape
+      // buildPlanFromParsed consumes.
+      const built = buildPlanFromParsed(isBonus ? { days: parsed.bonusDays } : parsed);
       if (built.length) {
         plan = built;
         // Overall rationale shown once on the native preview; transient (not
@@ -410,7 +453,11 @@ Respond with ONLY a JSON object of this exact shape, no other text:
       return;
     }
 
-    res.status(200).json({ plan, summary });
+    if (isBonus) {
+      res.status(200).json({ bonusDays: plan });
+    } else {
+      res.status(200).json({ plan, summary });
+    }
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
