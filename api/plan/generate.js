@@ -33,6 +33,18 @@ function equipmentGuidance(equipment, equipmentOther, hasPhotos){
     if(!hasPhotos && !equipmentOther) g += ' Assume a modest mixed setup (some dumbbells, one or two machines, maybe a cable stack) — prefer broadly-available equipment and bodyweight exercises over anything specialized.';
     return g;
   }
+  // Home gym / bodyweight: when the user detailed their real equipment (photos
+  // or a write-in), build around THAT instead of the conservative category
+  // default -- e.g. a home gym with a barbell shouldn't be stripped of barbell
+  // work. Without any detail, fall through to the category default below.
+  if((equipment === 'home-limited' || equipment === 'bodyweight') && (hasPhotos || equipmentOther)){
+    let g = equipment === 'bodyweight'
+      ? 'They train mainly with bodyweight, plus the equipment noted here.'
+      : 'They have a home gym with the equipment noted here.';
+    if(hasPhotos) g += ' Treat the attached equipment photos as the source of truth for what is available; only choose exercises performable with that equipment, plus bodyweight exercises.';
+    if(equipmentOther) g += ' They described the equipment as: ' + equipmentOther + '.';
+    return g;
+  }
   return EQUIPMENT_GUIDANCE[equipment] || 'No specific equipment constraint given.';
 }
 
@@ -75,9 +87,13 @@ async function checkAndLogGeneration(authHeader, userId){
   return { allowed: true };
 }
 
-function libraryForEquipment(equipment){
+function libraryForEquipment(equipment, hasDetail){
   const allowed = ALLOWED_EQUIPMENT[equipment];
   if(!allowed) return exerciseLibrary;
+  // A home-gym / bodyweight user who detailed their real equipment isn't bound
+  // by the category default -- let their description/photos (via the prompt)
+  // decide, so barbell/machine work they actually have isn't hard-filtered out.
+  if(hasDetail && (equipment === 'home-limited' || equipment === 'bodyweight')) return exerciseLibrary;
   return exerciseLibrary.filter(e => allowed.has(e.equipment));
 }
 
@@ -187,7 +203,12 @@ module.exports = async (req, res) => {
     .filter(Boolean)
     .slice(0, 20);
 
-  const pool = libraryForEquipment(equipment);
+  // Did the user detail their real equipment (write-in or photos)? If so, a
+  // home-gym/bodyweight answer is built around that instead of the category
+  // default (see libraryForEquipment / equipmentGuidance).
+  const hasEquipmentDetail = (typeof equipmentOther === 'string' && equipmentOther.trim().length > 0)
+    || (Array.isArray(equipmentPhotoUrls) && equipmentPhotoUrls.length > 0);
+  const pool = libraryForEquipment(equipment, hasEquipmentDetail);
   const libraryForPrompt = pool.map(e => ({
     name: e.name, targetAreas: e.targetAreas, equipment: e.equipment, difficulty: e.difficulty
   }));
